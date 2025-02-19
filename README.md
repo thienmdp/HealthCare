@@ -1,5 +1,3 @@
-# test commitlint
-
 # 🏥 **HealthCare**
 
 **HealthCare** là một ứng dụng web hiện đại hỗ trợ quản lý hồ sơ bệnh nhân, lịch hẹn, và theo dõi sức khỏe. Ứng dụng được xây dựng với **React, Vite, TypeScript, Redux Toolkit, RTK Query, React Hook Form, Yup, ShadCN UI, Tailwind CSS, và Lucide React**, mang lại hiệu suất cao, UI thân thiện và dễ bảo trì.
