@@ -4,15 +4,20 @@
     "home": "Trang chủ",
     "about": "Giới thiệu",
     "contact": "Liên hệ",
-    "services": "Dịch vụ",
     "FAQ": "FAQ",
     "appointment": "Đặt lịch",
     "blog": "Tin tức y tế",
     "services": "Dịch vụ khám",
     "logout": "Đăng xuất"
-
   },
   "homepage": {
     "title": "ĐÂY LÀ TRANG CHỦ"
-  }
+  },
+    "footer": {
+      "DN": "120 Hoàng Minh Thảo, Đà Nẵng",
+      "Hotline": "Hotline: 0356241423",
+      "AI": "Diagnosis IQ: Hệ thống hỗ trợ quyết định lâm sàng thông minh cho quản lý bệnh viện tự động.",
+      "about": "Về Diagnosis IQ"
+    }
 }
+

@@ -1,23 +1,20 @@
-import path from '@/constants/path'
-import { Globe, Mail, Phone } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import './Footer.css'
 
 const Footer = () => {
+  const { i18n, t } = useTranslation('landing')
   return (
     <footer className='footer'>
       <div className='footer__content'>
         <div className='footer__section'>
-          <h4>CAPTONE 2 PROJECT</h4>
-          <p>120 Hoàng Minh Thảo, Đà Nẵng</p>
-          <p>
-            Hotline: <a href='tel:0356241423'>0356241423</a>
-          </p>
-          <p>Diagnosis IQ: Smart Clinical Decision Support System for Automated Hospital Administration.</p>
+          <h4>Diagnosis AI</h4>
+          <p>{t('footer.DN')}</p>
+          <p>{t('footer.Hotline')}</p>
+          <p>{t('footer.AI')}</p>
           <p>Sương - Hiếu - Thành - Báu - Hà</p>
         </div>
         <div className='footer__section'>
-          <h4>Về CAPSTONE 2 </h4>
+          <h4>{t('footer.about')}</h4>
           <ul>
             <li>
               <a href='/gioi-thieu'>Giới thiệu về CAPSTONE 2</a>

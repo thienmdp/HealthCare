@@ -4,7 +4,6 @@
     "home": "Home",
     "about": "About",
     "contact": "Contact",
-    "services": "Services",
     "FAQ": "FAQ",
     "appointment": "Appointment",
     "blog": "Blog",
@@ -13,5 +12,11 @@
   },
   "homepage": {
     "title": "THIS IS HOME PAGE"
+  },
+  "footer": {
+    "DN": "120 Hoang Minh Thao, Da Nang",
+    "Hotline": "Hotline: 0356241423",
+    "AI": "Diagnosis IQ: An intelligent clinical decision support system for automatic hospital management.",
+    "about": "About Diagnosis IQ"
   }
 }
