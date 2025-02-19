@@ -6,6 +6,8 @@ const path = {
   logout: '/logout',
   // User
   profile: '/profile',
+  payment: '/payment',
+  booking: '/booking',
   // Doctor
   dashboard: '/dashboard',
   profileDoctor: '/profile-doctor',

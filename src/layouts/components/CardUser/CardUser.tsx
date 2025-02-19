@@ -6,6 +6,7 @@ import { getAvatarUrl } from '@/utils/user'
 import { Home, LogOut, User } from 'lucide-react'
 import { useDispatch } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
+import { FaCreditCard } from 'react-icons/fa'
 // Import các components từ shadcn UI
 import {
   DropdownMenu,
@@ -16,8 +17,10 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useTranslation } from 'react-i18next'
 
 export default function CardUser() {
+  const { i18n, t } = useTranslation('landing')
   const dispatch = useDispatch()
   const { pathname } = useLocation()
   const user = useAppSelector((state) => state.authState.user)
@@ -45,10 +48,6 @@ export default function CardUser() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56'>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className='mr-2 w-4 h-4' />
-            <Link to={path.profile}>Profile</Link>
-          </DropdownMenuItem>
           {role !== 'USER' && (
             <DropdownMenuItem>
               <Home className='mr-2 w-4 h-4' />
@@ -57,11 +56,18 @@ export default function CardUser() {
               </Link>
             </DropdownMenuItem>
           )}
+          <DropdownMenuItem>
+            <User className='mr-2 w-4 h-4' />
+            <Link to={path.profile}>{t('user.profile')}</Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <FaCreditCard className='mr-2 w-4 h-4' />
+          <Link to={path.payment}>{t('user.payment')}</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem className='text-red-600' onClick={handleLogout}>
           <LogOut className='mr-2 w-4 h-4' />
-          <span>Đăng xuất</span>
+          <span>{t('header.logout')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -18,5 +18,11 @@
     "Hotline": "Hotline: 0356241423",
     "AI": "Diagnosis IQ: An intelligent clinical decision support system for automatic hospital management.",
     "about": "About Diagnosis IQ"
+  },
+  "user": {
+    "profile": "Profile",
+    "history": "History",
+    "payment": "Payment",
+    "dashboard": "Dashboard"
   }
 }

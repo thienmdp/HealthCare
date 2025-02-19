@@ -18,6 +18,12 @@
       "Hotline": "Hotline: 0356241423",
       "AI": "Diagnosis IQ: Hệ thống hỗ trợ quyết định lâm sàng thông minh cho quản lý bệnh viện tự động.",
       "about": "Về Diagnosis IQ"
+    },
+    "user":{
+      "profile": "Hồ sơ",
+      "history": "Lịch sử khám",
+      "payment": "Thanh toán",
+      "dashboard": "Bảng điều khiển"
     }
 }
 
