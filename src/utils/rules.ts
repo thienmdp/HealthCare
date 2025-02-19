@@ -58,7 +58,7 @@ export const schema = yup.object({
     .min(6, 'Độ dài từ 6 đến 160 kí tự')
     .max(160, 'Độ dài từ 6 đến 160 kí tự')
     .oneOf([yup.ref('password')], 'Mật khẩu nhập lại không khớp'),
-  roles: yup.string().oneOf(['USER', 'ADMIN', 'EXPERT'], 'Vai trò không hợp lệ').required('Vai trò là bắt buộc'),
+  roles: yup.string().oneOf(['USER', 'ADMIN', 'DOCTOR'], 'Vai trò không hợp lệ').required('Vai trò là bắt buộc'),
   status: yup
     .string()
     .oneOf(['ACTIVE', 'BLOCK', 'UNVERIFY'], 'Trạng thái không hợp lệ')

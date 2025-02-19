@@ -30,7 +30,7 @@ export const MobileMenu = () => {
             <MenuIcon className='w-5 h-5' />
           </Button>
         </SheetTrigger>
-        <SheetContent side='left' className='p-0 w-full'>
+        <SheetContent side='left' className='w-full p-0'>
           <SheetHeader className='p-4 border-b'>
             <SheetTitle className='flex justify-center'>
               <img src='/assets/svg/logo_cme.svg' height={120} width={120} alt='' />
@@ -64,7 +64,7 @@ export const MobileMenu = () => {
 
             {authenticated && (
               <Link
-                to={role === 'ADMIN' ? path.profileAdmin : role === 'EXPERT' ? path.profileExpert : path.profile}
+                to={role === 'ADMIN' ? path.profileAdmin : role === 'DOCTOR' ? path.profileDoctor : path.profile}
                 className='px-4 py-2 hover:bg-accent'
                 onClick={() => {
                   setOpen(false)
