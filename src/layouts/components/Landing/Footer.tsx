@@ -79,7 +79,7 @@ const Footer = () => {
           hoặc điều trị y khoa.
         </p>
         <p>Cần tuyệt đối tuân theo hướng dẫn của Bác sĩ và Nhân viên y tế.</p>
-        <p>Copyright © 2018 - 2025 Công ty TNHH Capstone2 Việt Nam......</p>
+        <p>Copyright © 2018 - 2025 Công ty TNHH Capstone2 Việt Nam.</p>
       </div>
     </footer>
   )
