@@ -1,0 +1,37 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn.lock*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+/.yarn
+.yarn/install-state.gz
+
+github/*
+
+node_modules
+dist
+dist.rar
+dist-ssr
+*.local
+
+.tsbuildinfo
+*.tsbuildinfo
+
+stats.html
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.env

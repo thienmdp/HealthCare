@@ -1,0 +1,13 @@
+{
+  "header": {
+    "login": "Đăng nhập",
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "services": "Dịch vụ",
+    "FAQ": "FAQ"
+  },
+  "homepage": {
+    "title": "ĐÂY LÀ TRANG CHỦ"
+  }
+}

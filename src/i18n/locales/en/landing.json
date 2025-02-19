@@ -1,0 +1,13 @@
+{
+  "header": {
+    "login": "Sign In",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "services": "Services",
+    "FAQ": "FAQ"
+  },
+  "homepage": {
+    "title": "THIS IS HOME PAGE"
+  }
+}
