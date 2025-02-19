@@ -34,20 +34,20 @@ const Footer = () => {
           <h4>Dịch vụ</h4>
           <ul>
             <li>
-              <a href='/tin-tuc'>Tin tức y tế</a>
+              <a href='#'>Tin tức y tế</a>
               {/* sửa link liên kết tới trang */}
             </li>
             <li>
-              <a href='/dat-kham/bac-si/:doctorId'>Tư Vấn Trực Tuyến</a>
+              <a href='#'>Tư Vấn Trực Tuyến</a>
             </li>
             <li>
               <a href='#'>Đặt khám Chuyên Khoa</a>
             </li>
             <li>
-              <a href='/thong-tin/ho-so-benh-nhan'>Hồ Sơ Bệnh Án</a>
+              <a href='#'>Hồ Sơ Bệnh Án</a>
             </li>
             <li>
-              <a href='/dich-vu-kham'>Dịch vụ Phòng Khám</a>
+              <a href='#'>Dịch vụ Phòng Khám</a>
             </li>
           </ul>
         </div>
@@ -65,10 +65,10 @@ const Footer = () => {
               <a href='#'>Chính sách giải quyết khiếu nại</a>
             </li>
             <li>
-              <a href='mailto:hophuchieu135@gmail.com'>Hỗ trợ khách hàng</a>
+              <a href='#'>Hỗ trợ khách hàng</a>
             </li>
             <li>
-              <a href='mailto:hophuchieu135@gmail.com'>Tư vấn khách hàng</a>
+              <a href='#'>Tư vấn khách hàng</a>
             </li>
           </ul>
         </div>
@@ -79,7 +79,7 @@ const Footer = () => {
           hoặc điều trị y khoa.
         </p>
         <p>Cần tuyệt đối tuân theo hướng dẫn của Bác sĩ và Nhân viên y tế.</p>
-        <p>Copyright © 2018 - 2025 Công ty TNHH Capstone2 Việt Nam.</p>
+        <p>Copyright © 2018 - 2025 Công ty TNHH Capstone2 Việt Nam......</p>
       </div>
     </footer>
   )
