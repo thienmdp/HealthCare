@@ -48,7 +48,7 @@ const userRoutes = [
   {
     path: path.profile,
     element: (
-      <div className='pt-8 mx-auto max-w-screen-xl'>
+      <div className='max-w-screen-xl pt-8 mx-auto'>
         <Profile />
       </div>
     )
@@ -62,7 +62,7 @@ const adminRoutes = [
   }
 ]
 
-const expertRoutes = [
+const doctorRoutes = [
   {
     path: path.dashboard,
     element: <DashboardDoctor />
@@ -137,7 +137,7 @@ export default function useRouteElements() {
       {
         path: '',
         element: <ProtectedRoute allowedRole='DOCTOR' />,
-        children: expertRoutes
+        children: doctorRoutes
       },
       {
         path: '*',

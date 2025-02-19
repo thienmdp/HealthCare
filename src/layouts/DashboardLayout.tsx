@@ -1,54 +1,23 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, memo } from 'react'
-import Sidebar from './components/Dashboard/Sidebar'
-import Navbar from './components/Dashboard/Navbar'
+import { SidebarDashboard } from './components/Dashboard/sidebar-custom'
+import { Navbar } from './components/Dashboard/navbar-custom'
 
 interface Props {
   children?: React.ReactNode
 }
 
 function DashboardLayoutInner({ children }: Props) {
-  const [open, setOpen] = useState<boolean>(true)
-  const sidebarRef = useRef<HTMLDivElement>(null)
-
-  useLayoutEffect(() => {
-    function updateSize() {
-      setOpen(window.innerWidth >= 640)
-    }
-    updateSize()
-  }, [])
-
-  useEffect(() => {
-    function handleResize() {
-      setOpen(window.innerWidth >= 640)
-    }
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (window.innerWidth < 640 && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-        setOpen(false)
-      }
-    }
-
-    window.addEventListener('resize', handleResize)
-    document.addEventListener('mousedown', handleClickOutside)
-    if (window.innerWidth < 640 && !open && sidebarRef.current) {
-      sidebarRef.current.classList.add('hidden')
-    } else {
-      sidebarRef.current?.classList.remove('hidden')
-    }
-    return () => {
-      window.removeEventListener('resize', handleResize)
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [open])
   console.log('DashboardLayout')
   return (
     <section className='flex w-full h-screen overflow-hidden bg-gray-50'>
-      <div ref={sidebarRef}>
-        <Sidebar open={open} />
-      </div>
-      <div className='w-full h-full overflow-y-auto'>
-        <Navbar open={open} setOpen={setOpen} />
-        <div className='p-10 mt-[59px]'>{children}</div>
+      <div className='flex flex-row w-full min-h-screen mx-auto overflow-hidden bg-grid-small-gray-200 dark:bg-grid-small-gray-100/10'>
+        <SidebarDashboard />
+        <div className='flex flex-col w-full'>
+          <header className='sticky top-0 z-30 flex items-center border-b bg-background sm:static sm:h-auto sm:border-0 sm:bg-transparent '>
+            <Navbar />
+          </header>
+          <div className='pt-4 pl-4'>{children}</div>
+        </div>
       </div>
     </section>
   )

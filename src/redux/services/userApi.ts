@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import customFetchBase from './customFetchBase'
 import { logOut, setAuthenticated, setRoleUser, setUser } from '../features/auth.slice'
-import { CreateUserInput, ICourseOfUserPublic, UpdateInfoUserInput, User } from '@/types/user.type'
+import { CreateUserInput, UpdateInfoUserInput, User } from '@/types/user.type'
 import Cookies from 'js-cookie'
 
 export const userApi = createApi({
@@ -53,16 +53,6 @@ export const userApi = createApi({
         }
       }
     }),
-    getCourseUser: build.query<{ data: ICourseOfUserPublic[] }, string | null>({
-      query: (id) => `users/courses${id === null ? '' : '?userId=' + id}`,
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled
-        } catch (error) {
-          console.log('ERROR: ', error)
-        }
-      }
-    }),
     getAllUser: build.query<{ data: User[] }, null>({
       query: (branchId) => `users`,
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
@@ -91,11 +81,5 @@ export const userApi = createApi({
     })
   })
 })
-export const {
-  useGetMeQuery,
-  useUpdateMeMutation,
-  useGetProfileUserQuery,
-  useGetCourseUserQuery,
-  useCreateUserMutation,
-  useGetAllUserQuery
-} = userApi
+export const { useGetMeQuery, useUpdateMeMutation, useGetProfileUserQuery, useCreateUserMutation, useGetAllUserQuery } =
+  userApi

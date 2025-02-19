@@ -6,9 +6,9 @@ const path = {
   logout: '/logout',
   // User
   profile: '/profile',
-  // Expert
+  // Doctor
   dashboard: '/dashboard',
-  profileExpert: '/profile-expert',
+  profileDoctor: '/profile-doctor',
   // Admin
   dashboard_admin: '/dashboard-admin',
   userManage: '/user-manage',
