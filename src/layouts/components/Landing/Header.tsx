@@ -57,14 +57,17 @@ export const Header = () => {
               className='flex items-center text-2xl font-bold cursor-pointer text-blue_app'
               onClick={() => handleScrollToTop}
             >
-              Diagnosis IQ
+              <p>
+                <span>Diagnosis </span>
+                <span className='text-blue-500'>AI</span>
+              </p>
             </Link>
             <ModalSearch />
             {/* <SearchHeader /> */}
           </div>
-          <div className='flex items-center justify-end text-sm'>
+          <div className='flex items-center justify-end text-sm font-semibold text-gray-700'>
             <ModeToggleI18n />
-            <ul className='hidden ml-4 w-max md:flex'>
+            <ul className='hidden ml-4 w-max md:flex space-x-4'>
               <li>
                 <Link
                   className='mr-4 text-gray-700 cursor-pointer hover:text-blue_app min-w-fit'
@@ -72,7 +75,7 @@ export const Header = () => {
                   onClick={() => handleScrollToTop}
                   aria-current='page'
                 >
-                  {t('header.about')}
+                  {t('header.appointment')}
                 </Link>
               </li>
               <li>
@@ -82,7 +85,27 @@ export const Header = () => {
                   onClick={() => handleScrollToTop}
                   aria-current='page'
                 >
-                  {t('header.contact')}
+                  {t('header.blog')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className='mr-4 text-gray-700 cursor-pointer hover:text-blue_app min-w-fit'
+                  to={'#contact'}
+                  onClick={() => handleScrollToTop}
+                  aria-current='page'
+                >
+                  {t('header.services')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className='mr-4 text-gray-700 cursor-pointer hover:text-blue_app min-w-fit'
+                  to={'#contact'}
+                  onClick={() => handleScrollToTop}
+                  aria-current='page'
+                >
+                  {t('header.about')}
                 </Link>
               </li>
             </ul>

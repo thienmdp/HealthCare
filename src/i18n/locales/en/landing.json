@@ -5,7 +5,11 @@
     "about": "About",
     "contact": "Contact",
     "services": "Services",
-    "FAQ": "FAQ"
+    "FAQ": "FAQ",
+    "appointment": "Appointment",
+    "blog": "Blog",
+    "services": "Dịch vụ khám",
+    "logout": "Logout"
   },
   "homepage": {
     "title": "THIS IS HOME PAGE"
