@@ -61,6 +61,39 @@ npm run dev
 
 ---
 
+## 📝 **Hướng dẫn Commit**
+
+Dự án sử dụng commitlint để chuẩn hóa commit message. Commit message phải tuân theo format:
+
+```bash
+type(scope): subject
+
+# Ví dụ:
+git commit -m "feat(auth): add login with google"
+git commit -m "fix(ui): correct button alignment"
+```
+
+Các type hợp lệ:
+
+- `feat`: Thêm tính năng mới
+- `fix`: Sửa lỗi
+- `docs`: Thay đổi tài liệu
+- `style`: Thay đổi style/format code
+- `refactor`: Tái cấu trúc code
+- `test`: Thêm/sửa test
+- `chore`: Thay đổi build process, cài đặt package
+
+Nếu gặp vấn đề với commitlint, hãy thử:
+
+```bash
+npm uninstall husky
+npm install -D husky
+npm run prepare
+npx husky add .husky/commit-msg "npx --no -- commitlint --edit $1"
+```
+
+---
+
 ## 🎯 **Liên hệ & Đóng góp**
 
 Mọi đóng góp để cải thiện HealthCare đều được hoan nghênh! Hãy tạo **pull request** hoặc **issue** trên GitHub. 💙
