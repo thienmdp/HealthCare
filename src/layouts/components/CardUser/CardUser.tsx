@@ -7,7 +7,7 @@ import { Home, LogOut, User } from 'lucide-react'
 import { useDispatch } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import { FaCreditCard } from 'react-icons/fa'
-// Import các components từ shadcn UI
+
 import {
   DropdownMenu,
   DropdownMenuContent,

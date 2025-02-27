@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import GoogleOAuthClient from '@/components/Auth/GoogleOAuthClient'
 import { Helmet } from 'react-helmet-async'
 import { CustomNotification } from '@/components/CustomReactToastify'
+import '../../../../public/sigin.png'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -58,69 +59,70 @@ export default function SignIn() {
   }, [location, setValue])
 
   return (
-    <div>
-      <Helmet>
-        <title>Đăng nhập - Học liên tục</title>
-        <meta
-          name='description'
-          content='Diagnosis IQ: Smart Clinical Decision Support System for Automated Hospital.'
-        />
-      </Helmet>
-      <div className='flex mt-10'>
-        {/* <div className='hidden flex-1 justify-center items-center text-black bg-white lg:flex'>
-          <div className='max-w-md text-center'>
-            <img src='/assets/svg/login.svg' height={500} width={600} alt='asset' />
-          </div>
-        </div> */}
-        <div className='flex justify-center items-center w-full bg-gray-100 --lg:w-1/2'>
-          <div className='p-6 w-full max-w-md'>
-            <p className='mb-6 text-3xl font-semibold text-center text-black'>Đăng nhập</p>
-            <p className='mb-6 text-sm font-semibold text-center text-gray-700'>
-              Bạn có thể đăng nhập vào bằng tài khoản Google{' '}
-            </p>
-            <div className='flex flex-col justify-between items-center mt-4 lg:flex-row'>
-              <div className='mb-2 w-full'>
-                <GoogleOAuthClient />
+    <div className='flex h-screen items-center justify-center'>
+      <div className='flex w-3/4 shadow-lg rounded-lg overflow-hidden'>
+        {/* Left Side - Image */}
+        <div className='w-1/2 bg-gray-100'>
+          <img src='./sigin.png' alt='Lab Background' className='w-full h-full object-cover' />
+        </div>
+
+        {/* Right Side - Login Form */}
+        <div className='w-1/2 flex items-center justify-center p-10 bg-white shadow-lg'>
+          <div className='w-full max-w-md'>
+            <h2 className='text-2xl font-semibold text-gray-900 mb-6 text-center'>Log in to your account</h2>
+
+            <form>
+              <div className='mb-4'>
+                <label className='block text-gray-700'>Email</label>
+                <input
+                  type='email'
+                  placeholder='Enter your Email here'
+                  className='w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500'
+                />
               </div>
-            </div>
-            <div className='mt-4 text-sm text-center text-gray-700'>
-              <p>hoặc bằng tài khoản diagnosisiq của mình</p>
-            </div>
-            <form onSubmit={onSubmit} className='space-y-4'>
-              <Input
-                name='email'
-                className='mt-6'
-                placeholder='Email'
-                register={register}
-                // type='email'
-                errorMessage={errors.email?.message}
-              />
-              <Input
-                name='password'
-                className='mt-3'
-                placeholder='Password'
-                register={register}
-                type='password'
-                errorMessage={errors.password?.message}
-                autoComplete='on'
-              />
-              <Button
+
+              <div className='mb-4 relative'>
+                <label className='block text-gray-700'>Password</label>
+                <input
+                  type='password'
+                  placeholder='Enter your Password'
+                  className='w-full p-3 border border-gray-300 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500'
+                />
+              </div>
+
+              <div className='flex items-center justify-between mb-6'>
+                <div>
+                  <input type='checkbox' id='remember' className='mr-2' />
+                  <label htmlFor='remember' className='text-gray-700'>
+                    Remember me
+                  </label>
+                </div>
+                <a href='#' className='text-blue-600 hover:underline'>
+                  Forgot Password?
+                </a>
+              </div>
+
+              <button
                 type='submit'
-                className='flex justify-center items-center p-2 w-full text-white bg-gradient-to-br to-blue-700 rounded-md transition-colors duration-300 from-blue_app via-blue_app hover:bg-gradient-to-tl focus:outline-none focus:ring-2 focus:ring-offset-2'
-                isLoading={resultLogin.isLoading}
-                disabled={resultLogin.isLoading}
+                className='w-full bg-teal-500 text-white py-3 rounded-lg hover:bg-teal-600 transition duration-300'
               >
-                Đăng nhập
-              </Button>
+                Login
+              </button>
             </form>
-            <div className='mt-4 text-sm text-center text-gray-700'>
-              <p>
-                Bạn chưa có tài khoản?{' '}
-                <Link to={'/register'} className='text-black hover:underline'>
-                  Đăng ký ở đây
-                </Link>
-              </p>
-            </div>
+
+            <p className='text-center text-gray-600 mt-4'>
+              Don't have an account?
+              <a href='/register' className='text-blue-600 hover:underline ml-1'>
+                Register Now
+              </a>
+            </p>
+
+            <p className='text-center text-gray-500 text-sm mt-32'>
+              Copyright ©C2SE.48. All rights reserved.
+              <a href='#' className='text-blue-600 hover:underline ml-1'>
+                Terms & Conditions
+              </a>
+            </p>
           </div>
         </div>
       </div>
