@@ -11,6 +11,7 @@ import GoogleOAuthClient from '@/components/Auth/GoogleOAuthClient'
 import { Helmet } from 'react-helmet-async'
 import { CustomNotification } from '@/components/CustomReactToastify'
 import '../../../../public/sigin.png'
+import '../../../../public/Group 3_I.png'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -60,14 +61,22 @@ export default function SignIn() {
 
   return (
     <div className='flex h-screen items-center justify-center'>
-      <div className='flex w-3/4 shadow-lg rounded-lg overflow-hidden'>
+      <div className='flex w-3/4 shadow-lg rounded-lg overflow-hidden relative'>
         {/* Left Side - Image */}
         <div className='w-1/2 bg-gray-100'>
           <img src='./sigin.png' alt='Lab Background' className='w-full h-full object-cover' />
         </div>
 
         {/* Right Side - Login Form */}
-        <div className='w-1/2 flex items-center justify-center p-10 bg-white shadow-lg'>
+        <div className='w-1/2 flex items-center justify-center p-10 bg-white shadow-lg relative'>
+          {/* Logo - Diagnosis IQ */}
+          <div className='absolute top-6 right-6 flex items-center space-x-1'>
+            <span className='text-lg font-bold text-gray-800'>Diagnosis</span>
+            <img src='./Group 3_I.png' alt='I icon' className='h-5 w-5' />
+            {/* sương ơi chỉnh sửa lại chữ I nhé */}
+            <span className='text-lg font-bold text-gray-800'>Q</span>
+          </div>
+
           <div className='w-full max-w-md'>
             <h2 className='text-2xl font-semibold text-gray-900 mb-6 text-center'>Log in to your account</h2>
 
@@ -112,14 +121,14 @@ export default function SignIn() {
 
             <p className='text-center text-gray-600 mt-4'>
               Don't have an account?
-              <a href='/register' className='text-blue-600 hover:underline ml-1'>
+              <a href='#' className='text-blue-600 hover:underline ml-1'>
                 Register Now
               </a>
             </p>
 
-            <p className='text-center text-gray-500 text-sm mt-32'>
+            <p className='text-center text-gray-500 text-sm mt-28'>
               Copyright ©C2SE.48. All rights reserved.
-              <a href='#' className='text-blue-600 hover:underline ml-1'>
+              <a href='/register' className='text-blue-600 hover:underline ml-1'>
                 Terms & Conditions
               </a>
             </p>
