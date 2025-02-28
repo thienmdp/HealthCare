@@ -11,7 +11,7 @@ import GoogleOAuthClient from '@/components/Auth/GoogleOAuthClient'
 import { Helmet } from 'react-helmet-async'
 import { CustomNotification } from '@/components/CustomReactToastify'
 import '../../../../public/sigin.png'
-import '../../../../public/Group 3_I.png'
+import '../../../../public/Group3_I.png'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -72,7 +72,7 @@ export default function SignIn() {
           {/* Logo - Diagnosis IQ */}
           <div className='absolute top-6 right-6 flex items-center space-x-1'>
             <span className='text-lg font-bold text-gray-800'>Diagnosis</span>
-            <img src='./Group 3_I.png' alt='I icon' className='h-5 w-5' />
+            <img src='./Group3_I.png' alt='I icon' className='h-5 w-5' />
             {/* sương ơi chỉnh sửa lại chữ I nhé */}
             <span className='text-lg font-bold text-gray-800'>Q</span>
           </div>
