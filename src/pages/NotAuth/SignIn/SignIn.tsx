@@ -121,7 +121,7 @@ export default function SignIn() {
 
             <p className='text-center text-gray-600 mt-4'>
               Don't have an account?
-              <a href='#' className='text-blue-600 hover:underline ml-1'>
+              <a href='/register' className='text-blue-600 hover:underline ml-1'>
                 Register Now
               </a>
             </p>
