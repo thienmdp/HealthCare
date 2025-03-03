@@ -37,11 +37,11 @@ function DefaultLayoutInner({ children }: Props) {
   }, [scrollToTop])
   console.log('DefaultLayout')
   return (
-    <div className='flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip'>
+    <div className='flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip bg-white'>
       {!isAuthen && <GoogleOneTap />}
       <Header />
       <div className='max-w-screen-xl w-full px-6 mx-auto sm:px-10 mt-28 mb-12 lg:mt-[98px]'>{children}</div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   )
 }

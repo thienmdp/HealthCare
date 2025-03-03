@@ -5,7 +5,7 @@
 html,
 body {
   scroll-behavior: smooth;
-  font-family: sans-serif;
+  font-family: 'Lexend' sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
