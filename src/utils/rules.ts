@@ -5,6 +5,8 @@ const EMAIL_REGX =
   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 export const schema = yup.object({
+  firstName: yup.string().required('Tên là bắt buộc').min(2, 'Tên phải có ít nhất 2 ký tự'),
+  lastName: yup.string().required('Họ là bắt buộc').min(2, 'Họ phải có ít nhất 2 ký tự'),
   email: yup
     .string()
     .matches(EMAIL_REGX, 'Email không đúng định dạng')
@@ -12,7 +14,6 @@ export const schema = yup.object({
     .email('Email không đúng định dạng')
     .min(5, 'Độ dài từ 5 đến 160 kí tự')
     .max(160, 'Độ dài từ 5 đến 160 kí tự'),
-  full_name: yup.string().required('Nhập vào tên đầy đủ của bạn').min(2, 'Độ dài từ 2 kí tự'),
   phone: yup
     .string()
     .required('Số điện thoại là bắt buộc')
@@ -28,16 +29,13 @@ export const schema = yup.object({
   specialization: yup.string().required('Vị trí đảm nhiệm là bắt buộc'),
   workplace: yup.string().required('Nơi công tác là bắt buộc'),
   placeOfBirth: yup.string().required('Nơi sinh là bắt buộc').min(2, 'Nơi sinh phải có ít nhất 2 ký tự'),
-
   placeGraduation: yup.string().required('Nơi tốt nghiệp là bắt buộc').min(2, 'Nơi tốt nghiệp phải có ít nhất 2 ký tự'),
-
   yearGraduation: yup
     .number()
     .required('Năm tốt nghiệp là bắt buộc')
     .min(1945, 'Năm tốt nghiệp không thể nhỏ hơn 1945')
     .max(new Date().getFullYear(), `Năm tốt nghiệp không thể lớn hơn ${new Date().getFullYear()}`)
     .typeError('Năm tốt nghiệp phải là số'),
-
   highestDegree: yup
     .string()
     .required('Trình độ học vấn là bắt buộc')
@@ -64,4 +62,5 @@ export const schema = yup.object({
     .oneOf(['ACTIVE', 'BLOCK', 'UNVERIFY'], 'Trạng thái không hợp lệ')
     .required('Trạng thái là bắt buộc')
 })
+
 export type Schema = yup.InferType<typeof schema>
