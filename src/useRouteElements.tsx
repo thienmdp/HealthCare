@@ -69,7 +69,7 @@ const doctorRoutes = [
   }
 ]
 
-const ProtectedRoute = memo(({ allowedRole }: ProtectedRouteProps) => {
+const ProtectedRouteComponent = memo(({ allowedRole }: ProtectedRouteProps) => {
   const { isAuthenticated, roleUser } = useAuth()
   const isAllowed = isAuthenticated && roleUser === allowedRole
 
@@ -85,7 +85,7 @@ const ProtectedRoute = memo(({ allowedRole }: ProtectedRouteProps) => {
   )
 })
 
-const RejectedRoute = memo(() => {
+const RejectedRouteComponent = memo(() => {
   const { isAuth } = useAuth()
   if (isAuth) return <Navigate to={path.landing} />
 
@@ -96,18 +96,18 @@ const RejectedRoute = memo(() => {
   )
 })
 
-const PublicRoute = memo(() => (
+const PublicRouteComponent = memo(() => (
   <DefaultLayout>
     <Outlet />
   </DefaultLayout>
 ))
 
-export default function useRouteElements() {
+const UseRouteElements = () => {
   const routes = useMemo(
     () => [
       {
         path: '',
-        element: <RejectedRoute />,
+        element: <RejectedRouteComponent />,
         children: rejectedRoutes
       },
       {
@@ -121,22 +121,22 @@ export default function useRouteElements() {
       },
       {
         path: '',
-        element: <PublicRoute />,
+        element: <PublicRouteComponent />,
         children: publicRoutes
       },
       {
         path: '',
-        element: <ProtectedRoute allowedRole='USER' />,
+        element: <ProtectedRouteComponent allowedRole='USER' />,
         children: userRoutes
       },
       {
         path: '',
-        element: <ProtectedRoute allowedRole='ADMIN' />,
+        element: <ProtectedRouteComponent allowedRole='ADMIN' />,
         children: adminRoutes
       },
       {
         path: '',
-        element: <ProtectedRoute allowedRole='DOCTOR' />,
+        element: <ProtectedRouteComponent allowedRole='DOCTOR' />,
         children: doctorRoutes
       },
       {
@@ -152,3 +152,5 @@ export default function useRouteElements() {
   )
   return useRoutes(routes)
 }
+
+export default UseRouteElements
