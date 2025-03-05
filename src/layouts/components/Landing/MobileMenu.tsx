@@ -95,7 +95,7 @@ export const MobileMenu = () => {
                       scroll.scrollToTop({ duration: 300, smooth: true })
                     }}
                   >
-                    Khóa học liên tục
+                    Khóa Diagnosis
                   </Link>
                   <Link
                     to={path.landing}
