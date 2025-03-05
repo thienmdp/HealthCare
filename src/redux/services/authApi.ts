@@ -22,7 +22,7 @@ export const authApi = createApi({
           const { data } = await queryFulfilled
           console.log('LOGIN DATA', data)
           await dispatch(setAccessToken(data.data.access_token))
-          Cookies.set('access_token', data.data.access_token)
+          Cookies.set('accessToken', data.data.access_token)
           Cookies.set('isAuthenticated', 'true')
           await dispatch(userApi.endpoints.getMe.initiate(null, { forceRefetch: true }))
         } catch (error) {
