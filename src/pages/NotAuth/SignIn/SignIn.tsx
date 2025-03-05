@@ -82,7 +82,7 @@ export default function SignIn() {
   return (
     <div>
       <Helmet>
-        <title>Đăng nhập - Học liên tục</title>
+        <title>Đăng nhập - Diagnosis</title>
         <meta
           name='description'
           content='Diagnosis IQ: Smart Clinical Decision Support System for Automated Hospital.'
