@@ -22,7 +22,7 @@ export const Header = () => {
   const { i18n, t } = useTranslation('landing')
   const [scrollActive, setScrollActive] = useState(false)
   const user = useAppSelector((auth) => auth.authState.user)
-
+  console.log('user', user)
   useEffect(() => {
     localStorage.setItem('preferredTheme', 'light')
   }, [])

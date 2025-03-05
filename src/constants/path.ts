@@ -3,6 +3,7 @@ const path = {
   about: '/about',
   signin: '/sign-in',
   register: '/register',
+  verifyEmail: '/verify-email',
   logout: '/logout',
   // User
   profile: '/profile',

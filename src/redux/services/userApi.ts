@@ -10,15 +10,15 @@ export const userApi = createApi({
   tagTypes: ['User'],
   endpoints: (build) => ({
     getMe: build.query<{ data: User }, null>({
-      query: () => 'users/token',
+      query: () => 'user/profile',
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          // console.log('LOG ', data)
-          await dispatch(setRoleUser(data.data.roles))
+          console.log('LOG GETME', data)
+          await dispatch(setRoleUser(data.data.role))
           dispatch(setUser(data.data))
           dispatch(setAuthenticated(true))
-          Cookies.set('userRole', data.data.roles)
+          Cookies.set('userRole', data.data.role)
           Cookies.set('currentUser', JSON.stringify(data.data))
         } catch (error) {
           dispatch(setUser(null))

@@ -4,13 +4,14 @@ import { CustomNotification } from '@/components/CustomReactToastify'
 import { useRegisterAccountMutation } from '@/redux/services/authApi'
 import { Schema, schema } from '@/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-type FormData = Pick<Schema, 'firstName' | 'lastName' | 'email' | 'password' | 'confirm_password' | 'phone'>
-const registerSchema = schema.pick(['firstName', 'lastName', 'email', 'password', 'confirm_password', 'phone'])
+type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password' | 'firstName' | 'lastName' | 'phone'>
+const registerSchema = schema.pick(['email', 'password', 'confirm_password', 'firstName', 'lastName', 'phone'])
 
 export default function SignUp() {
   const navigate = useNavigate()
@@ -25,13 +26,13 @@ export default function SignUp() {
   } = useForm<FormData>({ resolver: yupResolver(registerSchema) })
 
   const onSubmit = handleSubmit((data: FormData) => {
-    // registerAccount({
-    //   firstName: data.firstName,
-    //   lastName: data.lastName,
-    //   email: data.email,
-    //   phone: data.phone,
-    //   password: data.password
-    // })
+    registerAccount({
+      lastName: data.lastName,
+      firstName: data.firstName,
+      email: data.email,
+      phone: data.phone,
+      password: data.password
+    })
   })
 
   useEffect(() => {
@@ -39,133 +40,112 @@ export default function SignUp() {
       toast.success(CustomNotification, {
         data: {
           title: 'Đăng ký thành công!',
-          content: 'Vui lòng kiểm tra email để kích hoạt tài khoản'
+          content: 'Vui lòng xác thực email của bạn'
         }
       })
-      navigate('/sign-in', { state: { email: getValues('email'), password: getValues('password') } })
+      navigate('/verify-email', {
+        state: {
+          email: getValues('email')
+        }
+      })
     }
     if (resultRegister.error) {
       const formError = (resultRegister.error as any)?.data?.message || resultRegister.error
       if (formError) {
-        if (formError === 'Email này đã sử dụng bởi người dùng khác.') {
+        if (formError === 'EMAIL_ALREADY_EXISTS') {
           setError('email', {
             message: 'Email đã tồn tại',
             type: 'Server'
           })
-        } else if (formError === 'Số điện thoại đã được sử dụng bởi người dùng khác.') {
+        } else if (formError === 'PHONE_ALREADY_EXISTS') {
           setError('phone', {
             message: 'Số điện thoại đã được sử dụng',
             type: 'Server'
           })
-        } else {
-          toast.error(formError)
         }
       }
     }
-  }, [resultRegister, setError, getValues, navigate])
+    console.log('resultRegister=>', resultRegister)
+  }, [resultRegister])
 
   return (
-    <div className='flex justify-center items-center min-h-screen bg-gray-100'>
-      <div className='bg-white p-8 rounded-lg shadow-md w-full max-w-3xl'>
-        <h2 className='text-center text-2xl font-bold text-gray-800'>Register for a Participant Account</h2>
-        <p className='text-center text-gray-600 mb-6'>Create your Account</p>
-
-        <form onSubmit={onSubmit} className='space-y-4'>
-          <div className='grid grid-cols-2 gap-4'>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
+    <div className='flex mt-10'>
+      <Helmet>
+        <title>Đăng ký - Học liên tục</title>
+        <meta
+          name='description'
+          content='Diagnosis IQ: Smart Clinical Decision Support System for Automated Hospital.'
+        />
+      </Helmet>
+      {/* <div className='items-center justify-between flex-1 hidden text-black bg-white lg:flex'>
+        <div className='max-w-md text-center'>
+          <img src='/assets/svg/register.svg' height={500} width={600} alt='' />
+        </div>
+      </div> */}
+      <div className='flex items-center justify-center w-full bg-gray-100 --lg:w-1/2'>
+        <div className='w-full max-w-md p-6 xl:max-w-xl'>
+          <p className='mb-6 text-3xl font-semibold text-center text-black'>Đăng ký</p>
+          <p className='mb-6 text-sm font-semibold text-center text-gray-700'>
+            Tham gia Cộng đồng của chúng tôi với quyền truy cập mọi lúc và miễn phí{' '}
+          </p>
+          <form onSubmit={onSubmit} className='space-y-4'>
+            <Input
+              name='email'
+              className='mt-6'
+              placeholder='Email'
+              register={register}
+              type='email'
+              errorMessage={errors.email?.message}
+            />
+            <Input
+              name='phone'
+              className='mt-6'
+              placeholder='Phone Number'
+              register={register}
+              type='phone'
+              errorMessage={errors.phone?.message}
+            />
+            <div className='grid grid-cols-2 gap-x-4'>
               <Input
                 name='firstName'
+                placeholder='First Name'
                 register={register}
                 errorMessage={errors.firstName?.message}
-                type='text'
-                className='w-full rounded-sm'
-                placeholder='Enter your first name'
               />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
               <Input
                 name='lastName'
+                placeholder='Last Name'
                 register={register}
                 errorMessage={errors.lastName?.message}
-                type='text'
-                className='w-full rounded'
-                placeholder='Enter your last name'
               />
             </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Email</label>
-              <Input
-                name='email'
-                register={register}
-                errorMessage={errors.email?.message}
-                type='email'
-                className='w-full'
-                placeholder='Enter your Email Address'
-              />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Date of Birth</label>
-              <Input type='date' className='w-full' />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Phone</label>
-              <Input
-                name='phone'
-                register={register}
-                errorMessage={errors.phone?.message}
-                type='phone'
-                className='w-full rounded'
-                placeholder='Enter your phone number'
-              />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
-              <select className='w-full p-3 border rounded bg-gray-100'>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Password</label>
+            <div className='grid grid-cols-2 mt-6 gap-x-4'>
               <Input
                 name='password'
+                placeholder='Password'
                 register={register}
-                errorMessage={errors.password?.message}
                 type='password'
-                className='w-full'
-                placeholder='Enter your password'
+                errorMessage={errors.password?.message}
+                autoComplete='on'
               />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Confirm Password</label>
               <Input
                 name='confirm_password'
+                placeholder='Confirm Password'
                 register={register}
-                errorMessage={errors.confirm_password?.message}
                 type='password'
-                className='w-full'
-                placeholder='Confirm your password'
+                autoComplete='on'
+                errorMessage={errors.confirm_password?.message}
               />
             </div>
-          </div>
-
-          <div className='flex justify-between mt-6'>
-            <Button type='button' className='px-6 py-2 border border-gray-700 rounded bg-cyan-500 hover:bg-gray-500'>
-              CANCEL
-            </Button>
             <Button
+              type='submit'
+              className='flex items-center justify-center w-full p-2 text-white transition-colors duration-300 rounded-md bg-gradient-to-br to-blue-700 from-blue_app via-blue_app hover:bg-gradient-to-tl focus:outline-none focus:ring-2 focus:ring-offset-2'
               isLoading={resultRegister.isLoading}
               disabled={resultRegister.isLoading}
-              type='submit'
-              className='px-6 py-2 bg-teal-600 text-white rounded hover:bg-teal-800'
             >
-              SUBMIT
+              Đăng ký
             </Button>
-          </div>
-
+          </form>
           <div className='mt-4 text-sm text-center text-gray-700'>
             <p>
               Đã có tài khoản?{' '}
@@ -174,7 +154,7 @@ export default function SignUp() {
               </Link>
             </p>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   )

@@ -7,20 +7,20 @@ import DashboardLayout from './layouts/DashboardLayout'
 import { DashboardAdmin } from './pages/Dashboard/admin'
 import { DashboardDoctor } from './pages/Dashboard/doctor'
 import { Page_404 } from './pages/NotFound'
-import { SignIn, SignUp } from './pages/NotAuth'
+import { SignIn, SignUp, VerifyEmail } from './pages/NotAuth'
 import { About, Landing } from './pages/Landing'
 import { Profile } from './pages/Dashboard/user'
 
 type ProtectedRouteProps = {
-  allowedRole: 'USER' | 'ADMIN' | 'DOCTOR'
+  allowedRole: 'user' | 'admin' | 'doctor'
 }
 
 function useAuth() {
   const { isAuthenticated, role: roleUser } = useAppSelector((state) => state.authState)
 
-  const isAdmin = isAuthenticated && roleUser === 'ADMIN'
-  const isDoctor = isAuthenticated && roleUser === 'DOCTOR'
-  const isUser = isAuthenticated && roleUser === 'USER'
+  const isAdmin = isAuthenticated && roleUser === 'admin'
+  const isDoctor = isAuthenticated && roleUser === 'doctor'
+  const isUser = isAuthenticated && roleUser === 'user'
   const isAuth = isAuthenticated && (isAdmin || isUser || isDoctor)
 
   return { isAuthenticated, roleUser, isAdmin, isDoctor, isUser, isAuth }
@@ -34,6 +34,10 @@ const rejectedRoutes = [
   {
     path: path.register,
     element: <SignUp />
+  },
+  {
+    path: path.verifyEmail,
+    element: <VerifyEmail />
   }
 ]
 
@@ -74,10 +78,10 @@ const ProtectedRouteComponent = memo(({ allowedRole }: ProtectedRouteProps) => {
   const isAllowed = isAuthenticated && roleUser === allowedRole
 
   if (!isAllowed) {
-    return <Navigate to={allowedRole === 'USER' ? path.signin : path.landing} replace />
+    return <Navigate to={allowedRole === 'user' ? path.signin : path.landing} replace />
   }
 
-  const Layout = allowedRole === 'USER' ? DefaultLayout : DashboardLayout
+  const Layout = allowedRole === 'user' ? DefaultLayout : DashboardLayout
   return (
     <Layout>
       <Outlet />
@@ -126,17 +130,17 @@ const UseRouteElements = () => {
       },
       {
         path: '',
-        element: <ProtectedRouteComponent allowedRole='USER' />,
+        element: <ProtectedRouteComponent allowedRole='user' />,
         children: userRoutes
       },
       {
         path: '',
-        element: <ProtectedRouteComponent allowedRole='ADMIN' />,
+        element: <ProtectedRouteComponent allowedRole='admin' />,
         children: adminRoutes
       },
       {
         path: '',
-        element: <ProtectedRouteComponent allowedRole='DOCTOR' />,
+        element: <ProtectedRouteComponent allowedRole='doctor' />,
         children: doctorRoutes
       },
       {

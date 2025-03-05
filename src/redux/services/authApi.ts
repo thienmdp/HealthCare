@@ -11,7 +11,7 @@ export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: customFetchBase,
   endpoints: (build) => ({
-    loginUser: build.mutation<AuthResponse, LoginInput>({
+    loginUser: build.mutation<{ data: AuthResponse }, LoginInput>({
       query: (data) => ({
         url: 'auth/login',
         method: 'POST',
@@ -21,8 +21,8 @@ export const authApi = createApi({
         try {
           const { data } = await queryFulfilled
           console.log('LOGIN DATA', data)
-          await dispatch(setAccessToken(data.accessToken))
-          Cookies.set('accessToken', data.accessToken)
+          await dispatch(setAccessToken(data.data.access_token))
+          Cookies.set('access_token', data.data.access_token)
           Cookies.set('isAuthenticated', 'true')
           await dispatch(userApi.endpoints.getMe.initiate(null, { forceRefetch: true }))
         } catch (error) {
@@ -30,7 +30,7 @@ export const authApi = createApi({
         }
       }
     }),
-    changePassword: build.mutation<AuthResponse, { oldPassword: string; newPassword: string }>({
+    changePassword: build.mutation<{ data: AuthResponse }, { oldPassword: string; newPassword: string }>({
       query(data) {
         return {
           url: `auth/change-password`,
@@ -46,7 +46,7 @@ export const authApi = createApi({
         }
       }
     }),
-    registerAccount: build.mutation<AuthResponse, RegisterInput>({
+    registerAccount: build.mutation<{ data: AuthResponse }, RegisterInput>({
       query(data) {
         return {
           url: 'auth/register',
@@ -62,7 +62,7 @@ export const authApi = createApi({
         }
       }
     }),
-    confirmToken: build.mutation<AuthResponse, { token: string }>({
+    confirmToken: build.mutation<{ data: AuthResponse }, { token: string }>({
       query: (token) => ({
         url: 'auth/google',
         method: 'POST',
@@ -71,18 +71,27 @@ export const authApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          await dispatch(setAccessToken(data.accessToken))
-          Cookies.set('accessToken', data.accessToken)
+          await dispatch(setAccessToken(data.data.access_token))
+          Cookies.set('access_token', data.data.access_token)
           Cookies.set('isAuthenticated', 'true')
         } catch (error) {
           console.error('Error in confirmToken:', error)
         }
       }
     }),
-    verifyEmail: build.mutation<AuthResponse, { token: string }>({
-      query: ({ token }) => ({
-        url: `auth/verify-email${token ? `?token=${token}` : ''}`,
-        method: 'GET'
+
+    verifyEmail: build.mutation<any, { email: string; code: string }>({
+      query: (body) => ({
+        url: '/auth/verify-email',
+        method: 'POST',
+        body
+      })
+    }),
+    resendVerifyEmail: build.mutation<any, { email: string }>({
+      query: (body) => ({
+        url: '/auth/resend-verify-email',
+        method: 'POST',
+        body
       })
     })
   })
@@ -93,5 +102,6 @@ export const {
   useRegisterAccountMutation,
   useChangePasswordMutation,
   useConfirmTokenMutation,
-  useVerifyEmailMutation
+  useVerifyEmailMutation,
+  useResendVerifyEmailMutation
 } = authApi

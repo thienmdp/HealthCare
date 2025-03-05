@@ -3,10 +3,9 @@ import { logOut } from '@/redux/features/auth.slice'
 import { authApi } from '@/redux/services/authApi'
 import { useAppSelector } from '@/redux/store'
 import { getAvatarUrl } from '@/utils/user'
-import { Home, LogOut, User } from 'lucide-react'
+import { CreditCard, Home, LogOut, User } from 'lucide-react'
 import { useDispatch } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
-import { FaCreditCard } from 'react-icons/fa'
 
 import {
   DropdownMenu,
@@ -38,35 +37,39 @@ export default function CardUser() {
         <div className='box-border flex items-center h-full cursor-pointer max-w-fit'>
           <Avatar>
             <AvatarImage src={getAvatarUrl(user ?? undefined)} alt='Avatar' />
-            <AvatarFallback>{user?.full_name?.charAt(0)?.toUpperCase() || 'U'}</AvatarFallback>
+            <AvatarFallback>{user?.profile?.fullName?.charAt(0)?.toUpperCase() || 'U'}</AvatarFallback>
           </Avatar>
           <p className='ml-2 text-sm max-w-[180px] truncate'>
             <span className='hidden md:contents'>Hi, </span>
-            <span className='hidden overflow-hidden md:contents'>{user?.full_name}</span>
+            <span className='hidden overflow-hidden md:contents'>{user?.profile?.fullName}</span>
           </p>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56'>
         <DropdownMenuGroup>
-          {role !== 'USER' && (
+          <DropdownMenuItem>
+            <User className='w-4 h-4 mr-2' />
+            <Link to={path.profile}>Profile</Link>
+          </DropdownMenuItem>
+          {role !== 'user' && (
             <DropdownMenuItem>
-              <Home className='mr-2 w-4 h-4' />
-              <Link to={pathname.match('dashboard') ? '/' : role === 'ADMIN' ? path.dashboard_admin : path.dashboard}>
+              <Home className='w-4 h-4 mr-2' />
+              <Link to={pathname.match('dashboard') ? '/' : role === 'admin' ? path.dashboard_admin : path.dashboard}>
                 {pathname.match('dashboard') ? 'Landing' : 'Dashboard'}
               </Link>
             </DropdownMenuItem>
           )}
           <DropdownMenuItem>
-            <User className='mr-2 w-4 h-4' />
+            <User className='w-4 h-4 mr-2' />
             <Link to={path.profile}>{t('user.profile')}</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuItem>
-          <FaCreditCard className='mr-2 w-4 h-4' />
+          <CreditCard className='w-4 h-4 mr-2' />
           <Link to={path.payment}>{t('user.payment')}</Link>
         </DropdownMenuItem>
         <DropdownMenuItem className='text-red-600' onClick={handleLogout}>
-          <LogOut className='mr-2 w-4 h-4' />
+          <LogOut className='w-4 h-4 mr-2' />
           <span>{t('header.logout')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

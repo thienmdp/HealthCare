@@ -5,8 +5,6 @@ const EMAIL_REGX =
   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 export const schema = yup.object({
-  firstName: yup.string().required('Tên là bắt buộc').min(2, 'Tên phải có ít nhất 2 ký tự'),
-  lastName: yup.string().required('Họ là bắt buộc').min(2, 'Họ phải có ít nhất 2 ký tự'),
   email: yup
     .string()
     .matches(EMAIL_REGX, 'Email không đúng định dạng')
@@ -14,22 +12,20 @@ export const schema = yup.object({
     .email('Email không đúng định dạng')
     .min(5, 'Độ dài từ 5 đến 160 kí tự')
     .max(160, 'Độ dài từ 5 đến 160 kí tự'),
+  fullName: yup.string().required('Nhập vào tên đầy đủ của bạn').min(2, 'Độ dài từ 2 kí tự'),
+  firstName: yup.string().required('Nhập vào họ và tên lót của bạn').min(2, 'Độ dài từ 2 kí tự'),
+  lastName: yup.string().required('Nhập vào tên của bạn').min(2, 'Độ dài từ 2 kí tự'),
   phone: yup
     .string()
     .required('Số điện thoại là bắt buộc')
     .matches(/^(84|0[2|3|5|7|8|9])+([0-9]{8,9})\b$/, 'Số điện thoại không hợp lệ'),
   license_number: yup.string().required('Số CCCD là bắt buộc').matches(CCCD_REGX, 'Số CCCD phải gồm 12 chữ số'),
   address: yup.string().required('Địa chỉ là bắt buộc'),
-  experience: yup.string().required('Kinh nghiệm là bắt buộc'),
-  date_of_birth: yup
+  birth: yup
     .date()
     .required('Ngày tháng năm sinh là bắt buộc')
     .max(new Date(), 'Ngày tháng năm sinh không thể ở tương lai')
     .typeError('Ngày tháng năm sinh không hợp lệ'),
-  specialization: yup.string().required('Vị trí đảm nhiệm là bắt buộc'),
-  workplace: yup.string().required('Nơi công tác là bắt buộc'),
-  placeOfBirth: yup.string().required('Nơi sinh là bắt buộc').min(2, 'Nơi sinh phải có ít nhất 2 ký tự'),
-  placeGraduation: yup.string().required('Nơi tốt nghiệp là bắt buộc').min(2, 'Nơi tốt nghiệp phải có ít nhất 2 ký tự'),
   yearGraduation: yup
     .number()
     .required('Năm tốt nghiệp là bắt buộc')

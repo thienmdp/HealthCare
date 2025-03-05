@@ -3,11 +3,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import Cookies from 'js-cookie'
 import { userApi } from '../services/userApi'
 import { authApi } from '../services/authApi'
+import { User } from '@/types/user.type'
 
 export interface InitialState {
   isAuthenticated: boolean
   role: string | null
-  user: any | null
+  user: User | null
   accessToken: string | null
 }
 
