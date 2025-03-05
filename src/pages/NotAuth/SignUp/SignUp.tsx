@@ -10,8 +10,8 @@ import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password' | 'full_name' | 'phone'>
-const registerSchema = schema.pick(['email', 'password', 'confirm_password', 'full_name', 'phone'])
+type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password' | 'firstName' | 'lastName' | 'phone'>
+const registerSchema = schema.pick(['email', 'password', 'confirm_password', 'firstName', 'lastName', 'phone'])
 
 export default function SignUp() {
   const navigate = useNavigate()
@@ -27,39 +27,41 @@ export default function SignUp() {
 
   const onSubmit = handleSubmit((data: FormData) => {
     registerAccount({
-      full_name: data.full_name,
+      lastName: data.lastName,
+      firstName: data.firstName,
       email: data.email,
-      phone_number: data.phone,
+      phone: data.phone,
       password: data.password
     })
   })
 
   useEffect(() => {
     if (resultRegister.data) {
-      console.log('resultRegister.data', resultRegister.data)
       toast.success(CustomNotification, {
         data: {
           title: 'Đăng ký thành công!',
-          content: 'Vui lòng kiểm tra email để kích hoạt tài khoản'
+          content: 'Vui lòng xác thực email của bạn'
         }
       })
-      navigate('/sign-in', { state: { email: getValues('email'), password: getValues('password') } })
+      navigate('/verify-email', {
+        state: {
+          email: getValues('email')
+        }
+      })
     }
     if (resultRegister.error) {
       const formError = (resultRegister.error as any)?.data?.message || resultRegister.error
       if (formError) {
-        if (formError === 'Email này đã sử dụng bởi người dùng khác.') {
+        if (formError === 'EMAIL_ALREADY_EXISTS') {
           setError('email', {
             message: 'Email đã tồn tại',
             type: 'Server'
           })
-        } else if (formError === 'Số điện thoại đã được sử dụng bởi người dùng khác.') {
+        } else if (formError === 'PHONE_ALREADY_EXISTS') {
           setError('phone', {
             message: 'Số điện thoại đã được sử dụng',
             type: 'Server'
           })
-        } else {
-          toast.error(formError)
         }
       }
     }
@@ -75,13 +77,13 @@ export default function SignUp() {
           content='Diagnosis IQ: Smart Clinical Decision Support System for Automated Hospital.'
         />
       </Helmet>
-      {/* <div className='hidden flex-1 justify-between items-center text-black bg-white lg:flex'>
+      {/* <div className='items-center justify-between flex-1 hidden text-black bg-white lg:flex'>
         <div className='max-w-md text-center'>
           <img src='/assets/svg/register.svg' height={500} width={600} alt='' />
         </div>
       </div> */}
-      <div className='flex justify-center items-center w-full bg-gray-100 --lg:w-1/2'>
-        <div className='p-6 w-full max-w-md xl:max-w-xl'>
+      <div className='flex items-center justify-center w-full bg-gray-100 --lg:w-1/2'>
+        <div className='w-full max-w-md p-6 xl:max-w-xl'>
           <p className='mb-6 text-3xl font-semibold text-center text-black'>Đăng ký</p>
           <p className='mb-6 text-sm font-semibold text-center text-gray-700'>
             Tham gia Cộng đồng của chúng tôi với quyền truy cập mọi lúc và miễn phí{' '}
@@ -103,14 +105,21 @@ export default function SignUp() {
               type='phone'
               errorMessage={errors.phone?.message}
             />
-            <Input
-              name='full_name'
-              className='mt-6'
-              placeholder='Full name'
-              register={register}
-              errorMessage={errors.full_name?.message}
-            />
-            <div className='grid grid-cols-2 gap-x-4 mt-6'>
+            <div className='grid grid-cols-2 gap-x-4'>
+              <Input
+                name='firstName'
+                placeholder='First Name'
+                register={register}
+                errorMessage={errors.firstName?.message}
+              />
+              <Input
+                name='lastName'
+                placeholder='Last Name'
+                register={register}
+                errorMessage={errors.lastName?.message}
+              />
+            </div>
+            <div className='grid grid-cols-2 mt-6 gap-x-4'>
               <Input
                 name='password'
                 placeholder='Password'
@@ -126,12 +135,11 @@ export default function SignUp() {
                 type='password'
                 autoComplete='on'
                 errorMessage={errors.confirm_password?.message}
-                // rules={rules.confirm_password}
               />
             </div>
             <Button
               type='submit'
-              className='flex justify-center items-center p-2 w-full text-white bg-gradient-to-br to-blue-700 rounded-md transition-colors duration-300 from-blue_app via-blue_app hover:bg-gradient-to-tl focus:outline-none focus:ring-2 focus:ring-offset-2'
+              className='flex items-center justify-center w-full p-2 text-white transition-colors duration-300 rounded-md bg-gradient-to-br to-blue-700 from-blue_app via-blue_app hover:bg-gradient-to-tl focus:outline-none focus:ring-2 focus:ring-offset-2'
               isLoading={resultRegister.isLoading}
               disabled={resultRegister.isLoading}
             >

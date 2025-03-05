@@ -30,10 +30,10 @@ const baseQuery = fetchBaseQuery({
 
 const isToastExcludedEndpoint = (args: string | FetchArgs) => {
   if (typeof args === 'string') {
-    return args === 'users' || args.includes('users/') || args === 'auth/register'
+    return args === 'user' || args.includes('user/') || args === 'auth/register'
   }
   return (
-    (args.url === 'users' || args.url.includes('users/') || args.url === 'auth/register') &&
+    (args.url === 'user' || args.url.includes('user/') || args.url === 'auth/register') &&
     ['POST', 'PATCH'].includes(args.method || '')
   )
 }
@@ -62,8 +62,14 @@ const handleErrorToast = (message: string, api: any) => {
 const retryRequest = async (args: string | FetchArgs, api: any, extraOptions: any, retryCount = 0): Promise<any> => {
   const isAuthLogin =
     typeof args === 'string'
-      ? args.includes('auth/login') || args.includes('auth/register') || args.includes('users/')
-      : args.url.includes('auth/login') || args.url.includes('auth/register') || args.url.includes('users/')
+      ? args.includes('auth/login') ||
+        args.includes('auth/register') ||
+        args.includes('user/') ||
+        args.includes('auth/verify-email')
+      : args.url.includes('auth/login') ||
+        args.url.includes('auth/register') ||
+        args.url.includes('user/') ||
+        args.url.includes('auth/verify-email')
   try {
     const result = await baseQuery(args, api, extraOptions)
 
@@ -108,7 +114,7 @@ const customFetchBase: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryEr
     const errorMessage = result.error
       ? extractErrorMessage(result.error as ErrorResponse)
       : (result.data as ErrorResponse)?.data?.message
-
+    console.log('errorMessage', result)
     if (errorMessage) {
       // Xử lý token hết hạn
       if (errorMessage === 'Invalid Token or Token Expired') {
