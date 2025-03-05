@@ -16,8 +16,8 @@ export function SidebarDashboard() {
         <div className='flex flex-col flex-1 overflow-x-hidden overflow-y-auto'>
           {open ? <Logo /> : <LogoIcon />}
           <div className='flex flex-col gap-2 mt-8'>
-            {role === 'ADMIN' && sidebarAdmin.map((item, index) => <SidebarLink key={index} link={item} />)}
-            {role === 'DOCTOR' && sidebarDoctor.map((item, index) => <SidebarLink key={index} link={item} />)}
+            {role === 'admin' && sidebarAdmin.map((item, index) => <SidebarLink key={index} link={item} />)}
+            {role === 'doctor' && sidebarDoctor.map((item, index) => <SidebarLink key={index} link={item} />)}
           </div>
         </div>
         <div>
