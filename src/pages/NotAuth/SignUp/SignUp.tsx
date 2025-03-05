@@ -71,7 +71,7 @@ export default function SignUp() {
   return (
     <div className='flex mt-10'>
       <Helmet>
-        <title>Đăng ký - Học liên tục</title>
+        <title>Đăng ký - Diagnosis</title>
         <meta
           name='description'
           content='Diagnosis IQ: Smart Clinical Decision Support System for Automated Hospital.'
