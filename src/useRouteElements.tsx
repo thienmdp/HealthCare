@@ -4,7 +4,7 @@ import path from './constants/path'
 import { useAppSelector } from './redux/store'
 import DefaultLayout from './layouts/DefaultLayout'
 import DashboardLayout from './layouts/DashboardLayout'
-import { DashboardAdmin } from './pages/Dashboard/admin'
+import { DashboardAdmin, UserManage } from './pages/Dashboard/admin'
 import { DashboardDoctor } from './pages/Dashboard/doctor'
 import { Page_404 } from './pages/NotFound'
 import { SignIn, SignUp, VerifyEmail } from './pages/NotAuth'
@@ -63,6 +63,10 @@ const adminRoutes = [
   {
     path: path.dashboard_admin,
     element: <DashboardAdmin />
+  },
+  {
+    path: path.userManage,
+    element: <UserManage />
   }
 ]
 
