@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import "tailwindcss/tailwind.css";
 
 const LandingContent: React.FC = () => {
   const { t } = useTranslation();

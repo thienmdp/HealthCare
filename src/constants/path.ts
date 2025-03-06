@@ -3,6 +3,8 @@ const path = {
   about: '/about',
   signin: '/sign-in',
   register: '/register',
+  services: '/services',
+  contact: '/contact',
   verifyEmail: '/verify-email',
   logout: '/logout',
   // User
