@@ -59,4 +59,42 @@ export const schema = yup.object({
     .oneOf(['ACTIVE', 'BLOCK', 'UNVERIFY'], 'Trạng thái không hợp lệ')
     .required('Trạng thái là bắt buộc')
 })
+
+export const adminUpdateUserSchema = yup.object({
+  firstName: yup.string().required('Nhập vào họ và tên lót của bạn').min(2, 'Độ dài từ 2 kí tự'),
+  lastName: yup.string().required('Nhập vào tên của bạn').min(2, 'Độ dài từ 2 kí tự'),
+  phone: yup
+    .string()
+    .required('Vui lòng nhập số điện thoại')
+    .matches(/^(84|0[2|3|5|7|8|9])+([0-9]{8,9})\b$/, 'Số điện thoại không hợp lệ'),
+  birth: yup.date().nullable(),
+  gender: yup.string().oneOf(['male', 'female'], 'Vui lòng chọn giới tính'),
+  role: yup.string().oneOf(['user', 'doctor'], 'Vui lòng chọn vai trò'),
+  address: yup.string(),
+  disabled: yup.boolean(),
+  isVerified: yup.boolean()
+})
+
+export type AdminUpdateUserSchema = yup.InferType<typeof adminUpdateUserSchema>
+
+export const createUserSchema = yup.object({
+  email: yup.string().required('Vui lòng nhập email').email('Email không hợp lệ'),
+  password: yup.string().required('Vui lòng nhập mật khẩu').min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
+  firstName: yup.string().required('Nhập vào họ và tên lót của bạn').min(2, 'Độ dài từ 2 kí tự'),
+  lastName: yup.string().required('Nhập vào tên của bạn').min(2, 'Độ dài từ 2 kí tự'),
+  phone: yup
+    .string()
+    .required('Vui lòng nhập số điện thoại')
+    .matches(/^(84|0[2|3|5|7|8|9])+([0-9]{8,9})\b$/, 'Số điện thoại không hợp lệ'),
+  role: yup.string().oneOf(['user', 'doctor'], 'Vui lòng chọn vai trò').required('Vui lòng chọn vai trò'),
+  gender: yup.string().oneOf(['male', 'female'], 'Vui lòng chọn giới tính').required('Vui lòng chọn giới tính'),
+  birth: yup
+    .date()
+    .required('Vui lòng chọn ngày sinh')
+    .max(new Date(), 'Ngày sinh không thể ở tương lai')
+    .typeError('Ngày sinh không hợp lệ')
+})
+
+export type CreateUserSchema = yup.InferType<typeof createUserSchema>
+
 export type Schema = yup.InferType<typeof schema>

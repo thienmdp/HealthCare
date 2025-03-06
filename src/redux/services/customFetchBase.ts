@@ -114,7 +114,6 @@ const customFetchBase: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryEr
     const errorMessage = result.error
       ? extractErrorMessage(result.error as ErrorResponse)
       : (result.data as ErrorResponse)?.data?.message
-    console.log('errorMessage', result)
     if (errorMessage) {
       // Xử lý token hết hạn
       if (errorMessage === 'Invalid Token or Token Expired') {

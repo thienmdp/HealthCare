@@ -10,7 +10,7 @@ export const sidebarAdmin = [
   {
     label: 'Quản lý người dùng',
     icon: <UsersRound className='flex-shrink-0 w-5 h-5' />,
-    href: '#path.userManage'
+    href: path.userManage
   },
   {
     label: 'Tài khoản',
