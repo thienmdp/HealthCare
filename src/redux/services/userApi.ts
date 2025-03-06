@@ -27,10 +27,10 @@ export const userApi = createApi({
         }
       }
     }),
-    updateMe: build.mutation<{ data: User }, { id: string; data: UpdateInfoUserInput }>({
-      query({ id, data }) {
+    updateMe: build.mutation<{ data: User }, { data: UpdateInfoUserInput }>({
+      query({ data }) {
         return {
-          url: `users/${id}`,
+          url: `user/update-profile`,
           method: 'PATCH',
           body: data
         }
@@ -44,7 +44,7 @@ export const userApi = createApi({
       }
     }),
     getProfileUser: build.query<{ data: User }, string>({
-      query: (id) => `users/${id}`,
+      query: (id) => `user/find/${id}`,
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
@@ -54,7 +54,7 @@ export const userApi = createApi({
       }
     }),
     getAllUser: build.query<{ data: User[] }, null>({
-      query: (branchId) => `users`,
+      query: (branchId) => `user/all`,
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
@@ -66,7 +66,7 @@ export const userApi = createApi({
     createUser: build.mutation<{ data: User }, CreateUserInput>({
       query(data) {
         return {
-          url: 'users',
+          url: 'user/create',
           method: 'POST',
           body: data
         }
@@ -78,8 +78,33 @@ export const userApi = createApi({
           console.error('Error in createUser:', error)
         }
       }
+    }),
+    adminUpdateUser: build.mutation<{ data: User }, { id: string; data: Partial<UpdateInfoUserInput> }>({
+      query({ id, data }) {
+        return {
+          url: `user/update`,
+          method: 'PATCH',
+          body: { id, ...data }
+        }
+      },
+      invalidatesTags: ['User']
+    }),
+    deleteUser: build.mutation<{ message: string }, { id: string }>({
+      query: ({ id }) => ({
+        url: 'user/delete',
+        method: 'DELETE',
+        body: { id }
+      }),
+      invalidatesTags: ['User']
     })
   })
 })
-export const { useGetMeQuery, useUpdateMeMutation, useGetProfileUserQuery, useCreateUserMutation, useGetAllUserQuery } =
-  userApi
+export const {
+  useGetMeQuery,
+  useUpdateMeMutation,
+  useGetProfileUserQuery,
+  useCreateUserMutation,
+  useGetAllUserQuery,
+  useAdminUpdateUserMutation,
+  useDeleteUserMutation
+} = userApi

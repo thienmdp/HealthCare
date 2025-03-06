@@ -6,6 +6,26 @@ import Cookies from 'js-cookie'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
+export const bufferToHex = (input: any): string => {
+  if (typeof input === 'string') {
+    return input
+  } else if (input?.buffer?.data && Array.isArray(input.buffer.data)) {
+    return input.buffer.data.map((byte: number) => byte.toString(16).padStart(2, '0')).join('')
+  } else if (input?.data && Array.isArray(input.data)) {
+    return input.data.map((byte: number) => byte.toString(16).padStart(2, '0')).join('')
+  } else if (input instanceof Uint8Array) {
+    return Array.from(input)
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('')
+  } else if (input instanceof ArrayBuffer) {
+    return Array.from(new Uint8Array(input))
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('')
+  } else {
+    throw new Error(`Invalid input format: ${JSON.stringify(input)}`)
+  }
+}
+
 export const getAccessToken = () => {
   const accessTokenString = Cookies.get('accessToken')
   // console.log('accessTokenString', accessTokenString)

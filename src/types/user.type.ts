@@ -7,43 +7,42 @@ export type CreateUserInput = {
   firstName: string
   lastName: string
   fullName: string
-  birth: string
+  birth: string | Date | null | undefined
   phone: string
   address: string
+  gender: 'male' | 'female'
   avatar: string
   role: RoleType
   disabled: boolean
   isVerified: boolean
-  updatedAt: string
-  createdAt: string
 }
 export type UpdateInfoUserInput = {
   firstName: string
   lastName: string
   fullName: string
-  birth: string
+  birth: string | Date | null | undefined
+  gender: 'male' | 'female'
   phone: string
   address: string
   avatar: string
   role: RoleType
   disabled: boolean
   isVerified: boolean
-  updatedAt: string
-  createdAt: string
 }
 
 export interface User {
-  id: string
+  _id: string | Buffer
   key?: string
   email: string
   profile: {
     firstName: string
     lastName: string
     fullName: string
-    birth: string
+    birth: string | Date | null | undefined
     phone: string
     address: string
     avatar: string
+    gender: 'male' | 'female'
   }
   role: RoleType
   disabled: boolean
