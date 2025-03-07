@@ -16,6 +16,7 @@ export default {
 			},
 			colors: {
 				blue_app: '#1D2657',
+				green_app: '#00B0AB',
 				default: '#666666',
 				orange_app: '#fa4017',
 				yellow_mentor: '#e2ae2b',
