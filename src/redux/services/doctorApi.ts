@@ -8,7 +8,11 @@ export const doctorApi = createApi({
   tagTypes: ['Doctor'],
   endpoints: (build) => ({
     getDoctorProfile: build.query<{ data: DoctorProfile }, string>({
-      query: (id) => `doctor-profile/${id}`,
+      query: (id) => ({
+        url: `doctor-profile/${id}`,
+        method: 'GET',
+        skip: !id // Skip the request if no ID is provided
+      }),
       providesTags: ['Doctor']
     }),
     createDoctorProfile: build.mutation<{ data: DoctorProfile }, CreateDoctorProfileInput>({

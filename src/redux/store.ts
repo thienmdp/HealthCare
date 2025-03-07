@@ -6,17 +6,19 @@ import errorToastSlice from './features/errorToast.slice'
 import { authApi } from './services/authApi'
 import { userApi } from './services/userApi'
 import { doctorApi } from './services/doctorApi'
+import { patientApi } from './services/patientApi'
 
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [doctorApi.reducerPath]: doctorApi.reducer,
+    [patientApi.reducerPath]: patientApi.reducer,
     errorToast: errorToastSlice,
     authState: authReducer
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware, userApi.middleware, doctorApi.middleware)
+    getDefaultMiddleware().concat(authApi.middleware, userApi.middleware, doctorApi.middleware, patientApi.middleware)
 })
 setupListeners(store.dispatch)
 

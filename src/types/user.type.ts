@@ -35,6 +35,7 @@ export interface User {
   key?: string
   email: string
   doctorProfileId?: string | Buffer
+  patientId?: string | Buffer
   profile: {
     _id: string | Buffer
     firstName: string

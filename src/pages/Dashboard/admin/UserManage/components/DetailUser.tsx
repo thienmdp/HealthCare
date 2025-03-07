@@ -3,6 +3,7 @@ import { User } from '@/types/user.type'
 import Information from './Detail/Information'
 import History from './Detail/History'
 import ProfileDoctorForm from './Detail/ProfileDoctorForm'
+import ProfilePatient from './Detail/ProfilePatient'
 
 interface Props {
   user: User
@@ -17,6 +18,9 @@ export default function DetailUser({ user, onClose }: Props) {
         <TabsTrigger value='doctorProfile' className={user.role !== 'doctor' ? 'hidden' : ''}>
           Hồ sơ bác sĩ
         </TabsTrigger>
+        <TabsTrigger value='patientProfile' className={user.role !== 'user' ? 'hidden' : ''}>
+          Hồ sơ bệnh nhân
+        </TabsTrigger>
         <TabsTrigger value='history'>Lịch sử</TabsTrigger>
       </TabsList>
       <TabsContent value='information'>
@@ -24,6 +28,9 @@ export default function DetailUser({ user, onClose }: Props) {
       </TabsContent>
       <TabsContent value='doctorProfile'>
         <ProfileDoctorForm user={user} onClose={onClose} />
+      </TabsContent>
+      <TabsContent value='patientProfile'>
+        <ProfilePatient user={user} onClose={onClose} />
       </TabsContent>
       <TabsContent value='history'>
         <History />

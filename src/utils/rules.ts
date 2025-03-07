@@ -137,4 +137,38 @@ export const doctorProfileSchema = yup.object({
 
 export type DoctorProfileSchema = yup.InferType<typeof doctorProfileSchema>
 
+export const patientRecordSchema = yup.object({
+  occupation: yup.string().required('Vui lòng nhập nghề nghiệp'),
+  bloodType: yup.string().required('Vui lòng chọn nhóm máu'),
+  height: yup.number().required('Vui lòng nhập chiều cao').min(0, 'Chiều cao không hợp lệ'),
+  weight: yup.number().required('Vui lòng nhập cân nặng').min(0, 'Cân nặng không hợp lệ'),
+  allergies: yup.array().of(yup.string()).default([]),
+  chronicDiseases: yup.array().of(yup.string()).default([]),
+  familyHistory: yup.string(),
+  surgeryHistory: yup.string(),
+  isPregnant: yup.boolean().default(false),
+  currentMedications: yup.array().of(yup.string()).default([]),
+  lifestyle: yup.object({
+    smoking: yup.boolean().required(),
+    alcohol: yup.boolean().required(),
+    exercise: yup.string(),
+    diet: yup.string()
+  }),
+  emergencyContact: yup.object({
+    name: yup.string().required('Vui lòng nhập tên người liên hệ khẩn cấp'),
+    phone: yup
+      .string()
+      .required('Vui lòng nhập số điện thoại')
+      .matches(/^(84|0[2|3|5|7|8|9])+([0-9]{8,9})\b$/, 'Số điện thoại không hợp lệ'),
+    relationship: yup.string().required('Vui lòng nhập mối quan hệ')
+  }),
+  insurance: yup.object({
+    number: yup.string().required('Vui lòng nhập số bảo hiểm'),
+    provider: yup.string().required('Vui lòng nhập nhà cung cấp bảo hiểm'),
+    expired: yup.string().required('Vui lòng nhập ngày hết hạn')
+  })
+})
+
+export type PatientRecordSchema = yup.InferType<typeof patientRecordSchema>
+
 export type Schema = yup.InferType<typeof schema>
