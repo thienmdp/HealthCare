@@ -1,7 +1,12 @@
+import { useEffect } from 'react'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useCreateDoctorProfileMutation } from '@/redux/services/doctorApi'
+import {
+  useGetDoctorProfileQuery,
+  useCreateDoctorProfileMutation,
+  useUpdateDoctorProfileMutation
+} from '@/redux/services/doctorApi'
 import { toast } from 'react-toastify'
 import { CustomNotification } from '@/components/CustomReactToastify'
 import { useForm } from 'react-hook-form'
@@ -16,29 +21,19 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { PlusCircle, X } from 'lucide-react'
 import { CreateDoctorProfileInput } from '@/types/doctor.type'
+import { LANGUAGES, SPECIALTIES } from '@/constants/schedules.doctor'
 
 interface Props {
   user: User
   onClose?: () => void
 }
 
-const LANGUAGES = ['Tiếng Việt', 'Tiếng Anh', 'Tiếng Pháp', 'Tiếng Trung', 'Tiếng Nhật', 'Tiếng Hàn']
-
-const SPECIALTIES = [
-  'Tim mạch',
-  'Nội khoa',
-  'Nhi khoa',
-  'Sản phụ khoa',
-  'Da liễu',
-  'Thần kinh',
-  'Mắt',
-  'Tai mũi họng',
-  'Răng hàm mặt',
-  'Ung bướu'
-]
-
-export default function ProfileDoctor({ user, onClose }: Props) {
-  const [createProfile, { isLoading }] = useCreateDoctorProfileMutation()
+export default function ProfileDoctorForm({ user, onClose }: Props) {
+  const { data: doctorProfile, isLoading: isLoadingProfile } = useGetDoctorProfileQuery(
+    bufferToHex(user.doctorProfileId)
+  )
+  const [createProfile, { isLoading: isCreating }] = useCreateDoctorProfileMutation()
+  const [updateProfile, { isLoading: isUpdating }] = useUpdateDoctorProfileMutation()
 
   const form = useForm<DoctorProfileSchema>({
     resolver: yupResolver(doctorProfileSchema),
@@ -64,29 +59,66 @@ export default function ProfileDoctor({ user, onClose }: Props) {
     }
   })
 
-  const onSubmit = async (data: DoctorProfileSchema) => {
-    try {
-      await createProfile({
-        ...(data as CreateDoctorProfileInput),
-        doctorId: bufferToHex(user._id)
-      }).unwrap()
-      console.log('data submit', data)
-
-      toast.success(CustomNotification, {
-        data: {
-          title: 'Thành công!',
-          content: 'Tạo hồ sơ bác sĩ thành công'
-        }
-      })
-      // onClose?.()
-    } catch (error: any) {
-      toast.error(CustomNotification, {
-        data: {
-          title: 'Thất bại!',
-          content: error.data?.message || 'Có lỗi xảy ra'
-        }
+  useEffect(() => {
+    if (doctorProfile?.data) {
+      // Reset form with existing profile data
+      form.reset({
+        licenseNumber: doctorProfile.data.licenseNumber,
+        specialties: doctorProfile.data.specialties,
+        yearsOfExperience: doctorProfile.data.yearsOfExperience,
+        education: doctorProfile.data.education,
+        certificates: doctorProfile.data.certificates,
+        languages: doctorProfile.data.languages,
+        biography: doctorProfile.data.biography,
+        achievements: doctorProfile.data.achievements,
+        consultationFee: doctorProfile.data.consultationFee,
+        isAvailable: doctorProfile.data.isAvailable,
+        profileImage: doctorProfile.data.profileImage || null
       })
     }
+  }, [doctorProfile, form])
+
+  const onSubmit = async (data: DoctorProfileSchema) => {
+    try {
+      if (doctorProfile?.data) {
+        // Update existing profile
+        await updateProfile({
+          id: bufferToHex(user.doctorProfileId),
+          data: data as CreateDoctorProfileInput
+        }).unwrap()
+
+        toast.success(CustomNotification, {
+          data: {
+            title: 'Thành công!',
+            content: 'Cập nhật hồ sơ bác sĩ thành công'
+          }
+        })
+      } else {
+        // Create new profile
+        await createProfile({
+          ...(data as CreateDoctorProfileInput),
+          doctorId: bufferToHex(user._id)
+        }).unwrap()
+
+        toast.success(CustomNotification, {
+          data: {
+            title: 'Thành công!',
+            content: 'Tạo hồ sơ bác sĩ thành công'
+          }
+        })
+      }
+      onClose?.()
+    } catch (error: any) {
+      console.log('error', error)
+    }
+  }
+
+  if (isLoadingProfile) {
+    return (
+      <div className='flex items-center justify-center min-h-[200px]'>
+        <div className='w-8 h-8 border-b-2 rounded-full animate-spin border-primary'></div>
+      </div>
+    )
   }
 
   return (
@@ -502,8 +534,8 @@ export default function ProfileDoctor({ user, onClose }: Props) {
         />
 
         <div className='flex justify-center gap-4'>
-          <Button variant='ringHover' className='min-w-[150px]' type='submit' disabled={isLoading}>
-            {isLoading ? 'Đang tạo...' : 'Tạo hồ sơ'}
+          <Button variant='ringHover' className='min-w-[150px]' type='submit' disabled={isCreating || isUpdating}>
+            {isCreating || isUpdating ? 'Đang xử lý...' : doctorProfile?.data ? 'Cập nhật hồ sơ' : 'Tạo hồ sơ'}
           </Button>
         </div>
       </form>

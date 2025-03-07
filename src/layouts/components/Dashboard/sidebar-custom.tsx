@@ -5,6 +5,7 @@ import { Settings } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { sidebarAdmin, sidebarDoctor } from '@/data/dummy'
 import { useAppSelector } from '@/redux/store'
+import path from '@/constants/path'
 
 export function SidebarDashboard() {
   const role = useAppSelector((auth) => auth.authState.role)
@@ -24,8 +25,8 @@ export function SidebarDashboard() {
           <SidebarLink
             link={{
               label: 'Settings',
-              href: '/manage/setting',
-              icon: <Settings className='flex-shrink-0 rounded-full h-7 w-7' />
+              href: role === 'admin' ? path.settingsAdmin : path.settings,
+              icon: <Settings className='flex-shrink-0 w-5 h-5 rounded-full' />
             }}
           />
         </div>

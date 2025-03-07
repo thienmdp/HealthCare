@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { User } from '@/types/user.type'
 import Information from './Detail/Information'
 import History from './Detail/History'
-import ProfileDoctor from './Detail/ProfileDoctor'
+import ProfileDoctorForm from './Detail/ProfileDoctorForm'
 
 interface Props {
   user: User
@@ -23,7 +23,7 @@ export default function DetailUser({ user, onClose }: Props) {
         <Information user={user} onClose={onClose} />
       </TabsContent>
       <TabsContent value='doctorProfile'>
-        <ProfileDoctor user={user} onClose={onClose} />
+        <ProfileDoctorForm user={user} onClose={onClose} />
       </TabsContent>
       <TabsContent value='history'>
         <History />

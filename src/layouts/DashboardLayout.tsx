@@ -16,7 +16,7 @@ function DashboardLayoutInner({ children }: Props) {
           <header className='sticky top-0 z-30 flex items-center border-b bg-background sm:static sm:h-auto sm:border-0 sm:bg-transparent '>
             <Navbar />
           </header>
-          <div className='pt-4 pl-4 md:pr-10 xl:pr-4'>{children}</div>
+          <div className='pt-4 pl-4 overflow-y-auto md:pr-10 xl:pr-4'>{children}</div>
         </div>
       </div>
     </section>
