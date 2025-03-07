@@ -33,13 +33,13 @@ export default function UserManage() {
         data={users?.data || []}
         isLoading={isFetching}
         onReload={() => refetch()}
-        headerClassName='bg-gray-200  text-sm !font-semibold'
+        headerClassName='bg-gray-200 text-sm !font-semibold'
       />
 
       <ModalCreateUser open={open} onOpenChange={setOpen} />
 
       <Dialog open={!!viewUser} onOpenChange={(open) => !open && setViewUser(null)}>
-        <DialogContent className='max-w-3xl max-h-[calc(100vh-4rem)] overflow-y-auto'>
+        <DialogContent className='max-w-3xl max-h-[calc(100vh-4rem)] min-h-[calc(100vh-4rem)] overflow-y-auto'>
           {viewUser && <DetailUser user={viewUser} onClose={() => setViewUser(null)} />}
         </DialogContent>
       </Dialog>

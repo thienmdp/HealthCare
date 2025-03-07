@@ -97,4 +97,44 @@ export const createUserSchema = yup.object({
 
 export type CreateUserSchema = yup.InferType<typeof createUserSchema>
 
+export const doctorProfileSchema = yup.object({
+  licenseNumber: yup.string().required('Vui lòng nhập số giấy phép'),
+  specialties: yup.array().of(yup.string().required()).default([]),
+  yearsOfExperience: yup.number().required('Vui lòng nhập số năm kinh nghiệm').min(0, 'Số năm không hợp lệ'),
+  education: yup
+    .array()
+    .of(
+      yup.object({
+        degree: yup.string().required('Vui lòng nhập bằng cấp'),
+        university: yup.string().required('Vui lòng nhập trường'),
+        graduationYear: yup
+          .number()
+          .required('Vui lòng nhập năm tốt nghiệp')
+          .min(1945, 'Năm tốt nghiệp không hợp lệ')
+          .max(new Date().getFullYear(), 'Năm tốt nghiệp không hợp lệ'),
+        specialization: yup.string().required('Vui lòng nhập chuyên ngành')
+      })
+    )
+    .default([]),
+  certificates: yup
+    .array()
+    .of(
+      yup.object({
+        name: yup.string().required('Vui lòng nhập tên chứng chỉ'),
+        issuedBy: yup.string().required('Vui lòng nhập nơi cấp'),
+        issueDate: yup.string().required('Vui lòng nhập ngày cấp'),
+        expiryDate: yup.string().required('Vui lòng nhập ngày hết hạn')
+      })
+    )
+    .default([]),
+  languages: yup.array().of(yup.string().required()).default(['Tiếng Việt']),
+  biography: yup.string().required('Vui lòng nhập tiểu sử'),
+  achievements: yup.array().of(yup.string()).default([]),
+  consultationFee: yup.number().required('Vui lòng nhập phí tư vấn').min(0, 'Phí tư vấn không hợp lệ'),
+  isAvailable: yup.boolean().default(true),
+  profileImage: yup.string().nullable()
+})
+
+export type DoctorProfileSchema = yup.InferType<typeof doctorProfileSchema>
+
 export type Schema = yup.InferType<typeof schema>

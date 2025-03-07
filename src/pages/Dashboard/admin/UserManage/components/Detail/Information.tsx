@@ -280,7 +280,7 @@ export default function Information({ user, onClose }: Props) {
         </div>
 
         <div className='flex !justify-center'>
-          <Button type='submit' disabled={isLoading}>
+          <Button variant={'ringHover'} className='min-w-[150px]' type='submit' disabled={isLoading}>
             {isLoading ? 'Đang cập nhật...' : 'Cập nhật'}
           </Button>
         </div>
