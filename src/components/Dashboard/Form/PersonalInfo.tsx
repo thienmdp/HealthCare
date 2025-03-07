@@ -70,6 +70,7 @@ export default function PersonalInfo({ user }: Props) {
         data: userData
       }).unwrap()
       refetch()
+      setIsEditing(false)
       toast.success(CustomNotification, {
         data: {
           title: 'Thành công!',

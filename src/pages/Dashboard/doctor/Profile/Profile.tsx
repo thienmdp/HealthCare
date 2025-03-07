@@ -4,8 +4,8 @@ import { useAppSelector } from '@/redux/store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useGetDoctorProfileQuery } from '@/redux/services/doctorApi'
 import { bufferToHex } from '@/utils/utils'
-import PersonalInfo from './components/PersonalInfo'
 import DoctorInfo from './components/DoctorInfo'
+import PersonalInfo from '@/components/Dashboard/Form/PersonalInfo'
 
 export default function ProfileDoctor() {
   const user = useAppSelector((state) => state.authState.user)
