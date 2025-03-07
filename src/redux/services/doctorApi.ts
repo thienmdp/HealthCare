@@ -19,19 +19,15 @@ export const doctorApi = createApi({
       }),
       invalidatesTags: ['Doctor']
     }),
-    updateDoctorProfile: build.mutation<{ data: DoctorProfile }, { id: string; data: Partial<CreateDoctorProfileInput> }>({
-      query: ({ id, data }) => ({
-        url: `doctor-profile/update/${id}`,
+    updateDoctorProfile: build.mutation<{ data: DoctorProfile }, { data: Partial<CreateDoctorProfileInput> }>({
+      query: (data) => ({
+        url: `doctor-profile/update`,
         method: 'PATCH',
-        body: data
+        body: data.data
       }),
       invalidatesTags: ['Doctor']
     })
   })
 })
 
-export const { 
-  useGetDoctorProfileQuery, 
-  useCreateDoctorProfileMutation, 
-  useUpdateDoctorProfileMutation 
-} = doctorApi
+export const { useGetDoctorProfileQuery, useCreateDoctorProfileMutation, useUpdateDoctorProfileMutation } = doctorApi

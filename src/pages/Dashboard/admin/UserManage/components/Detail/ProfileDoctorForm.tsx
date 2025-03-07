@@ -82,9 +82,9 @@ export default function ProfileDoctorForm({ user, onClose }: Props) {
     try {
       if (doctorProfile?.data) {
         // Update existing profile
+        const formData = { ...data, doctorId: bufferToHex(user._id) }
         await updateProfile({
-          id: bufferToHex(user.doctorProfileId),
-          data: data as CreateDoctorProfileInput
+          data: formData as CreateDoctorProfileInput
         }).unwrap()
 
         toast.success(CustomNotification, {

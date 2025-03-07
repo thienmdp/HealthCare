@@ -50,9 +50,9 @@ export default function DoctorInfo({ user, doctorProfile, loadingDoctorProfile }
     if (!user?._id) return
 
     try {
+      const formData = { ...data, doctorId: bufferToHex(user._id) }
       await updateProfile({
-        id: bufferToHex(user._id),
-        data: data as CreateDoctorProfileInput
+        data: formData as CreateDoctorProfileInput
       }).unwrap()
 
       toast.success(CustomNotification, {
@@ -61,6 +61,7 @@ export default function DoctorInfo({ user, doctorProfile, loadingDoctorProfile }
           content: 'Cập nhật hồ sơ bác sĩ thành công'
         }
       })
+      setIsEditing(false)
     } catch (error: any) {
       console.log('error', error)
     }
