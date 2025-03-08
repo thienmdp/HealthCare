@@ -80,44 +80,97 @@ export default function SignIn() {
   }, [location.state, setValue])
 
   return (
-    <div>
-      <Helmet>
-        <title>Đăng nhập - Diagnosis</title>
-        <meta
-          name='description'
-          content='Diagnosis IQ: Smart Clinical Decision Support System for Automated Hospital.'
-        />
-      </Helmet>
-      <div className='flex mt-10'>
-        {/* <div className='items-center justify-center flex-1 hidden text-black bg-white lg:flex'>
-          <div className='max-w-md text-center'>
-            <img src='/assets/svg/login.svg' height={500} width={600} alt='asset' />
+    // <div>
+    //   <Helmet>
+    //     <title>Đăng nhập - Diagnosis</title>
+    //     <meta
+    //       name='description'
+    //       content='Diagnosis IQ: Smart Clinical Decision Support System for Automated Hospital.'
+    //     />
+    //   </Helmet>
+    //   <div className='flex mt-10'>
+    //     <div className='flex items-center justify-center w-full bg-gray-100 --lg:w-1/2'>
+    //       <div className='w-full max-w-md p-6'>
+    //         <p className='mb-6 text-3xl font-semibold text-center text-black'>Đăng nhập</p>
+    //         <p className='mb-6 text-sm font-semibold text-center text-gray-700'>
+    //           Bạn có thể đăng nhập vào bằng tài khoản Google{' '}
+    //         </p>
+    //         <div className='flex flex-col items-center justify-between mt-4 lg:flex-row'>
+    //           <div className='w-full mb-2'>
+    //             <GoogleOAuthClient />
+    //           </div>
+    //         </div>
+    //         <div className='mt-4 text-sm text-center text-gray-700'>
+    //           <p>hoặc bằng tài khoản diagnosisiq của mình</p>
+    //         </div>
+    //         <form onSubmit={onSubmit} className='space-y-4'>
+    //           <Input
+    //             name='email'
+    //             className='mt-6'
+    //             placeholder='Email'
+    //             register={register}
+    //             // type='email'
+    //             errorMessage={errors.email?.message}
+    //           />
+    //           <Input
+    //             name='password'
+    //             className='mt-3'
+    //             placeholder='Password'
+    //             register={register}
+    //             type='password'
+    //             errorMessage={errors.password?.message}
+    //             autoComplete='on'
+    //           />
+    //           <Button
+    //             type='submit'
+    //             className='flex items-center justify-center w-full p-2 text-white transition-colors duration-300 rounded-md bg-gradient-to-br to-blue-700 from-blue_app via-blue_app hover:bg-gradient-to-tl focus:outline-none focus:ring-2 focus:ring-offset-2'
+    //             isLoading={resultLogin.isLoading}
+    //             disabled={resultLogin.isLoading}
+    //           >
+    //             Đăng nhập
+    //           </Button>
+    //         </form>
+    //         <div className='mt-4 text-sm text-center text-gray-700'>
+    //           <p>
+    //             Bạn chưa có tài khoản?{' '}
+    //             <Link to={'/register'} className='text-black hover:underline'>
+    //               Đăng ký ở đây
+    //             </Link>
+    //           </p>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+    <div className='flex h-screen items-center justify-center'>
+      <div className='flex w-3/4 shadow-lg rounded-lg overflow-hidden relative'>
+        {/* Left Side - Image */}
+        <div className='w-1/2 bg-gray-100'>
+          <img src='./dk.svg' alt='Lab Background' className='w-full h-full object-cover' />
+        </div>
+
+        {/* Right Side - Login Form */}
+        <div className='w-1/2 flex items-center justify-center p-10 bg-white shadow-lg relative'>
+          {/* Logo - Diagnosis IQ */}
+          <div className='absolute top-6 right-6 flex items-center space-x-1'>
+            <img src='./DAIQ.svg' alt='...' className='w-40 h-10' />
           </div>
-        </div> */}
-        <div className='flex items-center justify-center w-full bg-gray-100 --lg:w-1/2'>
-          <div className='w-full max-w-md p-6'>
-            <p className='mb-6 text-3xl font-semibold text-center text-black'>Đăng nhập</p>
-            <p className='mb-6 text-sm font-semibold text-center text-gray-700'>
-              Bạn có thể đăng nhập vào bằng tài khoản Google{' '}
-            </p>
-            <div className='flex flex-col items-center justify-between mt-4 lg:flex-row'>
-              <div className='w-full mb-2'>
-                <GoogleOAuthClient />
-              </div>
-            </div>
-            <div className='mt-4 text-sm text-center text-gray-700'>
-              <p>hoặc bằng tài khoản diagnosisiq của mình</p>
-            </div>
+
+          <div className='w-full max-w-md'>
+            <h2 className='text-2xl font-semibold text-gray-900 mb-6 text-center mt-5'>Log in to your account</h2>
+
             <form onSubmit={onSubmit} className='space-y-4'>
               <Input
+                label={'Email'}
                 name='email'
                 className='mt-6'
                 placeholder='Email'
                 register={register}
-                // type='email'
+                type='email'
                 errorMessage={errors.email?.message}
               />
               <Input
+                label={'Password'}
                 name='password'
                 className='mt-3'
                 placeholder='Password'
@@ -135,14 +188,20 @@ export default function SignIn() {
                 Đăng nhập
               </Button>
             </form>
-            <div className='mt-4 text-sm text-center text-gray-700'>
-              <p>
-                Bạn chưa có tài khoản?{' '}
-                <Link to={'/register'} className='text-black hover:underline'>
-                  Đăng ký ở đây
-                </Link>
-              </p>
-            </div>
+
+            <p className='text-center text-gray-600 mt-4'>
+              Don't have an account?
+              <a href='/register' className='text-blue-600 hover:underline ml-1'>
+                Register Now
+              </a>
+            </p>
+
+            <p className='text-center text-gray-500 text-sm mt-28'>
+              Copyright ©C2SE.48. All rights reserved.
+              <a href='/register' className='text-blue-600 hover:underline ml-1'>
+                Terms & Conditions
+              </a>
+            </p>
           </div>
         </div>
       </div>

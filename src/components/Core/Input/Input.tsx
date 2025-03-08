@@ -26,7 +26,7 @@ export default function Input({
   const registerResult = register && name ? register(name, rules) : {}
   return (
     <div className={className}>
-      {label && <label className='font-semibold'>{label}</label>}
+      {label && <label className='--font-semibold'>{label}</label>}
       <div className='relative flex items-center'>
         <input
           className={
