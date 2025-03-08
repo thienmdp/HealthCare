@@ -578,7 +578,7 @@ export default function ProfilePatient({ user, onClose }: Props) {
             </Card>
 
             <div className='flex justify-end gap-4'>
-              <Button variant='ringHover' type='submit' disabled={isCreating || isUpdating}>
+              <Button effect='ringHover' type='submit' disabled={isCreating || isUpdating}>
                 {isCreating || isUpdating ? 'Đang xử lý...' : patientRecord?.data ? 'Cập nhật' : 'Tạo hồ sơ'}
               </Button>
             </div>

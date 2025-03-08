@@ -203,7 +203,7 @@ export function ModalCreateUser({ open, onOpenChange }: Props) {
             />
 
             <DialogFooter className='!justify-center'>
-              <Button className='min-w-[150px]' variant='ringHover' type='submit' disabled={isLoading}>
+              <Button className='min-w-[150px]' effect='ringHover' type='submit' disabled={isLoading}>
                 {isLoading ? 'Đang tạo...' : 'Tạo người dùng'}
               </Button>
             </DialogFooter>

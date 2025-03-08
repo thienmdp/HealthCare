@@ -76,6 +76,11 @@ export default {
 					"0%,70%,100%": { opacity: "1" },
 					"20%,50%": { opacity: "0" },
 				},
+				shine: {
+					'0%': { backgroundPosition: '200% 0' },
+					'25%': { backgroundPosition: '-200% 0' },
+					'100%': { backgroundPosition: '-200% 0' },
+				},
 				'accordion-down': {
 					from: {
 						height: '0'
@@ -97,6 +102,7 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				"caret-blink": "caret-blink 1.25s ease-out infinite",
+				shine: 'shine 3s ease-out infinite',
 			}
 		}
 	},

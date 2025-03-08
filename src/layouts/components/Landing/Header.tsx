@@ -41,7 +41,6 @@ export const Header = () => {
   }, [])
 
   return (
-
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-250 ease-out bg-white ${scrollActive ? 'shadow-md' : ''}`}
     >
@@ -54,42 +53,61 @@ export const Header = () => {
         {/* Navigation Links */}
         <ul className='hidden space-x-2 text-lg text-black md:flex '>
           <li>
-            <Link to={path.landing} className={
-              buttonVariants({ variant: "linkHover2" }) + ' hover:!text-primary !font-normal !text-xl'}>
+            <Link
+              to={path.landing}
+              className={
+                buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
+                ' hover:!text-primary !font-normal !text-xl'
+              }
+            >
               {t('header.home')}
             </Link>
-
           </li>
           <li>
-            <Link to={path.about} className={
-              buttonVariants({ variant: "linkHover2" }) + ' hover:!text-primary !font-normal !text-xl'}>
+            <Link
+              to={path.about}
+              className={
+                buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
+                ' hover:!text-primary !font-normal !text-xl'
+              }
+            >
               {t('header.about')}
             </Link>
           </li>
           <li>
-            <Link to={path.services} className={
-              buttonVariants({ variant: "linkHover2" }) + ' hover:!text-primary !font-normal !text-xl'}>
+            <Link
+              to={path.services}
+              className={
+                buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
+                ' hover:!text-primary !font-normal !text-xl'
+              }
+            >
               {t('header.services')}
             </Link>
           </li>
           <li>
-            <Link to={path.contact} className={
-              buttonVariants({ variant: "linkHover2" }) + ' hover:!text-primary !font-normal !text-xl'}>
+            <Link
+              to={path.contact}
+              className={
+                buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
+                ' hover:!text-primary !font-normal !text-xl'
+              }
+            >
               {t('header.contact')}
             </Link>
           </li>
         </ul>
 
         {/* Login / Register Button */}
-        <div className=' items-center text-lg flex font-Medium'>
+        <div className='flex items-center text-lg font-Medium'>
           <ModeToggleI18n />
           <MobileMenu />
-          <span className='ml-2 hidden w-max md:block'>
+          <span className='hidden ml-2 w-max md:block'>
             {user && <CardUser />}
             {!user && (
               <div className='flex items-center w-max'>
                 <Link
-                  className={cn(buttonVariants({ variant: 'gooeyLeft' }), '!rounded-full !px-3 !py-2 min-w-[98px]')}
+                  className={cn(buttonVariants({ effect: 'shineHover' }), '!rounded-full !px-3 !py-2 min-w-[98px]')}
                   to={path.signin}
                   onClick={() => handleScrollToTop}
                 >

@@ -22,7 +22,7 @@ export default function UserManage() {
     <div className='p-6'>
       <div className='flex items-center justify-between mb-4'>
         <h1 className='text-2xl font-bold'>Quản lý người dùng</h1>
-        <Button variant='ringHover' size='sm' onClick={() => setOpen(true)}>
+        <Button effect='ringHover' size='sm' onClick={() => setOpen(true)}>
           <UserPlus className='w-4 h-4 mr-2' />
           Thêm người dùng
         </Button>

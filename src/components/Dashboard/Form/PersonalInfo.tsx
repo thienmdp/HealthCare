@@ -201,7 +201,7 @@ export default function PersonalInfo({ user }: Props) {
 
           {isEditing && (
             <div className='flex justify-center gap-4'>
-              <Button variant='ringHover' type='submit' disabled={isLoading}>
+              <Button effect='ringHover' type='submit' disabled={isLoading}>
                 {isLoading ? 'Đang cập nhật...' : 'Cập nhật'}
               </Button>
             </div>

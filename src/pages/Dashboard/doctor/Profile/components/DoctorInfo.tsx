@@ -537,7 +537,7 @@ export default function DoctorInfo({ user, doctorProfile, loadingDoctorProfile }
 
           {isEditing && (
             <div className='flex justify-center gap-4'>
-              <Button variant='ringHover' className='min-w-[150px]' type='submit' disabled={isLoading}>
+              <Button effect='ringHover' className='min-w-[150px]' type='submit' disabled={isLoading}>
                 {isLoading ? 'Đang xử lý...' : 'Cập nhật'}
               </Button>
             </div>

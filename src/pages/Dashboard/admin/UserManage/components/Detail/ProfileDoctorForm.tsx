@@ -198,7 +198,7 @@ export default function ProfileDoctorForm({ user, onClose }: Props) {
                 {field.value?.map((specialty, index) => (
                   <Button
                     key={specialty}
-                    variant='secondary'
+                    effect='shine'
                     size='sm'
                     onClick={() => {
                       const newSpecialties = [...field.value]
@@ -469,7 +469,7 @@ export default function ProfileDoctorForm({ user, onClose }: Props) {
                 {field.value?.map((lang, index) => (
                   <Button
                     key={lang}
-                    variant='secondary'
+                    effect='shine'
                     size='sm'
                     onClick={() => {
                       const newLanguages = [...field.value]
@@ -534,7 +534,7 @@ export default function ProfileDoctorForm({ user, onClose }: Props) {
         />
 
         <div className='flex justify-center gap-4'>
-          <Button variant='ringHover' className='min-w-[150px]' type='submit' disabled={isCreating || isUpdating}>
+          <Button effect='ringHover' className='min-w-[150px]' type='submit' disabled={isCreating || isUpdating}>
             {isCreating || isUpdating ? 'Đang xử lý...' : doctorProfile?.data ? 'Cập nhật hồ sơ' : 'Tạo hồ sơ'}
           </Button>
         </div>

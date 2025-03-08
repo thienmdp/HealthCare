@@ -116,7 +116,7 @@ export default function VerifyEmail() {
             <div className='flex justify-center'>
               <Button
                 type='submit'
-                variant={'ringHover'}
+                effect={'ringHover'}
                 className='rounded-full min-w-[120px]'
                 isLoading={verifyResult.isLoading}
                 disabled={verifyResult.isLoading}
@@ -132,7 +132,8 @@ export default function VerifyEmail() {
             className='font-medium'
             onClick={handleResendCode}
             disabled={countdown > 0 || resendResult.isLoading}
-            variant={'linkHover2'}
+            effect={'hoverUnderline'}
+            variant='link'
           >
             {countdown > 0
               ? `Gửi lại mã (${Math.floor(countdown / 60)}:${(countdown % 60).toString().padStart(2, '0')})`
