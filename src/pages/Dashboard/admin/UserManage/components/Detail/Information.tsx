@@ -273,7 +273,7 @@ export default function Information({ user, onClose }: Props) {
           </FormItem>
         </div>
 
-        <div className='flex !justify-center'>
+        <div className='flex !justify-center !mt-12'>
           <Button effect={'ringHover'} className='min-w-[150px]' type='submit' disabled={isLoading}>
             {isLoading ? 'Đang cập nhật...' : 'Cập nhật'}
           </Button>
