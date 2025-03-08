@@ -19,22 +19,25 @@ export type CreateUserInput = {
 export type UpdateInfoUserInput = {
   firstName: string
   lastName: string
-  fullName: string
+  fullName?: string
   birth: string | Date | null | undefined
   gender: 'male' | 'female'
   phone: string
   address: string
-  avatar: string
-  role: RoleType
-  disabled: boolean
-  isVerified: boolean
+  avatar?: string
+  role?: RoleType
+  disabled?: boolean
+  isVerified?: boolean
 }
 
 export interface User {
   _id: string | Buffer
   key?: string
   email: string
+  doctorProfileId?: string | Buffer
+  patientId?: string | Buffer
   profile: {
+    _id: string | Buffer
     firstName: string
     lastName: string
     fullName: string

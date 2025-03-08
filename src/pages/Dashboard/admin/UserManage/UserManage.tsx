@@ -22,7 +22,7 @@ export default function UserManage() {
     <div className='p-6'>
       <div className='flex items-center justify-between mb-4'>
         <h1 className='text-2xl font-bold'>Quản lý người dùng</h1>
-        <Button variant='ringHover' size='sm' onClick={() => setOpen(true)}>
+        <Button effect='ringHover' size='sm' className='!h-8' onClick={() => setOpen(true)}>
           <UserPlus className='w-4 h-4 mr-2' />
           Thêm người dùng
         </Button>
@@ -33,13 +33,13 @@ export default function UserManage() {
         data={users?.data || []}
         isLoading={isFetching}
         onReload={() => refetch()}
-        headerClassName='bg-gray-200  text-sm !font-semibold'
+        headerClassName='bg-gray-200 text-sm !font-semibold'
       />
 
       <ModalCreateUser open={open} onOpenChange={setOpen} />
 
       <Dialog open={!!viewUser} onOpenChange={(open) => !open && setViewUser(null)}>
-        <DialogContent className='max-w-3xl max-h-[calc(100vh-4rem)] overflow-y-auto'>
+        <DialogContent className='max-w-3xl max-h-[calc(100vh-4rem)] min-h-[calc(100vh-4rem)] overflow-y-auto'>
           {viewUser && <DetailUser user={viewUser} onClose={() => setViewUser(null)} />}
         </DialogContent>
       </Dialog>

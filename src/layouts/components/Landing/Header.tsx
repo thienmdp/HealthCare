@@ -22,7 +22,7 @@ export const Header = () => {
   const { i18n, t } = useTranslation('landing')
   const [scrollActive, setScrollActive] = useState(false)
   const user = useAppSelector((auth) => auth.authState.user)
-  console.log('user', user)
+
   useEffect(() => {
     localStorage.setItem('preferredTheme', 'light')
   }, [])
@@ -42,89 +42,81 @@ export const Header = () => {
 
   return (
     <header
-      className={
-        'fixed top-0 z-50 shadow-md w-full border-b-1 transition-all duration-250 ease-out' +
-        (scrollActive ? ' pt-0 shadow-sm' : '')
-      }
+      className={`fixed top-0 z-50 w-full transition-all duration-250 ease-out bg-white ${scrollActive ? 'shadow-md' : ''}`}
     >
-      <nav className='bg-white border-gray-200'>
-        <Container className='flex items-center justify-between px-6 py-4 mx-auto containerr max-w-screen-xl min-h-[70px]'>
-          <div className='flex items-center justify-between w-full md:justify-start'>
-            <MobileMenu />
+      <nav className='flex items-center justify-between max-w-screen-xl px-6 py-4 mx-auto'>
+        {/* Logo */}
+        <Link to={path.landing} className='text-2xl font-bold text-black'>
+          <img src='./landing/logo.svg' alt='Logo' className='h-8' />
+        </Link>
+
+        {/* Navigation Links */}
+        <ul className='hidden space-x-2 text-lg text-black md:flex '>
+          <li>
             <Link
               to={path.landing}
-              aria-label='logo_home'
-              className='flex items-center text-2xl font-bold cursor-pointer text-blue_app'
-              onClick={() => handleScrollToTop}
+              className={
+                buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
+                ' hover:!text-primary !font-normal !text-xl'
+              }
             >
-              <p>
-                <span>Diagnosis </span>
-                <span className='text-blue-500'>AI</span>
-              </p>
+              {t('header.home')}
             </Link>
-            <ModalSearch />
-            {/* <SearchHeader /> */}
-          </div>
-          <div className='flex items-center justify-end text-sm font-semibold text-gray-700'>
-            <ModeToggleI18n />
-            <ul className='hidden ml-4 w-max md:flex space-x-4'>
-              <li>
+          </li>
+          <li>
+            <Link
+              to={path.about}
+              className={
+                buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
+                ' hover:!text-primary !font-normal !text-xl'
+              }
+            >
+              {t('header.about')}
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={path.services}
+              className={
+                buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
+                ' hover:!text-primary !font-normal !text-xl'
+              }
+            >
+              {t('header.services')}
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={path.contact}
+              className={
+                buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
+                ' hover:!text-primary !font-normal !text-xl'
+              }
+            >
+              {t('header.contact')}
+            </Link>
+          </li>
+        </ul>
+
+        {/* Login / Register Button */}
+        <div className='flex items-center text-lg font-Medium'>
+          <ModeToggleI18n />
+          <MobileMenu />
+          <span className='hidden ml-2 w-max md:block'>
+            {user && <CardUser />}
+            {!user && (
+              <div className='flex items-center w-max'>
                 <Link
-                  className='mr-4 text-gray-700 cursor-pointer hover:text-blue_app min-w-fit'
-                  to={path.about}
+                  className={cn(buttonVariants({ effect: 'shineHover' }), '!rounded-full !px-3 !py-2 min-w-[98px]')}
+                  to={path.signin}
                   onClick={() => handleScrollToTop}
-                  aria-current='page'
                 >
-                  {t('header.appointment')}
+                  {t('header.register')}
                 </Link>
-              </li>
-              <li>
-                <Link
-                  className='mr-4 text-gray-700 cursor-pointer hover:text-blue_app min-w-fit'
-                  to={'#contact'}
-                  onClick={() => handleScrollToTop}
-                  aria-current='page'
-                >
-                  {t('header.blog')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className='mr-4 text-gray-700 cursor-pointer hover:text-blue_app min-w-fit'
-                  to={'#contact'}
-                  onClick={() => handleScrollToTop}
-                  aria-current='page'
-                >
-                  {t('header.services')}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className='mr-4 text-gray-700 cursor-pointer hover:text-blue_app min-w-fit'
-                  to={'#contact'}
-                  onClick={() => handleScrollToTop}
-                  aria-current='page'
-                >
-                  {t('header.about')}
-                </Link>
-              </li>
-            </ul>
-            <span className='hidden w-max md:block'>
-              {user && <CardUser />}
-              {!user && (
-                <div className='flex items-center w-max'>
-                  <Link
-                    className={cn(buttonVariants({ variant: 'gooeyLeft' }), '!rounded-full !px-3 !py-2 min-w-[98px]')}
-                    to={path.signin}
-                    onClick={() => handleScrollToTop}
-                  >
-                    {t('header.login')}
-                  </Link>
-                </div>
-              )}
-            </span>
-          </div>
-        </Container>
+              </div>
+            )}
+          </span>
+        </div>
       </nav>
     </header>
   )

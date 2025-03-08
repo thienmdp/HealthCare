@@ -4,12 +4,12 @@ import path from './constants/path'
 import { useAppSelector } from './redux/store'
 import DefaultLayout from './layouts/DefaultLayout'
 import DashboardLayout from './layouts/DashboardLayout'
-import { DashboardAdmin, UserManage } from './pages/Dashboard/admin'
-import { DashboardDoctor } from './pages/Dashboard/doctor'
-import { Page_404 } from './pages/NotFound'
 import { SignIn, SignUp, VerifyEmail } from './pages/NotAuth'
+import { Page_404 } from './pages/NotFound'
 import { About, Landing } from './pages/Landing'
 import { Profile } from './pages/Dashboard/user'
+import { DashboardDoctor, ProfileDoctor, SettingsDoctor } from './pages/Dashboard/doctor'
+import { DashboardAdmin, ProfileAdmin, SettingsAdmin, UserManage } from './pages/Dashboard/admin'
 
 type ProtectedRouteProps = {
   allowedRole: 'user' | 'admin' | 'doctor'
@@ -67,6 +67,14 @@ const adminRoutes = [
   {
     path: path.userManage,
     element: <UserManage />
+  },
+  {
+    path: path.profileAdmin,
+    element: <ProfileAdmin />
+  },
+  {
+    path: path.settingsAdmin,
+    element: <SettingsAdmin />
   }
 ]
 
@@ -74,6 +82,14 @@ const doctorRoutes = [
   {
     path: path.dashboard,
     element: <DashboardDoctor />
+  },
+  {
+    path: path.profileDoctor,
+    element: <ProfileDoctor />
+  },
+  {
+    path: path.settings,
+    element: <SettingsDoctor />
   }
 ]
 

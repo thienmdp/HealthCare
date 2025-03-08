@@ -1,5 +1,5 @@
 import path from '@/constants/path'
-import { LayoutDashboard, Settings, UsersRound } from 'lucide-react'
+import { CircleUserRound, LayoutDashboard, UsersRound } from 'lucide-react'
 
 export const sidebarAdmin = [
   {
@@ -13,9 +13,9 @@ export const sidebarAdmin = [
     href: path.userManage
   },
   {
-    label: 'Tài khoản',
-    icon: <Settings className='flex-shrink-0 w-5 h-5' />,
-    href: '#path.profileAdmin'
+    label: 'Profile',
+    icon: <CircleUserRound className='flex-shrink-0 w-5 h-5' />,
+    href: path.profileAdmin
   }
 ]
 export const sidebarDoctor = [
@@ -25,8 +25,8 @@ export const sidebarDoctor = [
     href: path.dashboard
   },
   {
-    label: 'Tài khoản',
-    icon: <Settings className='flex-shrink-0 w-5 h-5' />,
+    label: 'Profile',
+    icon: <CircleUserRound className='flex-shrink-0 w-5 h-5' />,
     href: path.profileDoctor
   }
 ]

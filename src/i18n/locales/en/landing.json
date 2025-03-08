@@ -8,7 +8,8 @@
     "appointment": "Appointment",
     "blog": "Blog",
     "services": "Services",
-    "logout": "Logout"
+    "FAQ": "FAQ",
+    "register": "Register"
   },
   "homepage": {
     "title": "THIS IS HOME PAGE"

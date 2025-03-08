@@ -33,7 +33,7 @@ export const MobileMenu = () => {
         <SheetContent side='left' className='w-full p-0'>
           <SheetHeader className='p-4 border-b'>
             <SheetTitle className='flex justify-center'>
-              <img src='/assets/svg/logo_cme.svg' height={120} width={120} alt='' />
+              <img src='./landing/logo.svg' height={120} width={120} alt='' />
             </SheetTitle>
           </SheetHeader>
 

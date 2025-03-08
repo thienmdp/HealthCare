@@ -13,9 +13,13 @@ import {
 const breadcrumbNameMap: Record<string, string> = {
   // Doctor
   [path.dashboard]: 'Dashboard',
+  [path.profileDoctor]: 'Profile Doctor',
+  [path.settings]: 'Settings',
   // Admin
   [path.dashboard_admin]: 'Admin Dashboard',
-  [path.userManage]: 'User Manage'
+  [path.userManage]: 'User Manage',
+  [path.profileAdmin]: 'Profile Admin',
+  [path.settingsAdmin]: 'Settings'
 }
 
 export const Navbar = () => {

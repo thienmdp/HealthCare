@@ -96,4 +96,78 @@ export const createUserSchema = yup.object({
 
 export type CreateUserSchema = yup.InferType<typeof createUserSchema>
 
+export const doctorProfileSchema = yup.object({
+  licenseNumber: yup.string().required('Vui lòng nhập số giấy phép'),
+  specialties: yup.array().of(yup.string().required()).default([]),
+  yearsOfExperience: yup.number().required('Vui lòng nhập số năm kinh nghiệm').min(0, 'Số năm không hợp lệ'),
+  education: yup
+    .array()
+    .of(
+      yup.object({
+        degree: yup.string().required('Vui lòng nhập bằng cấp'),
+        university: yup.string().required('Vui lòng nhập trường'),
+        graduationYear: yup
+          .number()
+          .required('Vui lòng nhập năm tốt nghiệp')
+          .min(1945, 'Năm tốt nghiệp không hợp lệ')
+          .max(new Date().getFullYear(), 'Năm tốt nghiệp không hợp lệ'),
+        specialization: yup.string().required('Vui lòng nhập chuyên ngành')
+      })
+    )
+    .default([]),
+  certificates: yup
+    .array()
+    .of(
+      yup.object({
+        name: yup.string().required('Vui lòng nhập tên chứng chỉ'),
+        issuedBy: yup.string().required('Vui lòng nhập nơi cấp'),
+        issueDate: yup.string().required('Vui lòng nhập ngày cấp'),
+        expiryDate: yup.string().required('Vui lòng nhập ngày hết hạn')
+      })
+    )
+    .default([]),
+  languages: yup.array().of(yup.string().required()).default(['Tiếng Việt']),
+  biography: yup.string().required('Vui lòng nhập tiểu sử'),
+  achievements: yup.array().of(yup.string()).default([]),
+  consultationFee: yup.number().required('Vui lòng nhập phí tư vấn').min(0, 'Phí tư vấn không hợp lệ'),
+  isAvailable: yup.boolean().default(true),
+  profileImage: yup.string().nullable()
+})
+
+export type DoctorProfileSchema = yup.InferType<typeof doctorProfileSchema>
+
+export const patientRecordSchema = yup.object({
+  occupation: yup.string().required('Vui lòng nhập nghề nghiệp'),
+  bloodType: yup.string().required('Vui lòng chọn nhóm máu'),
+  height: yup.number().required('Vui lòng nhập chiều cao').min(0, 'Chiều cao không hợp lệ'),
+  weight: yup.number().required('Vui lòng nhập cân nặng').min(0, 'Cân nặng không hợp lệ'),
+  allergies: yup.array().of(yup.string()).default([]),
+  chronicDiseases: yup.array().of(yup.string()).default([]),
+  familyHistory: yup.string(),
+  surgeryHistory: yup.string(),
+  isPregnant: yup.boolean().default(false),
+  currentMedications: yup.array().of(yup.string()).default([]),
+  lifestyle: yup.object({
+    smoking: yup.boolean().required(),
+    alcohol: yup.boolean().required(),
+    exercise: yup.string(),
+    diet: yup.string()
+  }),
+  emergencyContact: yup.object({
+    name: yup.string().required('Vui lòng nhập tên người liên hệ khẩn cấp'),
+    phone: yup
+      .string()
+      .required('Vui lòng nhập số điện thoại')
+      .matches(/^(84|0[2|3|5|7|8|9])+([0-9]{8,9})\b$/, 'Số điện thoại không hợp lệ'),
+    relationship: yup.string().required('Vui lòng nhập mối quan hệ')
+  }),
+  insurance: yup.object({
+    number: yup.string().required('Vui lòng nhập số bảo hiểm'),
+    provider: yup.string().required('Vui lòng nhập nhà cung cấp bảo hiểm'),
+    expired: yup.string().required('Vui lòng nhập ngày hết hạn')
+  })
+})
+
+export type PatientRecordSchema = yup.InferType<typeof patientRecordSchema>
+
 export type Schema = yup.InferType<typeof schema>

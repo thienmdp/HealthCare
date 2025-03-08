@@ -2,6 +2,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/ui/badge'
 import Actions from './Actions'
 import { User } from '@/types/user.type'
+import { Button } from '@/components/ui/button'
 
 export const columns = (onViewUser: (user: User) => void): ColumnDef<User>[] => [
   {
@@ -43,9 +44,13 @@ export const columns = (onViewUser: (user: User) => void): ColumnDef<User>[] => 
     cell: ({ row }) => {
       const role = row.getValue('role') as string
       return (
-        <Badge variant={role === 'admin' ? 'destructive' : role === 'doctor' ? 'default' : 'secondary'}>
+        <Button
+          className='!text-xs !px-2 !py-1 !h-6 !w-16 !font-semibold'
+          effect='shine'
+          variant={role === 'admin' ? 'destructive' : role === 'doctor' ? 'default' : 'secondary'}
+        >
           {role.toUpperCase()}
-        </Badge>
+        </Button>
       )
     }
   },
@@ -56,8 +61,11 @@ export const columns = (onViewUser: (user: User) => void): ColumnDef<User>[] => 
     cell: ({ row }) => {
       const disabled = row.getValue('disabled') as boolean
       return (
-        <Badge className='min-w-[100px] justify-center' variant={disabled ? 'destructive' : 'success'}>
-          {disabled ? 'Đã khóa' : 'Hoạt động'}
+        <Badge
+          className={`${disabled ? 'text-red-500 border-red-500 bg-red-50/90' : 'bg-primary/5 text-primary border-primary'} min-w-[100px] justify-start`}
+          variant='outline'
+        >
+          {disabled ? '🔴 Đã khóa' : '🟢 Hoạt động'}
         </Badge>
       )
     }
@@ -69,7 +77,7 @@ export const columns = (onViewUser: (user: User) => void): ColumnDef<User>[] => 
     cell: ({ row }) => {
       const isVerified = row.getValue('isVerified') as boolean
       return (
-        <Badge className='min-w-[100px] justify-center' variant={isVerified ? 'success' : 'default'}>
+        <Badge className='min-w-[100px] justify-center' variant={isVerified ? 'info' : 'warning'}>
           {isVerified ? 'Đã xác thực' : 'Chưa xác thực'}
         </Badge>
       )

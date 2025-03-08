@@ -8,22 +8,24 @@
     "appointment": "Đặt lịch",
     "blog": "Tin tức y tế",
     "services": "Dịch vụ khám",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "services": "Dịch vụ",
+    "FAQ": "FAQ",
+    "register": "Đăng ký"
   },
   "homepage": {
     "title": "ĐÂY LÀ TRANG CHỦ"
   },
-    "footer": {
-      "DN": "120 Hoàng Minh Thảo, Đà Nẵng",
-      "Hotline": "Hotline: 0356241423",
-      "AI": "Diagnosis IQ: Hệ thống hỗ trợ quyết định lâm sàng thông minh cho quản lý bệnh viện tự động.",
-      "about": "Về Diagnosis IQ"
-    },
-    "user":{
-      "profile": "Hồ sơ",
-      "history": "Lịch sử khám",
-      "payment": "Thanh toán",
-      "dashboard": "Bảng điều khiển"
-    }
+  "footer": {
+    "DN": "120 Hoàng Minh Thảo, Đà Nẵng",
+    "Hotline": "Hotline: 0356241423",
+    "AI": "Diagnosis IQ: Hệ thống hỗ trợ quyết định lâm sàng thông minh cho quản lý bệnh viện tự động.",
+    "about": "Về Diagnosis IQ"
+  },
+  "user": {
+    "profile": "Hồ sơ",
+    "history": "Lịch sử khám",
+    "payment": "Thanh toán",
+    "dashboard": "Bảng điều khiển"
+  }
 }
-

@@ -53,8 +53,8 @@ export default function Information({ user, onClose }: Props) {
         birth: data.birth ? format(data.birth, 'yyyy-MM-dd') : '',
         address: '',
         avatar: '',
-        disabled: false,
-        isVerified: false,
+        disabled: data.disabled,
+        isVerified: data.isVerified,
         role: data.role as 'user' | 'doctor',
         firstName: data.firstName,
         lastName: data.lastName,
@@ -77,12 +77,6 @@ export default function Information({ user, onClose }: Props) {
       onClose?.()
     } catch (error: any) {
       console.log('error', error)
-      toast.error(CustomNotification, {
-        data: {
-          title: 'Thất bại!',
-          content: error.data?.message || 'Có lỗi xảy ra'
-        }
-      })
     }
   }
 
@@ -279,8 +273,8 @@ export default function Information({ user, onClose }: Props) {
           </FormItem>
         </div>
 
-        <div className='flex !justify-center'>
-          <Button type='submit' disabled={isLoading}>
+        <div className='flex !justify-center !mt-12'>
+          <Button effect={'ringHover'} className='min-w-[150px]' type='submit' disabled={isLoading}>
             {isLoading ? 'Đang cập nhật...' : 'Cập nhật'}
           </Button>
         </div>
