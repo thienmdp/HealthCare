@@ -7,6 +7,8 @@ export interface ShiftDetail {
   shift: Shift
   doctors: User[]
   date: string
+  startTime: string
+  endTime: string
 }
 
 export interface DaySchedule {
@@ -61,4 +63,64 @@ export interface CreateScheduleRequest {
     dailySchedules: WeekSchedule
   }
   defaultConsultationDuration: number
+}
+
+export interface ScheduleEntry {
+  weekStart: string
+  weekEnd: string
+  dailySchedules: WeekSchedule
+}
+
+export interface DoctorScheduleResponse {
+  _id: {
+    buffer: {
+      type: string
+      data: number[]
+    }
+  }
+  doctor: {
+    buffer: {
+      type: string
+      data: number[]
+    }
+  }
+  scheduleEntries: ScheduleEntry[]
+  defaultConsultationDuration: number
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface GetDoctorScheduleResponse {
+  data: DoctorScheduleResponse[]
+}
+
+export interface DoctorShiftRegistration {
+  shift: any
+  doctorId: string
+  doctorName: string
+  avatar?: string
+  startTime: string
+  endTime: string
+  status: 'pending' | 'approved' | 'rejected'
+  rejectReason?: string
+}
+
+export interface AdminDayShift {
+  shift: Shift
+  startTime: string
+  endTime: string
+  doctors: DoctorShiftRegistration[]
+}
+
+export interface AdminDaySchedule {
+  date: string
+  shifts: AdminDayShift[]
+}
+
+export interface RejectDoctorShiftRequest {
+  doctorId: string
+  date: string
+  shift: Shift
+  reason: string
 }

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import { WeekSchedule, DayShift, Shift, ShiftTime } from '@/types/workSchedule.type'
 import { format, addDays, startOfWeek, addWeeks } from 'date-fns'
 import { vi } from 'date-fns/locale'
@@ -9,6 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useAppSelector } from '@/redux/store'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useCreateWorkScheduleMutation } from '@/redux/services/workScheduleApi'
+import { toast } from 'react-toastify'
+import { CustomNotification } from '@/components/CustomReactToastify'
+import { bufferToHex } from '@/utils/utils'
 
 const DEFAULT_SHIFTS: DayShift = {
   morning: false,
@@ -32,11 +35,12 @@ interface Props {
   onClose: () => void
 }
 
-type ShiftTimeKey = keyof ShiftTime
-
 export default function CreateScheduleDialog({ onClose }: Props) {
-  // const { _id: doctorId } = useAppSelector((state) => state.authState)
-  const doctorId = ''
+  const { user } = useAppSelector((state) => state.authState)
+  const doctorId = user?._id ? bufferToHex(user._id) : ''
+
+  const [createWorkSchedule, { isLoading }] = useCreateWorkScheduleMutation()
+
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { locale: vi }))
   const [schedule, setSchedule] = useState<WeekSchedule>({
     monday: { ...DEFAULT_SHIFTS },
@@ -79,6 +83,13 @@ export default function CreateScheduleDialog({ onClose }: Props) {
 
   const handleSubmit = async () => {
     try {
+      if (!doctorId) {
+        toast.error(CustomNotification, {
+          data: { title: 'Lỗi!', content: 'Không tìm thấy thông tin bác sĩ' }
+        })
+        return
+      }
+
       const payload = {
         doctorId,
         initialSchedule: {
@@ -88,11 +99,17 @@ export default function CreateScheduleDialog({ onClose }: Props) {
         },
         defaultConsultationDuration: 30
       }
-      console.log('Creating schedule:', payload)
-      // Call API here
+
+      await createWorkSchedule(payload).unwrap()
+      toast.success(CustomNotification, {
+        data: { title: 'Thành công!', content: 'Tạo lịch làm việc thành công' }
+      })
       onClose()
     } catch (error) {
       console.error('Error creating schedule:', error)
+      // toast.error(CustomNotification, {
+      //   data: { title: 'Thất bại!', content: 'Có lỗi xảy ra khi tạo lịch làm việc' }
+      // })
     }
   }
 
@@ -149,7 +166,7 @@ export default function CreateScheduleDialog({ onClose }: Props) {
                       {shifts[shift] && (
                         <div className='grid grid-cols-2 gap-2 pl-8'>
                           <Select
-                            value={shifts[startKey]}
+                            value={shifts[startKey] as string | undefined}
                             onValueChange={(value) =>
                               handleTimeChange(day as keyof WeekSchedule, shift, 'Start', value)
                             }
@@ -167,7 +184,7 @@ export default function CreateScheduleDialog({ onClose }: Props) {
                           </Select>
 
                           <Select
-                            value={shifts[endKey]}
+                            value={shifts[endKey] as string | undefined}
                             onValueChange={(value) => handleTimeChange(day as keyof WeekSchedule, shift, 'End', value)}
                           >
                             <SelectTrigger>
@@ -193,10 +210,12 @@ export default function CreateScheduleDialog({ onClose }: Props) {
       </ScrollArea>
 
       <div className='flex justify-end gap-2 pt-4'>
-        <Button variant='outline' onClick={onClose}>
+        <Button variant='outline' onClick={onClose} disabled={isLoading}>
           Hủy
         </Button>
-        <Button onClick={handleSubmit}>Tạo lịch</Button>
+        <Button onClick={handleSubmit} disabled={isLoading}>
+          {isLoading ? 'Đang xử lý...' : 'Tạo lịch'}
+        </Button>
       </div>
     </div>
   )

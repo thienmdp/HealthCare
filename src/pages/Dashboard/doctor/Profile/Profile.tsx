@@ -6,6 +6,7 @@ import { useGetDoctorProfileQuery } from '@/redux/services/doctorApi'
 import { bufferToHex } from '@/utils/utils'
 import DoctorInfo from './components/DoctorInfo'
 import PersonalInfo from '@/components/Dashboard/Form/PersonalInfo'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 export default function ProfileDoctor() {
   const user = useAppSelector((state) => state.authState.user)
@@ -31,14 +32,16 @@ export default function ProfileDoctor() {
           </Card>
         </TabsContent>
         <TabsContent value='doctor'>
-          <Card>
-            <CardHeader>
-              <CardTitle>Thông tin bác sĩ</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <DoctorInfo user={user} doctorProfile={doctorProfile?.data} loadingDoctorProfile={isFetching} />
-            </CardContent>
-          </Card>
+          <ScrollArea className='h-full mb-4'>
+            <Card>
+              <CardHeader>
+                <CardTitle>Thông tin bác sĩ</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <DoctorInfo user={user} doctorProfile={doctorProfile?.data} loadingDoctorProfile={isFetching} />
+              </CardContent>
+            </Card>
+          </ScrollArea>
         </TabsContent>
       </Tabs>
     </div>

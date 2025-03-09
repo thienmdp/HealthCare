@@ -7,6 +7,7 @@ import { authApi } from './services/authApi'
 import { userApi } from './services/userApi'
 import { doctorApi } from './services/doctorApi'
 import { patientApi } from './services/patientApi'
+import { workScheduleApi } from './services/workScheduleApi'
 
 export const store = configureStore({
   reducer: {
@@ -14,11 +15,18 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [doctorApi.reducerPath]: doctorApi.reducer,
     [patientApi.reducerPath]: patientApi.reducer,
+    [workScheduleApi.reducerPath]: workScheduleApi.reducer,
     errorToast: errorToastSlice,
     authState: authReducer
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware, userApi.middleware, doctorApi.middleware, patientApi.middleware)
+    getDefaultMiddleware().concat(
+      authApi.middleware,
+      userApi.middleware,
+      doctorApi.middleware,
+      patientApi.middleware,
+      workScheduleApi.middleware
+    )
 })
 setupListeners(store.dispatch)
 
