@@ -25,5 +25,35 @@
     "history": "History",
     "payment": "Payment",
     "dashboard": "Dashboard"
+  },
+  "hero": {
+    "title": {
+      "make": "Make an appointment",
+      "easy": "easy",
+      "and": "and",
+      "fast": "fast"
+    },
+    "subtitle": "Checking your family health by professional team doctors with complete and modern facilities services."
+  },
+  "advantages": {
+    "title": "Our Advantages",
+    "items": {
+      "appointment": "Make an appointment",
+      "telemedicine": "Telemedicine",
+      "aiAssistant": "AI Health Assistant",
+      "dashboard": "Smart Clinical Dashboard"
+    }
+  },
+  "consultant": {
+    "title": "Consultant",
+    "subtitle": "Quick Diagnosis, Instant Booking!"
+  },
+  "quality": {
+    "title": {
+      "start": "The",
+      "highlight": "Best Quality",
+      "end": "Service For Your Family"
+    },
+    "description": "Our best team doctor with complete and modern facilities will keep you healthy or return you to health from sick."
   }
 }
