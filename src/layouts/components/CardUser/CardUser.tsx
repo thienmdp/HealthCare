@@ -47,10 +47,6 @@ export default function CardUser() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56'>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className='w-4 h-4 mr-2' />
-            <Link to={path.profile}>Profile</Link>
-          </DropdownMenuItem>
           {role !== 'user' && (
             <DropdownMenuItem>
               <Home className='w-4 h-4 mr-2' />
@@ -64,11 +60,16 @@ export default function CardUser() {
             <Link to={path.profile}>{t('user.profile')}</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuItem>
-          <CreditCard className='w-4 h-4 mr-2' />
-          <Link to={path.payment}>{t('user.payment')}</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem className='text-red-600' onClick={handleLogout}>
+        {role === 'user' && (
+          <DropdownMenuItem>
+            <CreditCard className='w-4 h-4 mr-2' />
+            <Link to={path.payment}>{t('user.payment')}</Link>
+          </DropdownMenuItem>
+        )}
+        <DropdownMenuItem
+          className='!text-red-600 rounded-md cursor-pointer hover:!bg-red-100 bg-red-50'
+          onClick={handleLogout}
+        >
           <LogOut className='w-4 h-4 mr-2' />
           <span>{t('header.logout')}</span>
         </DropdownMenuItem>
