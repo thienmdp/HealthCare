@@ -15,6 +15,8 @@ const path = {
   dashboard: '/dashboard',
   profileDoctor: '/profile-doctor',
   settings: '/settings',
+  workScheduleDoctor: '/doctor-work-schedule',
+
   // Admin
   dashboard_admin: '/dashboard-admin',
   userManage: '/user-manage',

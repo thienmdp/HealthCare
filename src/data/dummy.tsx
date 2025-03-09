@@ -30,6 +30,11 @@ export const sidebarDoctor = [
     href: path.dashboard
   },
   {
+    label: 'Lịch làm việc',
+    icon: <CalendarDays className='flex-shrink-0 w-5 h-5' />,
+    href: path.workScheduleDoctor
+  },
+  {
     label: 'Profile',
     icon: <CircleUserRound className='flex-shrink-0 w-5 h-5' />,
     href: path.profileDoctor
