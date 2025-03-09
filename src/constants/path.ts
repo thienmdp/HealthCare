@@ -19,6 +19,7 @@ const path = {
   dashboard_admin: '/dashboard-admin',
   userManage: '/user-manage',
   profileAdmin: '/profile-admin',
-  settingsAdmin: '/settings-admin'
+  settingsAdmin: '/settings-admin',
+  workSchedule: '/work-schedule'
 } as const
 export default path

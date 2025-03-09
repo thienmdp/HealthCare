@@ -9,7 +9,7 @@ import { Page_404 } from './pages/NotFound'
 import { About, Landing } from './pages/Landing'
 import { Profile } from './pages/Dashboard/user'
 import { DashboardDoctor, ProfileDoctor, SettingsDoctor } from './pages/Dashboard/doctor'
-import { DashboardAdmin, ProfileAdmin, SettingsAdmin, UserManage } from './pages/Dashboard/admin'
+import { DashboardAdmin, ProfileAdmin, SettingsAdmin, UserManage, WorkSchedule } from './pages/Dashboard/admin'
 
 type ProtectedRouteProps = {
   allowedRole: 'user' | 'admin' | 'doctor'
@@ -67,6 +67,11 @@ const adminRoutes = [
   {
     path: path.userManage,
     element: <UserManage />
+  },
+
+  {
+    path: path.workSchedule,
+    element: <WorkSchedule />
   },
   {
     path: path.profileAdmin,
