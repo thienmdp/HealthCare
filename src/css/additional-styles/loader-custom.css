@@ -54,3 +54,45 @@
     background-position: top, top, left, right, bottom;
   }
 }
+
+
+/* Zalo zoomzoom */
+.zalozoomzoom {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  opacity: 0.5;
+  z-index: -2;
+  border-radius: 100%;
+  animation: zalozoomzoom 3s linear 0.2s infinite;
+}
+
+.zalozoomzoom:nth-child(1) {
+  animation-delay: 1.2s;
+}
+
+.zalozoomzoom:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.zalozoomzoom:nth-child(3) {
+  animation-delay: 1.5s;
+}
+
+.zalozoomzoom:nth-child(4) {
+  animation-delay: 2.2s;
+}
+
+@keyframes zalozoomzoom {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}

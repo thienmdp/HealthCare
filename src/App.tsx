@@ -8,7 +8,6 @@ import { useGetMeQuery } from './redux/services/userApi'
 import { useLocation } from 'react-router-dom'
 import LoadingBar from 'react-top-loading-bar'
 import { Info, CircleAlert, BadgeCheck, TriangleAlert } from 'lucide-react'
-import Chatbot from './components/Global/Chatbot'
 function App() {
   const dispatch = useDispatch()
   const { refetch: refetchGetMe } = useGetMeQuery(null)
@@ -82,7 +81,6 @@ function App() {
       />
       {routeElements}
       <ToastContainer {...toastConfig} icon={getToastIcon} />
-      <Chatbot/>
     </>
   )
 }
