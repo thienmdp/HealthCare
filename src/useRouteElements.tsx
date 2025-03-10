@@ -9,7 +9,14 @@ import { Page_404 } from './pages/NotFound'
 import { About, DoctorProfile, Landing } from './pages/Landing'
 import { Profile } from './pages/Dashboard/user'
 import { DashboardDoctor, ProfileDoctor, SettingsDoctor, WorkScheduleDoctor } from './pages/Dashboard/doctor'
-import { DashboardAdmin, ProfileAdmin, SettingsAdmin, UserManage, WorkSchedule } from './pages/Dashboard/admin'
+import {
+  DashboardAdmin,
+  PaymentManage,
+  ProfileAdmin,
+  SettingsAdmin,
+  UserManage,
+  WorkSchedule
+} from './pages/Dashboard/admin'
 
 type ProtectedRouteProps = {
   allowedRole: 'user' | 'admin' | 'doctor'
@@ -45,6 +52,10 @@ const publicRoutes = [
   {
     path: path.about,
     element: <About />
+  },
+  {
+    path: path.profileDoctorPublic,
+    element: <DoctorProfile />
   }
 ]
 
@@ -52,10 +63,6 @@ const userRoutes = [
   {
     path: path.profile,
     element: <Profile />
-  },
-  {
-    path: path.profileDoctorPublic,
-    element: <DoctorProfile />
   }
 ]
 
@@ -67,6 +74,10 @@ const adminRoutes = [
   {
     path: path.userManage,
     element: <UserManage />
+  },
+  {
+    path: path.paymentManage,
+    element: <PaymentManage />
   },
   {
     path: path.workSchedule,

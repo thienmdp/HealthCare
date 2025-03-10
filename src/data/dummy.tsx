@@ -1,5 +1,5 @@
 import path from '@/constants/path'
-import { CalendarDays, CircleUserRound, LayoutDashboard, UsersRound } from 'lucide-react'
+import { CalendarDays, CircleUserRound, CreditCard, FolderClock, LayoutDashboard, UsersRound } from 'lucide-react'
 
 export const sidebarAdmin = [
   {
@@ -11,6 +11,16 @@ export const sidebarAdmin = [
     label: 'Quản lý người dùng',
     icon: <UsersRound className='flex-shrink-0 w-5 h-5' />,
     href: path.userManage
+  },
+  {
+    label: 'Quản lý hóa đơn',
+    icon: <CreditCard className='flex-shrink-0 w-5 h-5' />,
+    href: path.paymentManage
+  },
+  {
+    label: 'Quản lý lịch hẹn',
+    icon: <FolderClock className='flex-shrink-0 w-5 h-5' />,
+    href: path.appointmentAdmin
   },
   {
     label: 'Lịch làm việc',
@@ -33,6 +43,11 @@ export const sidebarDoctor = [
     label: 'Lịch làm việc',
     icon: <CalendarDays className='flex-shrink-0 w-5 h-5' />,
     href: path.workScheduleDoctor
+  },
+  {
+    label: 'Lịch hẹn',
+    icon: <FolderClock className='flex-shrink-0 w-5 h-5' />,
+    href: path.appoitmentDoctor
   },
   {
     label: 'Profile',

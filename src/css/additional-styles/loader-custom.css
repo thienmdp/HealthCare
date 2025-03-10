@@ -96,3 +96,39 @@
     opacity: 0;
   }
 }
+
+
+/* print */
+@media print {
+  @page {
+    margin: 20mm;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .print-content,
+  .print-content * {
+    visibility: visible;
+  }
+
+  .print-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .print\:hidden {
+    display: none;
+  }
+
+  .print\:block {
+    display: block;
+  }
+
+  .print\:p-8 {
+    padding: 2rem;
+  }
+}

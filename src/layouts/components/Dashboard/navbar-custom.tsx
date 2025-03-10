@@ -15,9 +15,13 @@ const breadcrumbNameMap: Record<string, string> = {
   [path.dashboard]: 'Dashboard',
   [path.profileDoctor]: 'Profile Doctor',
   [path.settings]: 'Settings',
+  [path.workScheduleDoctor]: 'Work Schedule',
+  [path.appoitmentDoctor]: 'Appointment Manage',
   // Admin
   [path.dashboard_admin]: 'Admin Dashboard',
   [path.userManage]: 'User Manage',
+  [path.paymentManage]: 'Payment Manage',
+  [path.workSchedule]: 'Work Schedule Manage',
   [path.profileAdmin]: 'Profile Admin',
   [path.settingsAdmin]: 'Settings'
 }

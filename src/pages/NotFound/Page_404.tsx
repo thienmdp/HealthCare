@@ -1,44 +1,41 @@
-import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
-
-const Styled = styled.div`
-  #title {
-    font-family: 'Bungee', cursive;
-  }
-`
 function Page_404() {
-  const navigate = useNavigate()
-
+  const handleBack = () => {
+    window.history.back()
+  }
   return (
-    <Styled>
-      <div className='flex flex-col items-center justify-center w-full my-32 bg-white h-fit'>
-        <p id='title' className='font-extrabold tracking-wider text-[#1f1f1f] text-[13rem]'>
-          404
-        </p>
-        <div className='bg-blue_app text-white px-2 py-1 text-lg font-bold rounded -rotate-6 absolute mt-[-200px]'>
-          Page not found
-        </div>
-        <div className='mt-5 text-center'>
-          <p className='flex items-end justify-center text-2xl font-semibold text-[#1f1f1f] md:text-3xl'>
-            <span className='text-5xl'>🚧</span> Xin lỗi, chúng tôi không thể tìm thấy trang này.
-          </p>
-          <p className='mt-4 mb-8 text-lg font-semibold text-[#1f1f1f]  '>
-            Nhưng đừng lo lắng, bạn có thể tìm thấy rất nhiều thứ khác trên trang chủ của chúng tôi.
-          </p>
-        </div>
-        <button className='mt-5'>
-          <div className='relative inline-block text-sm font-medium hover:text-gray-700 group active:text-gray-700 focus:outline-none focus:ring'>
-            <span className='absolute inset-0 transition-transform translate-x-1 translate-y-1 rounded-lg bg-blue_app group-hover:translate-y-0 group-hover:translate-x-0'></span>
-            <span
-              onClick={() => navigate('/')}
-              className='relative block px-8 py-2 border border-current rounded-lg bg-blue_app hover:opacity-95'
+    <section className='bg-white '>
+      <div className='container flex items-center min-h-[60vh] px-6 py-12 mx-auto'>
+        <div>
+          <p className='text-sm font-medium text-primary '>404 error</p>
+          <h1 className='mt-3 text-2xl font-semibold text-gray-800 md:text-3xl'>We can’t find that page</h1>
+          <p className='mt-4 text-gray-500 '>Sorry, the page you are looking for doesn't exist or has been moved.</p>
+          <div className='flex items-center mt-6 gap-x-3'>
+            <button
+              onClick={() => handleBack()}
+              className='flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto hover:bg-gray-100 '
             >
-              <p className='flex items-center justify-center h-8 text-lg font-semibold text-white'>Trang chủ</p>
-            </span>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth='1.5'
+                stroke='currentColor'
+                className='w-5 h-5 rtl:rotate-180'
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' d='M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18' />
+              </svg>
+              <span>Go back</span>
+            </button>
+            <a
+              href='/'
+              className='w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 rounded-lg bg-primary/80 shrink-0 sm:w-auto hover:bg-primary '
+            >
+              Take me home
+            </a>
           </div>
-        </button>
+        </div>
       </div>
-    </Styled>
+    </section>
   )
 }
 

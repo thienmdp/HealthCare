@@ -17,10 +17,13 @@ const path = {
   profileDoctor: '/profile-doctor',
   settings: '/settings',
   workScheduleDoctor: '/doctor-work-schedule',
+  appoitmentDoctor: '/doctor-appointment',
 
   // Admin
   dashboard_admin: '/dashboard-admin',
   userManage: '/user-manage',
+  paymentManage: '/payment-manage',
+  appointmentAdmin: '/appointment-manage',
   profileAdmin: '/profile-admin',
   settingsAdmin: '/settings-admin',
   workSchedule: '/work-schedule'

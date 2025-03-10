@@ -14,6 +14,7 @@ export interface Certificate {
 
 export interface DoctorProfile {
   doctorId: string
+  doctorName: string
   licenseNumber: string
   specialties: string[]
   yearsOfExperience: number

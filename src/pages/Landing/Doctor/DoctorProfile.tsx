@@ -9,11 +9,11 @@ import DoctorSchedule from './components/DoctorSchedule'
 import { generateTimeSlots } from '@/utils/schedule'
 import BookingDialog from './components/BookingDialog'
 import { useAppSelector } from '@/redux/store'
-import { useGetProfileUserQuery } from '@/redux/services/userApi'
 import { useGetDoctorProfileQuery } from '@/redux/services/doctorApi'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { formatCurrency } from '@/utils/utils'
+import { Page_403 } from '@/pages/NotFound'
 
 export default function DoctorProfile() {
   const { doctorId } = useParams()
@@ -23,7 +23,6 @@ export default function DoctorProfile() {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>('')
   const [showBooking, setShowBooking] = useState(false)
 
-  const { data: doctorData, isLoading: isLoadingUser } = useGetProfileUserQuery(doctorId || '')
   const { data: doctorProfile, isLoading: isLoadingDoctor } = useGetDoctorProfileQuery(doctorId || '')
 
   const doctorSchedule = {
@@ -52,8 +51,8 @@ export default function DoctorProfile() {
     setShowBooking(true)
   }
 
-  const isLoading = isLoadingUser || isLoadingDoctor
-
+  const isLoading = isLoadingDoctor
+  if (!doctorProfile) return <Page_403 />
   return (
     <div className='container py-8'>
       <div className='grid gap-6 lg:grid-cols-3'>
@@ -69,12 +68,12 @@ export default function DoctorProfile() {
               <div className='space-y-6'>
                 <div className='flex flex-col items-center gap-6 md:flex-row md:items-start'>
                   <Avatar className='w-32 h-32 border-4 border-primary/10'>
-                    <AvatarImage src={doctorProfile?.data.profileImage || doctorData?.data.profile.avatar} />
-                    <AvatarFallback>{doctorData?.data.profile.fullName[0]}</AvatarFallback>
+                    <AvatarImage src={doctorProfile?.data.profileImage || doctorProfile?.data.profileImage} />
+                    <AvatarFallback>{doctorProfile?.data?.doctorName || 'BS'}</AvatarFallback>
                   </Avatar>
 
                   <div className='flex-1 text-center md:text-left'>
-                    <h1 className='text-2xl font-bold'>{doctorData?.data.profile.fullName || 'Fullname'}</h1>
+                    <h1 className='text-2xl font-bold'>{doctorProfile?.data?.doctorName || 'Tên đầy đủ Doctor'}</h1>
                     <p className='text-gray-500'>Số giấy phép: {doctorProfile?.data.licenseNumber}</p>
 
                     <div className='flex flex-wrap gap-2 mt-2'>
