@@ -33,7 +33,7 @@ export function MonthPickerPopover({
         <Button
           variant='outline'
           className={cn(
-            'w-[280px] justify-start text-left capitalize font-normal',
+            'w-[280px] h-8 justify-start text-left capitalize font-normal',
             !date && 'text-muted-foreground',
             className
           )}

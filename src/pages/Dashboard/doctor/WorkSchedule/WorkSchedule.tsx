@@ -82,12 +82,12 @@ export default function WorkSchedule() {
   }, [scheduleData, currentDate])
 
   return (
-    <div className='p-6'>
+    <div className='p-4 sm:p-6'>
       <div className='flex items-center justify-between mb-6'>
         <h1 className='text-2xl font-bold'>Lịch làm việc</h1>
         <div className='flex items-center gap-4'>
           <MonthPickerPopover date={currentDate} onDateChange={handleMonthChange} />
-          <Button onClick={() => setCreateDialogOpen(true)}>
+          <Button className='h-8 ' size={'sm'} onClick={() => setCreateDialogOpen(true)}>
             <Plus className='w-4 h-4 mr-2' />
             Tạo lịch làm việc
           </Button>
@@ -99,7 +99,7 @@ export default function WorkSchedule() {
           <div className='w-8 h-8 border-b-2 rounded-full border-primary animate-spin'></div>
         </div>
       ) : (
-        <div className='grid grid-cols-7 gap-4'>
+        <div className='grid grid-cols-3 gap-2 sm:gap-4 sm:grid-cols-5 lg:grid-cols-7'>
           {/* Calendar header */}
           {['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'].map((day) => (
             <div key={day} className='p-2 font-medium text-center'>
@@ -121,7 +121,7 @@ export default function WorkSchedule() {
               const daySchedule = schedule.find((s) => s.date === format(date, 'yyyy-MM-dd'))
 
               return (
-                <Card key={index} className='h-32'>
+                <Card key={index} className='h-36'>
                   <CardContent className='p-2'>
                     <div className='text-center'>
                       <div className='text-sm font-medium'>{format(date, 'EEEE', { locale: vi })}</div>
@@ -129,7 +129,7 @@ export default function WorkSchedule() {
                       {daySchedule?.shifts.length ? (
                         <div className='mt-1 text-xs text-gray-600'>
                           {daySchedule.shifts.map((shift) => (
-                            <div key={shift.id} className='mb-0.5 px-2 py-0.5 rounded bg-green-50'>
+                            <div key={shift.id} className='mb-0.5 px-2 py-0.5 rounded bg-primary/10'>
                               {shift.shift === 'morning' && `Sáng (${shift.startTime}-${shift.endTime})`}
                               {shift.shift === 'afternoon' && `Chiều (${shift.startTime}-${shift.endTime})`}
                               {shift.shift === 'evening' && `Tối (${shift.startTime}-${shift.endTime})`}

@@ -51,11 +51,7 @@ const publicRoutes = [
 const userRoutes = [
   {
     path: path.profile,
-    element: (
-      <div className='max-w-screen-xl pt-8 mx-auto'>
-        <Profile />
-      </div>
-    )
+    element: <Profile />
   }
 ]
 

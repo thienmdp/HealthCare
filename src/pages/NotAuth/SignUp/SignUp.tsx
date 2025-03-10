@@ -152,8 +152,8 @@ export default function SignUp() {
     //     </div>
     //   </div>
     // </div>
-    <div className='flex items-center justify-center min-h-screen bg-gray-100'>
-      <div className='w-full max-w-3xl p-8 bg-white rounded-lg shadow-md'>
+    <div className='flex items-center justify-center min-h-[80vh]'>
+      <div className='w-full max-w-3xl p-8 bg-white rounded-lg shadow-md '>
         <h2 className='text-2xl font-bold text-center text-gray-800'>Register for a Participant Account</h2>
         <p className='mb-6 text-center text-gray-600'>Create your Account</p>
 

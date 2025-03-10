@@ -32,13 +32,13 @@ export default function WorkSchedule() {
   }
 
   return (
-    <div className='p-6'>
+    <div className='p-4 sm:p-6'>
       <div className='flex items-center justify-between mb-6'>
         <h1 className='text-2xl font-bold'>Quản lý lịch làm việc</h1>
         <MonthPickerPopover date={currentDate} onDateChange={handleMonthChange} />
       </div>
 
-      <div className='grid grid-cols-7 gap-4'>
+      <div className='grid grid-cols-3 gap-2 sm:gap-4 sm:grid-cols-5 lg:grid-cols-7'>
         {/* Calendar header */}
         {['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'].map((day) => (
           <div key={day} className='p-2 font-medium text-center'>
@@ -60,20 +60,22 @@ export default function WorkSchedule() {
           return (
             <Card
               key={day.date}
-              className={`h-40 transition-shadow ${day.shifts.length > 0 ? 'cursor-pointer hover:shadow-lg' : ''}`}
+              className={`h-48 transition-shadow ${day.shifts.length > 0 ? 'cursor-pointer hover:shadow-lg' : ''}`}
               onClick={() => handleDayClick(day)}
             >
-              <CardContent className='p-2'>
-                <div className='text-center'>
-                  <div className='text-sm font-medium'>{format(new Date(day.date), 'EEEE', { locale: vi })}</div>
-                  <div className='text-xl font-bold'>{format(new Date(day.date), 'd')}</div>
+              <CardContent className='h-full p-2'>
+                <div className='flex flex-col items-center justify-between h-full text-center'>
+                  <div>
+                    <div className='text-sm font-medium'>{format(new Date(day.date), 'EEEE', { locale: vi })}</div>
+                    <div className='text-xl font-bold'>{format(new Date(day.date), 'd')}</div>
+                    {pendingCount > 0 && (
+                      <Badge variant='secondary' className='w-full justify-center !text-center mt-2'>
+                        {pendingCount} chờ duyệt
+                      </Badge>
+                    )}
+                  </div>
                   {day.shifts.length > 0 ? (
-                    <div className='mt-1 space-y-1'>
-                      {pendingCount > 0 && (
-                        <Badge variant='secondary' className='w-full justify-center !text-center'>
-                          {pendingCount} chờ duyệt
-                        </Badge>
-                      )}
+                    <div className='mb-4 space-y-1'>
                       <div className='mt-1 text-xs text-gray-600'>
                         {day.shifts.map((shift) => (
                           <div key={shift.shift} className='mb-0.5'>

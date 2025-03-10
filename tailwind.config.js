@@ -71,6 +71,11 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			spacing: {
+				'9/16': '56.25%',
+				'3/4': '75%',
+				'1/1': '100%'
+			},
 			keyframes: {
 				"caret-blink": {
 					"0%,70%,100%": { opacity: "1" },

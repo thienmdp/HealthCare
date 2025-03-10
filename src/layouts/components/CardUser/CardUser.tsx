@@ -57,7 +57,14 @@ export default function CardUser() {
           )}
           <DropdownMenuItem>
             <User className='w-4 h-4 mr-2' />
-            <Link to={path.profile}>{t('user.profile')}</Link>
+            <Link
+              to={
+                user.role === 'admin' ? path.profileAdmin : user.role === 'doctor' ? path.profileDoctor : path.profile
+              }
+            >
+              {' '}
+              {t('user.profile')}
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         {role === 'user' && (

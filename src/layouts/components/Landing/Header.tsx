@@ -111,7 +111,7 @@ export const Header = () => {
                   to={path.signin}
                   onClick={() => handleScrollToTop}
                 >
-                  {t('header.register')}
+                  {t('header.login')}
                 </Link>
               </div>
             )}

@@ -10,11 +10,13 @@ import GoogleOAuthClient from '@/components/Auth/GoogleOAuthClient'
 import { Helmet } from 'react-helmet-async'
 import { CustomNotification } from '@/components/CustomReactToastify'
 import { Button } from '@/components/ui/button'
+import { useTranslation } from 'react-i18next'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 
 export default function SignIn() {
+  const { t } = useTranslation('landing')
   const navigate = useNavigate()
   const location = useLocation()
   const [loginUser, resultLogin] = useLoginUserMutation()
@@ -142,23 +144,33 @@ export default function SignIn() {
     //     </div>
     //   </div>
     // </div>
-    <div className='flex items-center justify-center h-screen'>
-      <div className='relative flex w-3/4 overflow-hidden rounded-lg shadow-lg'>
+    <div className='flex items-center justify-center w-full '>
+      <div className='relative flex w-full overflow-hidden rounded-lg shadow-lg -mx-1/1 max-h-[85vh] min-h-[70vh]'>
         {/* Left Side - Image */}
-        <div className='w-1/2 bg-gray-100'>
+        <div className='hidden w-full bg-gray-100 sm:block'>
           <img src='./dk.svg' alt='Lab Background' className='object-cover w-full h-full' />
         </div>
 
         {/* Right Side - Login Form */}
-        <div className='relative flex items-center justify-center w-1/2 p-10 bg-white shadow-lg'>
+        <div className='relative flex items-center justify-center w-full p-10 bg-white shadow-lg'>
           {/* Logo - Diagnosis IQ */}
           <div className='absolute flex items-center space-x-1 top-6 right-6'>
             <img src='./DAIQ.svg' alt='...' className='w-40 h-10' />
           </div>
 
           <div className='w-full max-w-md'>
-            <h2 className='mt-5 mb-6 text-2xl font-semibold text-center text-gray-900'>Log in to your account</h2>
-
+            <h2 className='mt-5 mb-10 text-3xl font-bold text-center text-gray-900'>{t('header.login')}</h2>
+            <p className='mb-6 text-sm font-semibold text-center text-gray-700'>
+              Bạn có thể đăng nhập vào bằng tài khoản Google{' '}
+            </p>
+            <div className='flex flex-col items-center justify-between mt-4 lg:flex-row'>
+              <div className='w-full mb-2'>
+                <GoogleOAuthClient />
+              </div>
+            </div>
+            <div className='mt-4 text-sm text-center text-gray-700'>
+              <p>hoặc bằng tài khoản DiagnosisIQ của mình</p>
+            </div>
             <form onSubmit={onSubmit} className='space-y-4'>
               <Input
                 label={'Email'}
@@ -186,7 +198,7 @@ export default function SignIn() {
                 isLoading={resultLogin.isLoading}
                 disabled={resultLogin.isLoading}
               >
-                Đăng nhập
+                {t('header.login')}
               </Button>
             </form>
 

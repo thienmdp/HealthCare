@@ -21,7 +21,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Pencil } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import { BLOOD_TYPES, RELATIONSHIPS, INSURANCE_PROVIDERS } from '@/constants/schedules.patient'
-import { useGetAllUserQuery } from '@/redux/services/userApi'
+import { useGetAllUserQuery, useGetMeQuery } from '@/redux/services/userApi'
 import { CreatePatientRecordInput, UpdatePatientRecordInput } from '@/types/patient.type'
 
 interface Props {
@@ -32,6 +32,8 @@ interface Props {
 export default function ProfilePatient({ user, onClose }: Props) {
   const [isEditing, setIsEditing] = useState(false)
   const { refetch: refetchGetAllUser } = useGetAllUserQuery(null)
+  const { refetch: refetchGetMe } = useGetMeQuery(null)
+
   const {
     data: patientRecord,
     isLoading,
@@ -132,6 +134,8 @@ export default function ProfilePatient({ user, onClose }: Props) {
       setIsEditing(false)
     } catch (error: any) {
       console.log('Error:', error)
+    } finally {
+      user.role === 'user' && refetchGetMe()
     }
   }
 
@@ -171,9 +175,9 @@ export default function ProfilePatient({ user, onClose }: Props) {
         <div className='flex flex-wrap gap-2 mt-1'>
           {items.length > 0
             ? items.map((item, index) => (
-                <div key={index} className='px-3 py-1 text-sm bg-gray-100 rounded-full'>
+                <Button key={index} effect='shine' size='sm' variant={'destructive'}>
                   {item}
-                </div>
+                </Button>
               ))
             : '—'}
         </div>
