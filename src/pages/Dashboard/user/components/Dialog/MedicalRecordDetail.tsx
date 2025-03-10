@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator'
 import { formatCurrency } from '@/utils/utils'
 
 interface Props {
-  record: any // Replace with proper type
+  record: any
   onClose: () => void
 }
 

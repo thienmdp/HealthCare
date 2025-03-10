@@ -9,6 +9,7 @@ const path = {
   logout: '/logout',
   // User
   profile: '/profile',
+  profileDoctorPublic: '/doctor/:doctorId',
   payment: '/payment',
   booking: '/booking',
   // Doctor

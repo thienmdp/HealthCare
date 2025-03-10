@@ -47,17 +47,17 @@ export const Header = () => {
       <nav className='flex items-center justify-between max-w-screen-xl px-6 py-4 mx-auto'>
         {/* Logo */}
         <Link to={path.landing} className='text-2xl font-bold text-black'>
-          <img src='./landing/logo.svg' alt='Logo' className='h-8' />
+          <img src='/landing/logo.svg' alt='Logo' className='h-8' />
         </Link>
 
         {/* Navigation Links */}
-        <ul className='hidden space-x-2 text-lg text-black md:flex '>
+        <ul className='hidden space-x-2 text-black md:flex '>
           <li>
             <Link
               to={path.landing}
               className={
                 buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
-                ' hover:!text-primary !font-normal !text-xl'
+                ' hover:!text-primary !font-normal !text-base'
               }
             >
               {t('header.home')}
@@ -68,7 +68,7 @@ export const Header = () => {
               to={path.about}
               className={
                 buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
-                ' hover:!text-primary !font-normal !text-xl'
+                ' hover:!text-primary !font-normal !text-base'
               }
             >
               {t('header.about')}
@@ -79,7 +79,7 @@ export const Header = () => {
               to={path.services}
               className={
                 buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
-                ' hover:!text-primary !font-normal !text-xl'
+                ' hover:!text-primary !font-normal !text-base'
               }
             >
               {t('header.services')}
@@ -90,7 +90,7 @@ export const Header = () => {
               to={path.contact}
               className={
                 buttonVariants({ effect: 'hoverUnderline', variant: 'link' }) +
-                ' hover:!text-primary !font-normal !text-xl'
+                ' hover:!text-primary !font-normal !text-base'
               }
             >
               {t('header.contact')}

@@ -6,7 +6,7 @@ import DefaultLayout from './layouts/DefaultLayout'
 import DashboardLayout from './layouts/DashboardLayout'
 import { SignIn, SignUp, VerifyEmail } from './pages/NotAuth'
 import { Page_404 } from './pages/NotFound'
-import { About, Landing } from './pages/Landing'
+import { About, DoctorProfile, Landing } from './pages/Landing'
 import { Profile } from './pages/Dashboard/user'
 import { DashboardDoctor, ProfileDoctor, SettingsDoctor, WorkScheduleDoctor } from './pages/Dashboard/doctor'
 import { DashboardAdmin, ProfileAdmin, SettingsAdmin, UserManage, WorkSchedule } from './pages/Dashboard/admin'
@@ -52,6 +52,10 @@ const userRoutes = [
   {
     path: path.profile,
     element: <Profile />
+  },
+  {
+    path: path.profileDoctorPublic,
+    element: <DoctorProfile />
   }
 ]
 
