@@ -23,7 +23,8 @@ const breadcrumbNameMap: Record<string, string> = {
   [path.paymentManage]: 'Payment Manage',
   [path.workSchedule]: 'Work Schedule Manage',
   [path.profileAdmin]: 'Profile Admin',
-  [path.settingsAdmin]: 'Settings'
+  [path.settingsAdmin]: 'Settings',
+  [path.appointmentAdmin]: 'Appointment Manage'
 }
 
 export const Navbar = () => {

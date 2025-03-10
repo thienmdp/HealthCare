@@ -8,8 +8,15 @@ import { SignIn, SignUp, VerifyEmail } from './pages/NotAuth'
 import { Page_404 } from './pages/NotFound'
 import { About, DoctorProfile, Landing } from './pages/Landing'
 import { Profile } from './pages/Dashboard/user'
-import { DashboardDoctor, ProfileDoctor, SettingsDoctor, WorkScheduleDoctor } from './pages/Dashboard/doctor'
 import {
+  AppointmentDoctor,
+  DashboardDoctor,
+  ProfileDoctor,
+  SettingsDoctor,
+  WorkScheduleDoctor
+} from './pages/Dashboard/doctor'
+import {
+  AppointmentManage,
   DashboardAdmin,
   PaymentManage,
   ProfileAdmin,
@@ -84,6 +91,10 @@ const adminRoutes = [
     element: <WorkSchedule />
   },
   {
+    path: path.appointmentAdmin,
+    element: <AppointmentManage />
+  },
+  {
     path: path.profileAdmin,
     element: <ProfileAdmin />
   },
@@ -105,6 +116,10 @@ const doctorRoutes = [
   {
     path: path.workScheduleDoctor,
     element: <WorkScheduleDoctor />
+  },
+  {
+    path: path.appoitmentDoctor,
+    element: <AppointmentDoctor />
   },
   {
     path: path.settings,
