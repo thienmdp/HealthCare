@@ -52,9 +52,9 @@ export default function ListDoctor({ listDoctor }: { listDoctor: User[] }) {
           >
             <CarouselContent className='-ml-4'>
               {filteredDoctors.length > 0 ? (
-                filteredDoctors.map((doctor) => (
+                filteredDoctors.map((doctor, index) => (
                   <CarouselItem
-                    key={bufferToHex(doctor._id)}
+                    key={bufferToHex(doctor._id) + index}
                     className='pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/5'
                   >
                     <Card className='h-full overflow-hidden'>
