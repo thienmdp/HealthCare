@@ -1,25 +1,123 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Card, CardContent } from '@/components/ui/card'
-import { format } from 'date-fns'
+import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { vi } from 'date-fns/locale'
-import { generateAdminMockSchedule } from './mockData'
-import { AdminDaySchedule } from '@/types/workSchedule.type'
+import {
+  AdminDaySchedule,
+  AdminDayShift,
+  ApprovalStatus,
+  DoctorShiftRegistration,
+  Shift,
+  DailySchedule,
+  ShiftSchedule
+} from '@/types/workSchedule.type'
 import DoctorListDialog from './components/DoctorListDialog'
 import { MonthPickerPopover } from '@/components/ui/month-picker-popover'
 import { Badge } from '@/components/ui/badge'
+import { useGetAllSchedulesQuery } from '@/redux/services/workScheduleApi'
+import { Skeleton } from '@/components/ui/skeleton'
+import { bufferToHex } from '@/utils/utils'
+
+// Add helper type for type-safe property access
+type ShiftKey = keyof ShiftSchedule
+type ShiftKeyPrefix = 'morning' | 'afternoon' | 'evening'
+
+// Add type guards and helpers
+function isApprovalStatus(value: unknown): value is ApprovalStatus {
+  return value === 'pending' || value === 'approved' || value === 'rejected'
+}
 
 export default function WorkSchedule() {
   const [selectedDay, setSelectedDay] = useState<AdminDaySchedule | null>(null)
   const [currentDate, setCurrentDate] = useState(new Date())
-  const [schedule, setSchedule] = useState<AdminDaySchedule[]>(generateAdminMockSchedule())
+  const [isUpdating, setIsUpdating] = useState(false)
+
+  const startDate = format(startOfMonth(currentDate), 'yyyy-MM-dd')
+  const endDate = format(endOfMonth(currentDate), 'yyyy-MM-dd')
+
+  const {
+    data: scheduleData,
+    isLoading,
+    isFetching,
+    refetch: refetchAllSchedules
+  } = useGetAllSchedulesQuery({
+    startDate,
+    endDate
+  })
+
+  const processScheduleForDate = (date: Date): AdminDaySchedule | null => {
+    const dateStr = format(date, 'yyyy-MM-dd')
+    const schedules = scheduleData?.data?.data || []
+    console.log('schedules', schedules)
+    const daySchedules = schedules.filter(
+      (schedule: DailySchedule) => format(new Date(schedule.date), 'yyyy-MM-dd') === dateStr
+    )
+
+    if (daySchedules.length === 0) return null
+    const shifts: AdminDayShift[] = ['morning', 'afternoon', 'evening']
+      .map((shiftType): AdminDayShift | null => {
+        const doctors = daySchedules
+          .map((schedule: DailySchedule): DoctorShiftRegistration | null => {
+            const schedules = schedule.schedules
+            const prefix = shiftType as ShiftKeyPrefix
+
+            // Type-safe property access with validation
+            const enabled = schedules[prefix] as boolean
+            const approvalStatus = schedules[`${prefix}ApprovalStatus` as ShiftKey]
+            const rejectionReason = schedules[`${prefix}RejectionReason` as ShiftKey] as string
+            const startTime = schedules[`${prefix}Start` as ShiftKey] as string
+            const endTime = schedules[`${prefix}End` as ShiftKey] as string
+
+            if (!enabled || !startTime || !endTime || !isApprovalStatus(approvalStatus)) return null
+
+            return {
+              doctorId: schedule.doctor ? bufferToHex(schedule.doctor._id) : '',
+              scheduleId: bufferToHex(schedule._id),
+              doctorName: schedule?.doctor
+                ? `${schedule?.doctor?.profile?.firstName} ${schedule?.doctor?.profile?.lastName}`
+                : 'Unknown Doctor',
+              status: approvalStatus,
+              startTime,
+              endTime,
+              rejectionReason
+            }
+          })
+          .filter((doc): doc is DoctorShiftRegistration => doc !== null)
+
+        if (doctors.length === 0) return null
+
+        return {
+          shift: shiftType as Shift,
+          startTime: doctors[0].startTime,
+          endTime: doctors[0].endTime,
+          doctors
+        }
+      })
+      .filter((shift): shift is AdminDayShift => shift !== null)
+
+    return shifts.length > 0 ? { date: dateStr, shifts } : null
+  }
+
+  // Add effect to update selectedDay when data changes
+  useEffect(() => {
+    if (selectedDay && !isFetching && scheduleData) {
+      const updatedSchedule = processScheduleForDate(new Date(selectedDay.date))
+      if (updatedSchedule) {
+        console.log('Updating selectedDay with:', updatedSchedule)
+        setSelectedDay(updatedSchedule)
+      } else {
+        setSelectedDay(null)
+      }
+    }
+  }, [scheduleData, isFetching])
 
   const handleMonthChange = (date: Date) => {
     setCurrentDate(date)
-    setSchedule(generateAdminMockSchedule(date)) // In real app, fetch from API
   }
 
   const handleDayClick = (day: AdminDaySchedule) => {
+    console.log('handleDayClick', day)
     if (day.shifts.length > 0) {
       setSelectedDay(day)
     }
@@ -31,6 +129,22 @@ export default function WorkSchedule() {
     }, 0)
   }
 
+  const handleUpdateSuccess = async () => {
+    try {
+      setIsUpdating(true)
+      await refetchAllSchedules()
+    } catch (error) {
+      console.error('Error updating schedule:', error)
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
+  const getActiveShiftCount = (shift: AdminDayShift) => {
+    return shift.doctors.filter((doc) => doc.status !== 'rejected').length
+  }
+
+  console.log('selectedDay', selectedDay)
   return (
     <div className='p-4 sm:p-6'>
       <div className='flex items-center justify-between mb-6'>
@@ -38,71 +152,95 @@ export default function WorkSchedule() {
         <MonthPickerPopover date={currentDate} onDateChange={handleMonthChange} />
       </div>
 
-      <div className='grid grid-cols-3 gap-2 sm:gap-4 sm:grid-cols-5 lg:grid-cols-7'>
-        {/* Calendar header */}
-        {['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'].map((day) => (
-          <div key={day} className='p-2 font-medium text-center'>
-            {day}
-          </div>
-        ))}
+      {isLoading ? (
+        <div className='grid grid-cols-3 gap-2 sm:gap-4 sm:grid-cols-5 lg:grid-cols-7'>
+          {Array.from({ length: 35 }).map((_, index) => (
+            <Skeleton key={index} className='w-full h-48' />
+          ))}
+        </div>
+      ) : (
+        <div className='grid grid-cols-3 gap-2 sm:gap-4 sm:grid-cols-5 lg:grid-cols-7'>
+          {/* Calendar header */}
+          {['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'].map((day) => (
+            <div key={day} className='p-2 font-medium text-center'>
+              {day}
+            </div>
+          ))}
 
-        {/* Empty cells */}
-        {Array.from({ length: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay() }).map(
-          (_, index) => (
-            <div key={`empty-${index}`} className='h-32' />
-          )
-        )}
+          {/* Empty cells */}
+          {Array.from({ length: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay() }).map(
+            (_, index) => (
+              <div key={`empty-${index}`} className='h-48' />
+            )
+          )}
 
-        {/* Calendar days */}
-        {schedule.map((day) => {
-          const pendingCount = getPendingCount(day.shifts)
+          {/* Calendar days */}
+          {Array.from({ length: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate() }).map(
+            (_, index) => {
+              const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), index + 1)
+              const daySchedule = processScheduleForDate(date) as AdminDaySchedule
 
-          return (
-            <Card
-              key={day.date}
-              className={`h-48 transition-shadow ${day.shifts.length > 0 ? 'cursor-pointer hover:shadow-lg' : ''}`}
-              onClick={() => handleDayClick(day)}
-            >
-              <CardContent className='h-full p-2'>
-                <div className='flex flex-col items-center justify-between h-full text-center'>
-                  <div>
-                    <div className='text-sm font-medium'>{format(new Date(day.date), 'EEEE', { locale: vi })}</div>
-                    <div className='text-xl font-bold'>{format(new Date(day.date), 'd')}</div>
-                    {pendingCount > 0 && (
-                      <Badge variant='secondary' className='w-full justify-center !text-center mt-2'>
-                        {pendingCount} chờ duyệt
-                      </Badge>
-                    )}
-                  </div>
-                  {day.shifts.length > 0 ? (
-                    <div className='mb-4 space-y-1'>
-                      <div className='mt-1 text-xs text-gray-600'>
-                        {day.shifts.map((shift) => (
-                          <div key={shift.shift} className='mb-0.5'>
-                            {shift.shift === 'morning' && 'Sáng'}
-                            {shift.shift === 'afternoon' && 'Chiều'}
-                            {shift.shift === 'evening' && 'Tối'}: {shift.doctors.length} bác sĩ
+              return (
+                <Card
+                  key={format(date, 'yyyy-MM-dd')}
+                  className={`h-48 transition-shadow ${daySchedule ? 'cursor-pointer hover:shadow-lg' : ''}`}
+                  onClick={() => daySchedule && handleDayClick(daySchedule as AdminDaySchedule)}
+                >
+                  <CardContent className='h-full p-2'>
+                    <div className='flex flex-col h-full text-center'>
+                      <div>
+                        <div className='text-sm font-medium'>{format(date, 'EEEE', { locale: vi })}</div>
+                        <div className='text-xl font-bold'>{format(date, 'd')}</div>
+                        {daySchedule && getPendingCount(daySchedule.shifts) > 0 && (
+                          <Badge variant='secondary' className='justify-center w-full mt-2'>
+                            {getPendingCount(daySchedule.shifts)} chờ duyệt
+                          </Badge>
+                        )}
+                      </div>
+
+                      <div className='flex-1 mt-2'>
+                        {daySchedule ? (
+                          <div className='text-sm text-gray-600 truncate'>
+                            {daySchedule.shifts.map((shift) => {
+                              const activeCount = shift.doctors.length
+                              if (activeCount === 0) return null
+
+                              const pendingCount = shift.doctors.filter((d) => d.status === 'pending').length
+                              const approvedCount = shift.doctors.filter((d) => d.status === 'approved').length
+
+                              return (
+                                <div key={shift.shift} className='mb-1'>
+                                  {shift.shift === 'morning' && 'Sáng'}
+                                  {shift.shift === 'afternoon' && 'Chiều'}
+                                  {shift.shift === 'evening' && 'Tối'}: {approvedCount}/{activeCount}
+                                  {pendingCount > 0 && ` (${pendingCount} chờ duyệt)`}
+                                </div>
+                              )
+                            })}
                           </div>
-                        ))}
+                        ) : (
+                          <div className='text-sm text-gray-400 truncate'>Chưa có lịch</div>
+                        )}
                       </div>
                     </div>
-                  ) : (
-                    <div className='mt-1 text-xs text-gray-400'>Chưa có lịch</div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          )
-        })}
-      </div>
+                  </CardContent>
+                </Card>
+              )
+            }
+          )}
+        </div>
+      )}
 
-      <Dialog open={!!selectedDay} onOpenChange={() => setSelectedDay(null)}>
+      <Dialog open={!!selectedDay} onOpenChange={(open) => !open && setSelectedDay(null)}>
         <DialogContent className='lg:max-w-3xl'>
           {selectedDay && (
             <DoctorListDialog
+              key={`${selectedDay.date}-${isFetching}`}
               date={selectedDay.date}
               shifts={selectedDay.shifts}
               onClose={() => setSelectedDay(null)}
+              onUpdateSuccess={handleUpdateSuccess}
+              isUpdating={isUpdating || isFetching}
             />
           )}
         </DialogContent>

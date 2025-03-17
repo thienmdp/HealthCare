@@ -9,13 +9,14 @@ import { bufferToHex } from '@/utils/utils'
 import { ArrowRight, Search } from 'lucide-react'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import { Input } from '@/components/ui/input'
+import { DoctorProfile } from '@/types/doctor.type'
 
-export default function ListDoctor({ listDoctor }: { listDoctor: User[] }) {
+export default function ListDoctor({ listDoctor }: { listDoctor: DoctorProfile[] }) {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
 
   const filteredDoctors = listDoctor.filter((doctor) => {
-    const fullName = `${doctor.profile.firstName} ${doctor.profile.lastName}`.toLowerCase()
+    const fullName = `${doctor.doctorName}`.toLowerCase()
     const searchLower = searchTerm.toLowerCase()
     return fullName.includes(searchLower)
   })
@@ -61,12 +62,14 @@ export default function ListDoctor({ listDoctor }: { listDoctor: User[] }) {
                       <div className='flex flex-col h-full '>
                         <div className='flex items-center w-full p-4 pb-0'>
                           <Avatar className='w-16 h-16 border-4 border-white'>
-                            <AvatarImage src={doctor.profile.avatar} />
-                            <AvatarFallback>{doctor.profile.lastName}</AvatarFallback>
+                            <AvatarImage src={doctor.doctor?.profile?.avatar} />
+                            <AvatarFallback>{doctor.doctor?.profile?.lastName}</AvatarFallback>
                           </Avatar>
                           <div className='ml-4'>
-                            <h3 className='text-lg font-semibold capitalize'>{doctor.role}</h3>
-                            <p>{doctor.profile.firstName + ' ' + doctor.profile.lastName}</p>
+                            <h3 className='text-lg font-semibold capitalize'>
+                              {doctor.doctor?.profile?.firstName + ' ' + doctor.doctor?.profile?.lastName}
+                            </h3>
+                            <p className='text-sm font-light'>{doctor.doctor?.role}</p>
                           </div>
                         </div>
                         <div className='flex flex-wrap gap-2 p-4'>
@@ -82,7 +85,7 @@ export default function ListDoctor({ listDoctor }: { listDoctor: User[] }) {
                             effect='expandIcon'
                             Icon={ArrowRight}
                             iconPlacement='right'
-                            onClick={() => navigate(`/doctor/${doctor._id}`)}
+                            onClick={() => navigate(`/doctor/${bufferToHex(doctor._id)}`)}
                           >
                             Đặt lịch khám
                           </Button>

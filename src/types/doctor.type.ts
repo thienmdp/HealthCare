@@ -1,3 +1,5 @@
+import { User } from './user.type'
+
 export interface Education {
   degree: string
   university: string
@@ -13,6 +15,8 @@ export interface Certificate {
 }
 
 export interface DoctorProfile {
+  _id: string
+  doctor: User
   doctorId: string
   doctorName: string
   licenseNumber: string

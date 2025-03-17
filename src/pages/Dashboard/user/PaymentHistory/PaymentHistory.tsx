@@ -1,5 +1,5 @@
 import { DataTable } from '@/components/ui/data-table'
-import { paymentColumns } from './columns'
+import { paymentColumns } from '../components/columns'
 
 const mockData = [
   {

@@ -8,6 +8,8 @@ import { userApi } from './services/userApi'
 import { doctorApi } from './services/doctorApi'
 import { patientApi } from './services/patientApi'
 import { workScheduleApi } from './services/workScheduleApi'
+import { publicApi } from './services/publicApi'
+import { appointmentApi } from './services/appointmentApi'
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +18,8 @@ export const store = configureStore({
     [doctorApi.reducerPath]: doctorApi.reducer,
     [patientApi.reducerPath]: patientApi.reducer,
     [workScheduleApi.reducerPath]: workScheduleApi.reducer,
+    [publicApi.reducerPath]: publicApi.reducer,
+    [appointmentApi.reducerPath]: appointmentApi.reducer,
     errorToast: errorToastSlice,
     authState: authReducer
   },
@@ -25,7 +29,9 @@ export const store = configureStore({
       userApi.middleware,
       doctorApi.middleware,
       patientApi.middleware,
-      workScheduleApi.middleware
+      workScheduleApi.middleware,
+      publicApi.middleware,
+      appointmentApi.middleware
     )
 })
 setupListeners(store.dispatch)

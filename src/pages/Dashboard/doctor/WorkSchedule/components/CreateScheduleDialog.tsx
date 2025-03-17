@@ -1,19 +1,21 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { WeekSchedule, DayShift, Shift, ShiftTime } from '@/types/workSchedule.type'
-import { format, addDays, startOfWeek, addWeeks } from 'date-fns'
-import { vi } from 'date-fns/locale'
 import { Switch } from '@/components/ui/switch'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { Label } from '@/components/ui/label'
 import { useAppSelector } from '@/redux/store'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useCreateWorkScheduleMutation } from '@/redux/services/workScheduleApi'
+import { bufferToHex } from '@/utils/utils'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useCreateMultiDayScheduleMutation, useCreateRecurringScheduleMutation } from '@/redux/services/workScheduleApi'
 import { toast } from 'react-toastify'
 import { CustomNotification } from '@/components/CustomReactToastify'
-import { bufferToHex } from '@/utils/utils'
+import { DateRangePicker } from '@/components/Core/Calendar/DateRangePicker'
+import { DateTimePicker } from '@/components/Core/Calendar/DateTimePicker'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
+import { endOfDay, format, isSameDay, startOfDay } from 'date-fns'
+import { vi } from 'date-fns/locale'
+import { DayShiftSchedule } from '@/types/workSchedule.type'
 
-const DEFAULT_SHIFTS: DayShift = {
+const DEFAULT_SCHEDULE: DayShiftSchedule = {
   morning: false,
   morningStart: '08:00',
   morningEnd: '12:00',
@@ -31,191 +33,226 @@ const TIME_OPTIONS = Array.from({ length: 24 * 2 }).map((_, i) => {
   return `${hour.toString().padStart(2, '0')}:${minute}`
 })
 
-interface Props {
-  onClose: () => void
+const DAYS_OF_WEEK = [
+  { label: 'CN', value: 0 },
+  { label: 'T2', value: 1 },
+  { label: 'T3', value: 2 },
+  { label: 'T4', value: 3 },
+  { label: 'T5', value: 4 },
+  { label: 'T6', value: 5 },
+  { label: 'T7', value: 6 }
+]
+
+interface DateSchedule {
+  date: Date
+  schedules: DayShiftSchedule
 }
 
-export default function CreateScheduleDialog({ onClose }: Props) {
+export default function CreateScheduleDialog({ onClose }: { onClose: () => void }) {
   const { user } = useAppSelector((state) => state.authState)
+  // const doctorId = user?.doctorProfileId ? bufferToHex(user.doctorProfileId) : ''
   const doctorId = user?._id ? bufferToHex(user._id) : ''
 
-  const [createWorkSchedule, { isLoading }] = useCreateWorkScheduleMutation()
+  const [mode, setMode] = useState<'single' | 'recurring'>('single')
+  const [createMultiDay] = useCreateMultiDayScheduleMutation()
+  const [createRecurring] = useCreateRecurringScheduleMutation()
 
-  const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { locale: vi }))
-  const [schedule, setSchedule] = useState<WeekSchedule>({
-    monday: { ...DEFAULT_SHIFTS },
-    tuesday: { ...DEFAULT_SHIFTS },
-    wednesday: { ...DEFAULT_SHIFTS },
-    thursday: { ...DEFAULT_SHIFTS },
-    friday: { ...DEFAULT_SHIFTS },
-    saturday: { ...DEFAULT_SHIFTS },
-    sunday: { ...DEFAULT_SHIFTS }
-  })
+  // Single mode state
+  const [dateSchedules, setDateSchedules] = useState<DateSchedule[]>([])
 
-  const handlePreviousWeek = () => {
-    setWeekStart((prev) => addWeeks(prev, -1))
+  // Recurring mode state
+  const [dateRange, setDateRange] = useState<{ from: Date; to: Date } | undefined>()
+  const [selectedDays, setSelectedDays] = useState<number[]>([])
+  const [recurringSchedule, setRecurringSchedule] = useState<DayShiftSchedule>(DEFAULT_SCHEDULE)
+
+  const handleDateSelect = (dates: Date[]) => {
+    setDateSchedules((prev) => {
+      const existing = prev.filter((ds) => dates.some((d) => isSameDay(d, ds.date)))
+      const newDates = dates.filter((d) => !prev.some((ds) => isSameDay(d, ds.date)))
+
+      return [
+        ...existing,
+        ...newDates.map((date) => ({
+          date,
+          schedules: { ...DEFAULT_SCHEDULE }
+        }))
+      ]
+    })
   }
 
-  const handleNextWeek = () => {
-    setWeekStart((prev) => addWeeks(prev, 1))
+  const handleScheduleUpdate = (date: Date, schedules: DayShiftSchedule) => {
+    setDateSchedules((prev) => prev.map((ds) => (isSameDay(ds.date, date) ? { ...ds, schedules } : ds)))
   }
 
-  const handleShiftToggle = (day: keyof WeekSchedule, shift: Shift) => {
-    setSchedule((prev) => ({
-      ...prev,
-      [day]: {
-        ...prev[day],
-        [shift]: !prev[day][shift]
-      }
-    }))
-  }
+  const renderShiftControls = (schedule: DayShiftSchedule, setSchedule: (schedule: DayShiftSchedule) => void) => {
+    const renderTimeSelect = (
+      shift: keyof DayShiftSchedule,
+      type: 'Start' | 'End',
+      value: string,
+      onChange: (value: string) => void
+    ) => (
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger>
+          <SelectValue placeholder={type === 'Start' ? 'Bắt đầu' : 'Kết thúc'} />
+        </SelectTrigger>
+        <SelectContent>
+          {TIME_OPTIONS.map((time) => (
+            <SelectItem key={time} value={time}>
+              {time}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    )
 
-  const handleTimeChange = (day: keyof WeekSchedule, shift: Shift, type: 'Start' | 'End', value: string) => {
-    const timeKey = `${shift}${type}` as keyof ShiftTime
-    setSchedule((prev) => ({
-      ...prev,
-      [day]: {
-        ...prev[day],
-        [timeKey]: value
-      }
-    }))
+    const renderShift = (shift: 'morning' | 'afternoon' | 'evening', label: string) => (
+      <div className='space-y-2'>
+        <div className='flex items-center gap-2'>
+          <Switch
+            checked={schedule[shift] || false}
+            onCheckedChange={(checked) => setSchedule({ ...schedule, [shift]: checked })}
+          />
+          <span>{label}</span>
+        </div>
+        {schedule[shift] && (
+          <div className='grid grid-cols-2 gap-2'>
+            {renderTimeSelect(shift, 'Start', schedule[`${shift}Start`] || '', (value) =>
+              setSchedule({ ...schedule, [`${shift}Start`]: value })
+            )}
+            {renderTimeSelect(shift, 'End', schedule[`${shift}End`] || '', (value) =>
+              setSchedule({ ...schedule, [`${shift}End`]: value })
+            )}
+          </div>
+        )}
+      </div>
+    )
+
+    return (
+      <div className='p-4 space-y-4 border rounded-lg'>
+        {renderShift('morning', 'Ca sáng')}
+        {renderShift('afternoon', 'Ca chiều')}
+        {renderShift('evening', 'Ca tối')}
+      </div>
+    )
   }
 
   const handleSubmit = async () => {
     try {
-      if (!doctorId) {
-        toast.error(CustomNotification, {
-          data: { title: 'Lỗi!', content: 'Không tìm thấy thông tin bác sĩ' }
-        })
-        return
+      if (mode === 'single') {
+        if (dateSchedules.length === 0) {
+          toast.error('Vui lòng chọn ít nhất một ngày')
+          return
+        }
+
+        await createMultiDay({
+          doctorId,
+          daySchedules: dateSchedules.map(({ date, schedules }) => ({
+            date: date.toISOString(),
+            schedules
+          })),
+          defaultConsultationDuration: 30
+        }).unwrap()
+      } else {
+        if (!dateRange?.from || !dateRange?.to || selectedDays.length === 0) {
+          toast.error('Vui lòng chọn đầy đủ thông tin')
+          return
+        }
+
+        await createRecurring({
+          doctorId,
+          startDate: startOfDay(dateRange.from).toISOString(),
+          endDate: endOfDay(dateRange.to).toISOString(),
+          daysOfWeek: selectedDays,
+          scheduleTemplate: recurringSchedule,
+          defaultConsultationDuration: 30
+        }).unwrap()
       }
 
-      const payload = {
-        doctorId,
-        initialSchedule: {
-          weekStart: weekStart.toISOString(),
-          weekEnd: addDays(weekStart, 6).toISOString(),
-          dailySchedules: schedule
-        },
-        defaultConsultationDuration: 30
-      }
-
-      await createWorkSchedule(payload).unwrap()
-      toast.success(CustomNotification, {
-        data: { title: 'Thành công!', content: 'Tạo lịch làm việc thành công' }
-      })
+      toast.success('Tạo lịch làm việc thành công')
       onClose()
     } catch (error) {
-      console.error('Error creating schedule:', error)
-      // toast.error(CustomNotification, {
-      //   data: { title: 'Thất bại!', content: 'Có lỗi xảy ra khi tạo lịch làm việc' }
-      // })
+      toast.error('Có lỗi xảy ra khi tạo lịch làm việc')
     }
   }
 
   return (
-    <div className='space-y-6'>
-      <div>
-        <h2 className='text-lg font-semibold'>Tạo lịch làm việc</h2>
-        <div className='flex items-center justify-between mt-2'>
-          <Button variant='outline' size='icon' onClick={handlePreviousWeek}>
-            <ChevronLeft className='w-4 h-4' />
-          </Button>
-          <p className='text-sm text-gray-500'>
-            Tuần từ {format(weekStart, 'dd/MM/yyyy')} đến {format(addDays(weekStart, 6), 'dd/MM/yyyy')}
-          </p>
-          <Button variant='outline' size='icon' onClick={handleNextWeek}>
-            <ChevronRight className='w-4 h-4' />
-          </Button>
-        </div>
-      </div>
+    <div className='mt-4 space-y-6'>
+      <Tabs value={mode} onValueChange={(value) => setMode(value as 'single' | 'recurring')}>
+        <TabsList className='grid w-full grid-cols-2'>
+          <TabsTrigger value='single'>Theo ngày</TabsTrigger>
+          <TabsTrigger value='recurring'>Lặp lại</TabsTrigger>
+        </TabsList>
 
-      <ScrollArea className='h-[60vh]'>
-        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-          {Object.entries(schedule).map(([day, shifts]) => (
-            <div key={day} className='p-4 border rounded-lg'>
-              <h3 className='mb-4 font-medium capitalize'>
-                {format(
-                  addDays(
-                    weekStart,
-                    ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].indexOf(day)
-                  ),
-                  'EEEE, dd/MM',
-                  { locale: vi }
-                )}
-              </h3>
+        <TabsContent value='single' className='space-y-4'>
+          <div className='space-y-2'>
+            <Label>Chọn (các) ngày làm việc:</Label>
+            <DateTimePicker
+              mode='multiple'
+              value={dateSchedules.map((ds) => ds.date)}
+              onChange={(dates) => handleDateSelect(Array.isArray(dates) ? dates : [dates])}
+              showTime={false}
+              min={new Date()}
+            />
+          </div>
 
-              <div className='space-y-4'>
-                {['morning', 'afternoon', 'evening'].map((shiftType) => {
-                  const shift = shiftType as Shift
-                  const startKey = `${shift}Start` as keyof ShiftTime
-                  const endKey = `${shift}End` as keyof ShiftTime
+          {dateSchedules.length > 0 && (
+            <div className='space-y-4'>
+              {dateSchedules.map(({ date, schedules }) => (
+                <div key={date.toISOString()} className='p-4 border rounded-lg'>
+                  <h3 className='mb-4 font-medium'>{format(date, 'EEEE, dd/MM/yyyy', { locale: vi })}</h3>
+                  {renderShiftControls(schedules, (newSchedules) => handleScheduleUpdate(date, newSchedules))}
+                </div>
+              ))}
+            </div>
+          )}
+        </TabsContent>
 
-                  return (
-                    <div key={shift} className='space-y-2'>
-                      <div className='flex items-center gap-2'>
-                        <Switch
-                          checked={shifts[shift]}
-                          onCheckedChange={() => handleShiftToggle(day as keyof WeekSchedule, shift)}
-                        />
-                        <span className='capitalize'>
-                          {shift === 'morning' ? 'Sáng' : shift === 'afternoon' ? 'Chiều' : 'Tối'}
-                        </span>
-                      </div>
+        <TabsContent value='recurring' className='space-y-4'>
+          <div className='space-y-4'>
+            <div className='space-y-2'>
+              <Label>Khoảng thời gian:</Label>
+              <DateRangePicker
+                value={dateRange && { from: dateRange.from, to: dateRange.to }}
+                onChange={(range) => {
+                  if (range?.from && range?.to) {
+                    setDateRange({ from: range.from, to: range.to })
+                  } else {
+                    setDateRange(undefined)
+                  }
+                }}
+                min={new Date()}
+              />
+            </div>
 
-                      {shifts[shift] && (
-                        <div className='grid grid-cols-2 gap-2 pl-8'>
-                          <Select
-                            value={shifts[startKey] as string | undefined}
-                            onValueChange={(value) =>
-                              handleTimeChange(day as keyof WeekSchedule, shift, 'Start', value)
-                            }
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder='Bắt đầu' />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {TIME_OPTIONS.map((time) => (
-                                <SelectItem key={time} value={time}>
-                                  {time}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-
-                          <Select
-                            value={shifts[endKey] as string | undefined}
-                            onValueChange={(value) => handleTimeChange(day as keyof WeekSchedule, shift, 'End', value)}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder='Kết thúc' />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {TIME_OPTIONS.map((time) => (
-                                <SelectItem key={time} value={time}>
-                                  {time}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
+            <div className='space-y-2'>
+              <Label>Chọn các ngày trong tuần:</Label>
+              <div className='flex flex-wrap gap-2'>
+                {DAYS_OF_WEEK.map(({ label, value }) => (
+                  <Button
+                    key={value}
+                    size='sm'
+                    variant={selectedDays.includes(value) ? 'default' : 'outline'}
+                    onClick={() => {
+                      setSelectedDays((prev) =>
+                        prev.includes(value) ? prev.filter((d) => d !== value) : [...prev, value]
+                      )
+                    }}
+                  >
+                    {label}
+                  </Button>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      </ScrollArea>
+          </div>
+          {renderShiftControls(recurringSchedule, setRecurringSchedule)}
+        </TabsContent>
+      </Tabs>
 
-      <div className='flex justify-end gap-2 pt-4'>
-        <Button variant='outline' onClick={onClose} disabled={isLoading}>
+      <div className='flex justify-end gap-2'>
+        <Button variant='outline' onClick={onClose}>
           Hủy
         </Button>
-        <Button onClick={handleSubmit} disabled={isLoading}>
-          {isLoading ? 'Đang xử lý...' : 'Tạo lịch'}
-        </Button>
+        <Button onClick={handleSubmit}>Tạo lịch</Button>
       </div>
     </div>
   )

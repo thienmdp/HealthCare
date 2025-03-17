@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import PersonalInfo from '@/components/Dashboard/Form/PersonalInfo'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import ProfilePatient from '../admin/UserManage/components/Detail/ProfilePatient'
-import { AppointmentHistory, AppointmentStats, PaymentHistory } from './components'
+import { AppointmentStats } from './AppointmentStats'
+import { AppointmentHistory } from './AppointmentHistory'
+import { PaymentHistory } from './PaymentHistory'
 
 export default function ProfileDoctor() {
   const user = useAppSelector((state) => state.authState.user)

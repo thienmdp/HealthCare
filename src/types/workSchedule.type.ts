@@ -1,19 +1,116 @@
 import { User } from './user.type'
 
 export type Shift = 'morning' | 'afternoon' | 'evening'
+export type ApprovalStatus = 'pending' | 'approved' | 'rejected'
+
+export interface BufferData {
+  type: 'Buffer'
+  data: number[]
+}
+
+export interface BufferId {
+  buffer: BufferData
+}
+
+export interface DoctorProfile {
+  _id: BufferId
+  firstName: string
+  lastName: string
+}
+
+export interface Doctor {
+  _id: BufferId
+  profile: DoctorProfile
+}
+
+export interface ShiftSchedule {
+  morning: boolean
+  morningStart: string
+  morningEnd: string
+  morningApprovalStatus: ApprovalStatus
+  morningRejectionReason: string
+  afternoon: boolean
+  afternoonStart: string
+  afternoonEnd: string
+  afternoonApprovalStatus: ApprovalStatus
+  afternoonRejectionReason: string
+  evening: boolean
+  eveningStart: string
+  eveningEnd: string
+  eveningApprovalStatus: ApprovalStatus
+  eveningRejectionReason: string
+}
+
+export interface DailySchedule {
+  _id: BufferId
+  doctor: Doctor | null
+  date: string
+  schedules: ShiftSchedule
+  // scheduleEntries: ScheduleEntry[]
+  defaultConsultationDuration: number
+  createdAt: string
+  updatedAt: string
+  __v: number
+}
+
+export interface PaginatedResponse<T> {
+  data: T[]
+  pagination: {
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }
+}
+
+export interface GetSchedulesResponse {
+  data: {
+    data: DailySchedule[]
+    pagination: {
+      total: number
+      page: number
+      limit: number
+      totalPages: number
+    }
+  }
+}
+
+export interface DoctorShiftRegistration {
+  doctorId: string
+  avatar?: string
+  scheduleId: string
+  doctorName: string
+  startTime: string
+  endTime: string
+  status: ApprovalStatus
+  rejectionReason?: string
+}
+
+export interface AdminDayShift {
+  shift: Shift
+  startTime: string
+  endTime: string
+  doctors: DoctorShiftRegistration[]
+}
+
+export interface AdminDaySchedule {
+  date: string
+  shifts: AdminDayShift[]
+}
 
 export interface ShiftDetail {
   id: string
   shift: Shift
-  doctors: User[]
   date: string
   startTime: string
   endTime: string
+  approvalStatus?: ApprovalStatus
+  rejectionReason?: string
 }
 
 export interface DaySchedule {
   date: string
-  shifts: ShiftDetail[]
+  schedules: DayShiftSchedule
 }
 
 export interface DoctorScheduleRequest {
@@ -41,7 +138,12 @@ export type ShiftStatus = {
   [K in Shift]: boolean
 }
 
-export type ShiftTime = ShiftStatus & ShiftStartEnd
+export type ShiftTime = ShiftStatus &
+  ShiftStartEnd & {
+    [K in Shift as `${K}ApprovalStatus`]?: ApprovalStatus
+  } & {
+    [K in Shift as `${K}RejectionReason`]?: string
+  }
 
 export type DayShift = ShiftTime
 
@@ -65,6 +167,33 @@ export interface CreateScheduleRequest {
   defaultConsultationDuration: number
 }
 
+export interface DayShiftSchedule {
+  morning?: boolean
+  morningStart?: string
+  morningEnd?: string
+  afternoon?: boolean
+  afternoonStart?: string
+  afternoonEnd?: string
+  evening?: boolean
+  eveningStart?: string
+  eveningEnd?: string
+}
+
+export interface CreateMultiDayScheduleRequest {
+  doctorId: string
+  daySchedules: DaySchedule[]
+  defaultConsultationDuration: number
+}
+
+export interface CreateRecurringScheduleRequest {
+  doctorId: string
+  startDate: string
+  endDate: string
+  daysOfWeek: number[]
+  scheduleTemplate: DayShiftSchedule
+  defaultConsultationDuration: number
+}
+
 export interface ScheduleEntry {
   weekStart: string
   weekEnd: string
@@ -84,7 +213,7 @@ export interface DoctorScheduleResponse {
       data: number[]
     }
   }
-  scheduleEntries: ScheduleEntry[]
+  // scheduleEntries: ScheduleEntry[]
   defaultConsultationDuration: number
   isActive: boolean
   createdAt: string
@@ -92,35 +221,5 @@ export interface DoctorScheduleResponse {
 }
 
 export interface GetDoctorScheduleResponse {
-  data: DoctorScheduleResponse[]
-}
-
-export interface DoctorShiftRegistration {
-  shift: any
-  doctorId: string
-  doctorName: string
-  avatar?: string
-  startTime: string
-  endTime: string
-  status: 'pending' | 'approved' | 'rejected'
-  rejectReason?: string
-}
-
-export interface AdminDayShift {
-  shift: Shift
-  startTime: string
-  endTime: string
-  doctors: DoctorShiftRegistration[]
-}
-
-export interface AdminDaySchedule {
-  date: string
-  shifts: AdminDayShift[]
-}
-
-export interface RejectDoctorShiftRequest {
-  doctorId: string
-  date: string
-  shift: Shift
-  reason: string
+  data: DailySchedule[]
 }

@@ -30,8 +30,20 @@ export const doctorApi = createApi({
         body: data.data
       }),
       invalidatesTags: ['Doctor']
+    }),
+    getAllDoctors: build.query<{ data: { data: DoctorProfile[] } }, null>({
+      query: () => ({
+        url: 'doctor-profile/all',
+        method: 'GET'
+      }),
+      providesTags: ['Doctor']
     })
   })
 })
 
-export const { useGetDoctorProfileQuery, useCreateDoctorProfileMutation, useUpdateDoctorProfileMutation } = doctorApi
+export const {
+  useGetDoctorProfileQuery,
+  useCreateDoctorProfileMutation,
+  useUpdateDoctorProfileMutation,
+  useGetAllDoctorsQuery // Add this export
+} = doctorApi

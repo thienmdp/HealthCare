@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Calendar, Clock, Ticket, UserCheck, Users } from 'lucide-react'
-import BuyPackageDialog from './Dialog/BuyPackageDialog'
 import { AppointmentPackage } from '@/types/appointmentPackage.type'
+import BuyPackageDialog from '../components/Dialog/BuyPackageDialog'
 
 export default function AppointmentStats() {
   const [showBuyPackage, setShowBuyPackage] = useState(false)

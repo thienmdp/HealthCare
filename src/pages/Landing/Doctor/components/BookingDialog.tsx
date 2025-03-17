@@ -1,8 +1,13 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+import { useCreateAppointmentMutation } from '@/redux/services/appointmentApi'
 import { format } from 'date-fns'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { Button } from '@/components/ui/button'
+import { CustomNotification } from '@/components/CustomReactToastify'
+import { Textarea } from '@/components/ui/textarea'
 import { vi } from 'date-fns/locale'
+import { useAppSelector } from '@/redux/store'
+import { bufferToHex } from '@/utils/utils'
 
 interface Props {
   doctorId: string
@@ -12,33 +17,66 @@ interface Props {
 }
 
 export default function BookingDialog({ doctorId, date, timeSlot, onClose }: Props) {
+  const user = useAppSelector((state) => state.authState.user)
+  const [createAppointment, { isLoading }] = useCreateAppointmentMutation()
+  const [type, setType] = useState<'video_call' | 'in_person'>('video_call')
   const [symptoms, setSymptoms] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async () => {
-    setIsSubmitting(true)
     try {
-      // Call API to create appointment
-      console.log('Booking appointment:', {
-        doctorId,
-        date: format(date, 'yyyy-MM-dd'),
-        timeSlot,
-        symptoms
+      // Calculate endTime (assuming 30 min duration)
+      const [hours, minutes] = timeSlot.split(':').map(Number)
+      const endTimeDate = new Date(date)
+      endTimeDate.setHours(hours, minutes + 30)
+      const endTime = format(endTimeDate, 'HH:mm')
+
+      await createAppointment({
+        patient: bufferToHex(user?.patientId!),
+        doctor: doctorId,
+        appointmentDate: format(date, 'yyyy-MM-dd'),
+        startTime: timeSlot,
+        endTime,
+        type
+        // symptoms
+      }).unwrap()
+
+      toast.success(CustomNotification, {
+        data: {
+          title: 'Thành công!',
+          content: 'Đặt lịch khám thành công'
+        }
       })
       onClose()
     } catch (error) {
-      console.error('Error booking appointment:', error)
+      console.log('Error:', error)
     }
-    setIsSubmitting(false)
   }
 
   return (
     <div className='space-y-4'>
-      <div>
-        <h2 className='text-lg font-semibold'>Xác nhận đặt lịch khám</h2>
-        <p className='text-sm text-gray-500'>
-          {format(date, 'EEEE, dd/MM/yyyy', { locale: vi })} - {timeSlot}
-        </p>
+      <h2 className='text-lg font-semibold'>Xác nhận đặt lịch khám</h2>
+      <div className='space-y-2'>
+        <p>Ngày khám: {format(date, 'dd/MM/yyyy')}</p>
+        <p>Thời gian: {timeSlot}</p>
+        <div className='space-y-2'>
+          <p className='font-medium'>Hình thức khám:</p>
+          <div className='flex gap-4'>
+            <Button
+              type='button'
+              variant={type === 'video_call' ? 'default' : 'outline'}
+              onClick={() => setType('video_call')}
+            >
+              Khám trực tuyến
+            </Button>
+            <Button
+              type='button'
+              variant={type === 'in_person' ? 'default' : 'outline'}
+              onClick={() => setType('in_person')}
+            >
+              Khám trực tiếp
+            </Button>
+          </div>
+        </div>
       </div>
 
       <div className='space-y-2'>
@@ -51,12 +89,12 @@ export default function BookingDialog({ doctorId, date, timeSlot, onClose }: Pro
         />
       </div>
 
-      <div className='flex justify-end gap-2 pt-4'>
+      <div className='flex justify-end gap-2'>
         <Button variant='outline' onClick={onClose}>
           Hủy
         </Button>
-        <Button onClick={handleSubmit} disabled={isSubmitting}>
-          {isSubmitting ? 'Đang xử lý...' : 'Xác nhận'}
+        <Button onClick={handleSubmit} disabled={isLoading}>
+          {isLoading ? 'Đang xử lý...' : 'Xác nhận'}
         </Button>
       </div>
     </div>

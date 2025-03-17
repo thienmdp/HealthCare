@@ -50,12 +50,12 @@ export default function PersonalInfo({ user }: Props) {
   const form = useForm<PersonalInfoInput>({
     resolver: yupResolver(personalInfoSchema),
     values: {
-      firstName: user?.profile.firstName || '',
-      lastName: user?.profile.lastName || '',
-      phone: user?.profile.phone || '',
-      gender: user?.profile.gender || 'male',
-      birth: user?.profile.birth ? new Date(user.profile.birth) : null,
-      address: user?.profile.address || ''
+      firstName: user?.profile?.firstName || '',
+      lastName: user?.profile?.lastName || '',
+      phone: user?.profile?.phone || '',
+      gender: user?.profile?.gender || 'male',
+      birth: user?.profile?.birth ? new Date(user.profile.birth) : null,
+      address: user?.profile?.address || ''
     }
   })
 

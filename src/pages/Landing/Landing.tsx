@@ -1,156 +1,27 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { Advance, Hero, ListDoctor, Quality } from './components'
-import { DoctorProfile } from '@/types/doctor.type'
+import { useGetPublicDoctorsQuery } from '@/redux/services/publicApi'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const LandingContent: React.FC = () => {
-  const { t } = useTranslation('landing')
-  const MOCK_DOCTORS: DoctorProfile[] | any = [
-    {
-      _id: '67c7b7866ecfbe874d2a7009',
-      email: 'doctor@gmail.com',
-      role: 'doctor',
-      lastLogin: '2025-03-10T02:57:12.297Z',
-      disabled: false,
-      isVerified: true,
-      createdAt: '2025-02-26T07:29:28.756Z',
-      updatedAt: '2025-03-10T02:57:12.297Z',
-      profile: {
-        _id: '67c7b7866ecfbe874d2a7009',
-        firstName: 'Bác sĩ',
-        lastName: 'An',
-        avatar: '',
-        birth: '2000-12-13T00:00:00.000Z',
-        gender: 'male',
-        phone: '0782222888',
-        createdAt: '2025-03-06T09:17:50.638Z',
-        updatedAt: '2025-03-07T08:07:16.340Z'
-      },
-      doctorProfileId: '67c7b7866ecfbe874d2a7009',
-      patientId: null
-    },
-    {
-      _id: '67c7b7866ecfbe874d2a7009',
-      email: 'doctor@gmail.com',
-      role: 'doctor',
-      lastLogin: '2025-03-10T02:57:12.297Z',
-      disabled: false,
-      isVerified: true,
-      createdAt: '2025-02-26T07:29:28.756Z',
-      updatedAt: '2025-03-10T02:57:12.297Z',
-      profile: {
-        _id: '67c7b7866ecfbe874d2a7009',
-        firstName: 'Bác sĩ',
-        lastName: 'An',
-        avatar: '',
-        birth: '2000-12-13T00:00:00.000Z',
-        gender: 'male',
-        phone: '0782222888',
-        createdAt: '2025-03-06T09:17:50.638Z',
-        updatedAt: '2025-03-07T08:07:16.340Z'
-      },
-      doctorProfileId: '67c7b7866ecfbe874d2a7009',
-      patientId: null
-    },
-    {
-      _id: '67c7b7866ecfbe874d2a7009',
-      email: 'doctor@gmail.com',
-      role: 'doctor',
-      lastLogin: '2025-03-10T02:57:12.297Z',
-      disabled: false,
-      isVerified: true,
-      createdAt: '2025-02-26T07:29:28.756Z',
-      updatedAt: '2025-03-10T02:57:12.297Z',
-      profile: {
-        _id: '67c7b7866ecfbe874d2a7009',
-        firstName: 'Bác sĩ',
-        lastName: 'An',
-        avatar: '',
-        birth: '2000-12-13T00:00:00.000Z',
-        gender: 'male',
-        phone: '0782222888',
-        createdAt: '2025-03-06T09:17:50.638Z',
-        updatedAt: '2025-03-07T08:07:16.340Z'
-      },
-      doctorProfileId: '67c7b7866ecfbe874d2a7009',
-      patientId: null
-    },
-    {
-      _id: '67c7b7866ecfbe874d2a7009',
-      email: 'doctor@gmail.com',
-      role: 'doctor',
-      lastLogin: '2025-03-10T02:57:12.297Z',
-      disabled: false,
-      isVerified: true,
-      createdAt: '2025-02-26T07:29:28.756Z',
-      updatedAt: '2025-03-10T02:57:12.297Z',
-      profile: {
-        _id: '67c7b7866ecfbe874d2a7009',
-        firstName: 'Bác sĩ',
-        lastName: 'An',
-        avatar: '',
-        birth: '2000-12-13T00:00:00.000Z',
-        gender: 'male',
-        phone: '0782222888',
-        createdAt: '2025-03-06T09:17:50.638Z',
-        updatedAt: '2025-03-07T08:07:16.340Z'
-      },
-      doctorProfileId: '67c7b7866ecfbe874d2a7009',
-      patientId: null
-    },
-    {
-      _id: '67c7b7866ecfbe874d2a7009',
-      email: 'doctor@gmail.com',
-      role: 'doctor',
-      lastLogin: '2025-03-10T02:57:12.297Z',
-      disabled: false,
-      isVerified: true,
-      createdAt: '2025-02-26T07:29:28.756Z',
-      updatedAt: '2025-03-10T02:57:12.297Z',
-      profile: {
-        _id: '67c7b7866ecfbe874d2a7009',
-        firstName: 'Bác sĩ',
-        lastName: 'An',
-        avatar: '',
-        birth: '2000-12-13T00:00:00.000Z',
-        gender: 'male',
-        phone: '0782222888',
-        createdAt: '2025-03-06T09:17:50.638Z',
-        updatedAt: '2025-03-07T08:07:16.340Z'
-      },
-      doctorProfileId: '67c7b7866ecfbe874d2a7009',
-      patientId: null
-    },
-    {
-      _id: '67c7b7866ecfbe874d2a7009',
-      email: 'doctor@gmail.com',
-      role: 'doctor',
-      lastLogin: '2025-03-10T02:57:12.297Z',
-      disabled: false,
-      isVerified: true,
-      createdAt: '2025-02-26T07:29:28.756Z',
-      updatedAt: '2025-03-10T02:57:12.297Z',
-      profile: {
-        _id: '67c7b7866ecfbe874d2a7009',
-        firstName: 'Bác sĩ',
-        lastName: 'An22',
-        avatar: '',
-        birth: '2000-12-13T00:00:00.000Z',
-        gender: 'male',
-        phone: '0782222888',
-        createdAt: '2025-03-06T09:17:50.638Z',
-        updatedAt: '2025-03-07T08:07:16.340Z'
-      },
-      doctorProfileId: '67c7b7866ecfbe874d2a7009',
-      patientId: null
-    }
-  ]
+  const { data: doctors, isLoading } = useGetPublicDoctorsQuery()
+  console.log('doctors', doctors)
   return (
     <div className='bg-white text-[#000000] min-h-screen w-full'>
       <Hero />
       <Advance />
       <Quality />
-      <ListDoctor listDoctor={MOCK_DOCTORS} />
+      {isLoading ? (
+        <div className='container px-4 py-16 mx-auto'>
+          <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Skeleton key={index} className='h-[200px] w-full' />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <ListDoctor listDoctor={doctors?.data?.data || []} />
+      )}
       <div className='min-h-screen'></div>
     </div>
   )

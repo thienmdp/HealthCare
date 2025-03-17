@@ -47,22 +47,23 @@ export default function SignIn() {
         }
       })
 
-      const redirectPath = sessionStorage.getItem('redirectAfterLogin') || '/dashboard'
-      navigate(redirectPath)
-      sessionStorage.removeItem('redirectAfterLogin')
-    }
-    if (resultLogin.error) {
-      const formError = (resultLogin.error as any)?.data?.message || resultLogin.error
-      if (formError) {
-        if (formError === 'USER_NOT_FOUND') {
-          setError('email', {
-            message: 'Email không tồn tại',
-            type: 'Server'
-          })
-        }
+      // Check for booking intent
+      const bookingIntent = sessionStorage.getItem('bookingIntent')
+      if (bookingIntent) {
+        const { doctorId, date, timeSlot } = JSON.parse(bookingIntent)
+        sessionStorage.removeItem('bookingIntent')
+        navigate(`/doctor/${doctorId}`, {
+          state: {
+            bookingData: { date, timeSlot },
+            autoOpenBooking: true
+          }
+        })
+      } else {
+        const redirectPath = location.state?.from || '/dashboard'
+        navigate(redirectPath)
       }
     }
-  }, [resultLogin])
+  }, [resultLogin.data])
 
   useEffect(() => {
     // Xử lý email từ state khi chuyển hướng từ trang verify hoặc signup
@@ -90,59 +91,6 @@ export default function SignIn() {
     //       content='Diagnosis IQ: Smart Clinical Decision Support System for Automated Hospital.'
     //     />
     //   </Helmet>
-    //   <div className='flex mt-10'>
-    //     <div className='flex items-center justify-center w-full bg-gray-100 --lg:w-1/2'>
-    //       <div className='w-full max-w-md p-6'>
-    //         <p className='mb-6 text-3xl font-semibold text-center text-black'>Đăng nhập</p>
-    //         <p className='mb-6 text-sm font-semibold text-center text-gray-700'>
-    //           Bạn có thể đăng nhập vào bằng tài khoản Google{' '}
-    //         </p>
-    //         <div className='flex flex-col items-center justify-between mt-4 lg:flex-row'>
-    //           <div className='w-full mb-2'>
-    //             <GoogleOAuthClient />
-    //           </div>
-    //         </div>
-    //         <div className='mt-4 text-sm text-center text-gray-700'>
-    //           <p>hoặc bằng tài khoản diagnosisiq của mình</p>
-    //         </div>
-    //         <form onSubmit={onSubmit} className='space-y-4'>
-    //           <Input
-    //             name='email'
-    //             className='mt-6'
-    //             placeholder='Email'
-    //             register={register}
-    //             // type='email'
-    //             errorMessage={errors.email?.message}
-    //           />
-    //           <Input
-    //             name='password'
-    //             className='mt-3'
-    //             placeholder='Password'
-    //             register={register}
-    //             type='password'
-    //             errorMessage={errors.password?.message}
-    //             autoComplete='on'
-    //           />
-    //           <Button
-    //             type='submit'
-    //             className='flex items-center justify-center w-full p-2 text-white transition-colors duration-300 rounded-md bg-gradient-to-br to-blue-700 from-blue_app via-blue_app hover:bg-gradient-to-tl focus:outline-none focus:ring-2 focus:ring-offset-2'
-    //             isLoading={resultLogin.isLoading}
-    //             disabled={resultLogin.isLoading}
-    //           >
-    //             Đăng nhập
-    //           </Button>
-    //         </form>
-    //         <div className='mt-4 text-sm text-center text-gray-700'>
-    //           <p>
-    //             Bạn chưa có tài khoản?{' '}
-    //             <Link to={'/register'} className='text-black hover:underline'>
-    //               Đăng ký ở đây
-    //             </Link>
-    //           </p>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
     // </div>
     <div className='flex items-center justify-center w-full '>
       <div className='relative flex w-full overflow-hidden rounded-lg shadow-lg -mx-1/1 max-h-[85vh] min-h-[70vh]'>

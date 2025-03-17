@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns'
 import { vi } from 'date-fns/locale'
-import { DaySchedule, Shift, ShiftDetail, WeekSchedule } from '@/types/workSchedule.type'
+import { ApprovalStatus, DaySchedule, Shift, ShiftDetail, ShiftTime, WeekSchedule } from '@/types/workSchedule.type'
 import { MonthPickerPopover } from '@/components/ui/month-picker-popover'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
@@ -11,75 +11,89 @@ import CreateScheduleDialog from './components/CreateScheduleDialog'
 import { useAppSelector } from '@/redux/store'
 import { useGetDoctorScheduleQuery } from '@/redux/services/workScheduleApi'
 import { bufferToHex } from '@/utils/utils'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 export default function WorkSchedule() {
   const { user } = useAppSelector((state) => state.authState)
-  const doctorId = user?._id ? bufferToHex(user._id) : ''
-
-  const { data: scheduleData, isLoading } = useGetDoctorScheduleQuery(doctorId, {
-    skip: !doctorId
-  })
-
+  const doctorId = user?.doctorProfileId ? bufferToHex(user.doctorProfileId) : ''
   const [currentDate, setCurrentDate] = useState(new Date())
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
-  // Trong thực tế sẽ fetch từ API
-  const [schedule, setSchedule] = useState<DaySchedule[]>([])
+
+  // Get first and last day of selected month
+  const startDate = format(startOfMonth(currentDate), 'yyyy-M-d')
+  const endDate = format(endOfMonth(currentDate), 'yyyy-M-d')
+
+  const { data: scheduleData, isLoading } = useGetDoctorScheduleQuery(
+    {
+      id: doctorId,
+      startDate,
+      endDate,
+      includeAll: true
+    },
+    {
+      skip: !doctorId
+    }
+  )
 
   const handleMonthChange = (date: Date) => {
     setCurrentDate(date)
-    // Fetch schedule for new month
   }
 
-  useEffect(() => {
-    if (scheduleData?.data) {
-      // Find schedule entries that overlap with current month
-      const monthStart = startOfMonth(currentDate)
-      const monthEnd = endOfMonth(currentDate)
-
-      const relevantSchedules = scheduleData.data.flatMap((schedule) =>
-        schedule.scheduleEntries.filter((entry) => {
-          const entryStart = new Date(entry.weekStart)
-          const entryEnd = new Date(entry.weekEnd)
-          return entryStart <= monthEnd && entryEnd >= monthStart
-        })
-      )
-
-      // Create daily schedule array
-      const monthDays = eachDayOfInterval({ start: monthStart, end: monthEnd })
-      const newSchedule: DaySchedule[] = monthDays.map((date) => {
-        const dateStr = format(date, 'yyyy-MM-dd')
-        const matchingEntry = relevantSchedules.find((entry) => {
-          const entryStart = new Date(entry.weekStart)
-          const entryEnd = new Date(entry.weekEnd)
-          return date >= entryStart && date <= entryEnd
-        })
-
-        if (!matchingEntry) return { date: dateStr, shifts: [] }
-
-        const dayOfWeek = format(date, 'EEEE').toLowerCase() as keyof WeekSchedule
-        const daySchedule = matchingEntry.dailySchedules[dayOfWeek]
-
-        const shifts: any[] = ['morning', 'afternoon', 'evening']
-          // const shifts: ShiftDetail[] = ['morning', 'afternoon', 'evening']
-          .filter((shift) => daySchedule[shift as Shift])
-          .map((shift) => ({
-            id: `${shift}-${dateStr}`,
-            shift: shift as Shift,
-            date: dateStr,
-            doctors: [],
-            startTime: daySchedule[`${shift}Start` as keyof typeof daySchedule],
-            endTime: daySchedule[`${shift}End` as keyof typeof daySchedule]
-          }))
-
-        return {
-          date: dateStr,
-          shifts
-        }
-      })
-
-      setSchedule(newSchedule)
+  const getShiftStatusClass = (status: ApprovalStatus) => {
+    switch (status) {
+      case 'approved':
+        return 'bg-green-100 text-green-800'
+      case 'rejected':
+        return 'bg-red-50 text-red-800'
+      default:
+        return 'bg-yellow-50 text-yellow-800'
     }
-  }, [scheduleData, currentDate])
+  }
+
+  const renderShift = (shift: 'morning' | 'afternoon' | 'evening', schedules: any) => {
+    if (!schedules[shift]) return null
+
+    const status = schedules[`${shift}ApprovalStatus`]
+    const reason = schedules[`${shift}RejectionReason`]
+    const startTime = schedules[`${shift}Start`]
+    const endTime = schedules[`${shift}End`]
+
+    return (
+      <TooltipProvider key={shift}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div
+              className={`truncate text-sm mb-0.5 px-2 py-0.5 rounded ${getShiftStatusClass(status)} transition-colors`}
+            >
+              {shift === 'morning' && `Sáng (${startTime}-${endTime})`}
+              {shift === 'afternoon' && `Chiều (${startTime}-${endTime})`}
+              {shift === 'evening' && `Tối (${startTime}-${endTime})`}
+              <span className='ml-1'>
+                {status === 'approved' && '✓'}
+                {status === 'rejected' && '✕'}
+                {status === 'pending' && '⋯'}
+              </span>
+            </div>
+          </TooltipTrigger>
+          {status === 'rejected' && reason && (
+            <TooltipContent className='text-red-800 border-red-200 bg-red-50'>
+              <p>Lý do từ chối: {reason}</p>
+            </TooltipContent>
+          )}
+          {status === 'pending' && (
+            <TooltipContent>
+              <p>Đang chờ duyệt</p>
+            </TooltipContent>
+          )}
+          {status === 'approved' && (
+            <TooltipContent className='text-green-800 border-green-200 bg-green-50'>
+              <p>Đã được duyệt</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
+    )
+  }
 
   return (
     <div className='p-4 sm:p-6'>
@@ -110,7 +124,7 @@ export default function WorkSchedule() {
           {/* Empty cells */}
           {Array.from({ length: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay() }).map(
             (_, index) => (
-              <div key={`empty-${index}`} className='h-32' />
+              <div key={`empty-${index}`} className='h-48' />
             )
           )}
 
@@ -118,25 +132,24 @@ export default function WorkSchedule() {
           {Array.from({ length: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate() }).map(
             (_, index) => {
               const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), index + 1)
-              const daySchedule = schedule.find((s) => s.date === format(date, 'yyyy-MM-dd'))
+              const dateStr = format(date, 'yyyy-MM-dd')
+              const daySchedule = scheduleData?.data.find(
+                (schedule) => format(new Date(schedule.date), 'yyyy-MM-dd') === dateStr
+              )
 
               return (
-                <Card key={index} className='h-36'>
+                <Card key={index} className='h-48'>
                   <CardContent className='p-2'>
                     <div className='text-center'>
                       <div className='text-sm font-medium'>{format(date, 'EEEE', { locale: vi })}</div>
                       <div className='text-xl font-bold'>{format(date, 'd')}</div>
-                      {daySchedule?.shifts.length ? (
+                      {daySchedule && (
                         <div className='mt-1 text-xs text-gray-600'>
-                          {daySchedule.shifts.map((shift) => (
-                            <div key={shift.id} className='mb-0.5 px-2 py-0.5 rounded bg-primary/10'>
-                              {shift.shift === 'morning' && `Sáng (${shift.startTime}-${shift.endTime})`}
-                              {shift.shift === 'afternoon' && `Chiều (${shift.startTime}-${shift.endTime})`}
-                              {shift.shift === 'evening' && `Tối (${shift.startTime}-${shift.endTime})`}
-                            </div>
-                          ))}
+                          {renderShift('morning', daySchedule.schedules)}
+                          {renderShift('afternoon', daySchedule.schedules)}
+                          {renderShift('evening', daySchedule.schedules)}
                         </div>
-                      ) : null}
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -147,7 +160,7 @@ export default function WorkSchedule() {
       )}
 
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-        <DialogContent className='lg:max-w-3xl'>
+        <DialogContent className='max-w-3xl max-h-[calc(100vh-4rem)] min-h-[calc(100vh-4rem)] overflow-y-auto'>
           <CreateScheduleDialog onClose={() => setCreateDialogOpen(false)} />
         </DialogContent>
       </Dialog>

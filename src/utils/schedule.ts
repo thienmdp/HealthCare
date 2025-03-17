@@ -1,19 +1,16 @@
-export const generateTimeSlots = (startTime: string, endTime: string, intervalMinutes: number = 15): string[] => {
+export function generateTimeSlots(startTime: string, endTime: string, duration: number = 30): string[] {
   const slots: string[] = []
   const [startHour, startMinute] = startTime.split(':').map(Number)
   const [endHour, endMinute] = endTime.split(':').map(Number)
 
-  let currentHour = startHour
-  let currentMinute = startMinute
+  let currentMinutes = startHour * 60 + startMinute
+  const endMinutes = endHour * 60 + endMinute
 
-  while (currentHour < endHour || (currentHour === endHour && currentMinute < endMinute)) {
-    slots.push(`${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`)
-
-    currentMinute += intervalMinutes
-    if (currentMinute >= 60) {
-      currentHour += 1
-      currentMinute = 0
-    }
+  while (currentMinutes + duration <= endMinutes) {
+    const hour = Math.floor(currentMinutes / 60)
+    const minute = currentMinutes % 60
+    slots.push(`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`)
+    currentMinutes += duration
   }
 
   return slots

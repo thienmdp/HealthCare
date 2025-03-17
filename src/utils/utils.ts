@@ -22,7 +22,8 @@ export const bufferToHex = (input: any): string => {
       .map((byte) => byte.toString(16).padStart(2, '0'))
       .join('')
   } else {
-    throw new Error(`Invalid input format: ${JSON.stringify(input)}`)
+    return ''
+    // throw new Error(`Invalid input format: ${JSON.stringify(input)}`)
   }
 }
 

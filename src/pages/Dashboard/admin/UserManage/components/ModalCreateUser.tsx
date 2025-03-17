@@ -31,7 +31,7 @@ export function ModalCreateUser({ open, onOpenChange }: Props) {
     try {
       const userData: CreateUserInput = {
         ...values,
-        fullName: `${values.lastName} ${values.firstName}`,
+        fullName: `${values.firstName} ${values.lastName}`,
         birth: format(values.birth, 'yyyy-MM-dd'),
         address: '',
         avatar: '',
@@ -98,7 +98,7 @@ export function ModalCreateUser({ open, onOpenChange }: Props) {
             <div className='grid grid-cols-2 gap-4'>
               <FormField
                 control={form.control}
-                name='lastName'
+                name='firstName'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Họ</FormLabel>
@@ -112,7 +112,7 @@ export function ModalCreateUser({ open, onOpenChange }: Props) {
 
               <FormField
                 control={form.control}
-                name='firstName'
+                name='lastName'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Tên</FormLabel>
