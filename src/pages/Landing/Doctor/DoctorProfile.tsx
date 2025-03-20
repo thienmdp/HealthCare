@@ -287,6 +287,7 @@ export default function DoctorProfile() {
         <DialogContent className='max-w-lg'>
           <BookingDialog
             doctorId={doctorId!}
+            doctorProfileId={doctorProfile.data.doctor._id!}
             date={selectedDate}
             timeSlot={selectedTimeSlot}
             onClose={() => setShowBooking(false)}

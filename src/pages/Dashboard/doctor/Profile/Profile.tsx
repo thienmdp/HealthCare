@@ -23,9 +23,6 @@ export default function ProfileDoctor() {
         </TabsList>
         <TabsContent value='personal'>
           <Card>
-            <CardHeader>
-              <CardTitle>Thông tin cá nhân</CardTitle>
-            </CardHeader>
             <CardContent>
               <PersonalInfo user={user} />
             </CardContent>
@@ -34,9 +31,6 @@ export default function ProfileDoctor() {
         <TabsContent value='doctor'>
           <ScrollArea className='h-full mb-4'>
             <Card>
-              <CardHeader>
-                <CardTitle>Thông tin bác sĩ</CardTitle>
-              </CardHeader>
               <CardContent>
                 <DoctorInfo user={user} doctorProfile={doctorProfile?.data} loadingDoctorProfile={isFetching} />
               </CardContent>

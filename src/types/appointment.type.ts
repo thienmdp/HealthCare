@@ -39,31 +39,90 @@ export interface Prescription {
   totalAmount: number
 }
 
+export interface BufferObject {
+  buffer: {
+    type: 'Buffer'
+    data: number[]
+  }
+}
+
+export interface Profile {
+  _id: BufferObject
+  firstName: string
+  lastName: string
+}
+
+export interface UserWithProfile {
+  _id: BufferObject
+  profile: Profile | null
+}
+
 export interface Appointment {
-  _id: string
-  patient: {
-    _id: string
-    profile: {
-      firstName: string
-      lastName: string
-    }
-  }
-  doctor: {
-    _id: string
-    profile: {
-      firstName: string
-      lastName: string
-    }
-    specialties: string[]
-  }
+  _id: BufferObject
+  patient: UserWithProfile
+  doctor: UserWithProfile
   appointmentDate: string
   startTime: string
   endTime: string
-  type: 'video_call' | 'in_person'
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled'
-  symptoms?: string
-  diagnosis?: string
-  prescription?: Prescription
+  type: 'video_call' | 'in_person'
+  appointmentFee: number
+  isRescheduled: boolean
+  isReminded: boolean
+  isVideoCallStarted: boolean
+  isVideoCallEnded: boolean
   createdAt: string
   updatedAt: string
+  cancelReason?: string
+  cancelledAt?: string
+  cancelledBy?: BufferObject
+  updatedBy?: BufferObject
+  medicalInfo?: {
+    symptoms?: string
+    reason?: string
+    notes?: string
+    currentMedications?: string[]
+  }
+  __v: number
+}
+
+export interface PaginationResponse<T> {
+  pagination: {
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }
+  appointments: T[]
+}
+
+export interface AppointmentResponse {
+  data: {
+    appointments: Appointment[]
+    pagination: {
+      total: number
+      page: number
+      limit: number
+      totalPages: number
+    }
+  }
+}
+
+interface MedicalInfo {
+  symptoms?: string
+  reason?: string
+  notes?: string
+  currentMedications?: string[]
+}
+
+export interface AppointmentDetail extends Appointment {
+  cancelReason?: string
+  cancelledAt?: string
+  cancelledBy?: BufferObject
+  updatedBy?: BufferObject
+  medicalInfo?: MedicalInfo
+}
+
+export interface AppointmentDetailResponse {
+  data: AppointmentDetail
 }

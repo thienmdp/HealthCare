@@ -67,14 +67,9 @@ export default function CardUser() {
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        {role === 'user' && (
-          <DropdownMenuItem>
-            <CreditCard className='w-4 h-4 mr-2' />
-            <Link to={path.payment}>{t('user.payment')}</Link>
-          </DropdownMenuItem>
-        )}
+        <DropdownMenuSeparator />
         <DropdownMenuItem
-          className='!text-red-600 rounded-md cursor-pointer hover:!bg-red-100 bg-red-50'
+          className='!text-red-600 rounded-md cursor-pointer hover:!bg-red-500 hover:!text-white'
           onClick={handleLogout}
         >
           <LogOut className='w-4 h-4 mr-2' />

@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import customFetchBase from './customFetchBase'
+import { PaginationResponse, AppointmentResponse, Appointment } from '@/types/appointment.type'
 
 interface CreateAppointmentInput {
   doctor: string
@@ -8,32 +9,16 @@ interface CreateAppointmentInput {
   startTime: string
   endTime: string
   type: 'video_call' | 'in_person'
-  symptoms?: string
+  medicalInfo?: {
+    symptoms?: string
+    reason?: string
+    notes?: string
+  }
 }
 
-interface Appointment {
-  _id: string
-  patient: {
-    _id: string
-    profile: {
-      firstName: string
-      lastName: string
-    }
-  }
-  doctor: {
-    _id: string
-    profile: {
-      firstName: string
-      lastName: string
-    }
-  }
-  appointmentDate: string
-  startTime: string
-  endTime: string
-  type: 'video_call' | 'in_person'
-  status: 'pending' | 'confirmed' | 'completed' | 'cancelled'
-  createdAt: string
-  updatedAt: string
+interface GetAppointmentsParams {
+  page?: number
+  limit?: number
 }
 
 export const appointmentApi = createApi({
@@ -49,11 +34,47 @@ export const appointmentApi = createApi({
       }),
       invalidatesTags: ['Appointment']
     }),
-    getMyAppointments: build.query<{ data: Appointment[] }, void>({
-      query: () => 'appointment/my-appointment',
+    getMyAppointments: build.query<AppointmentResponse, GetAppointmentsParams>({
+      query: (params) => ({
+        url: 'appointment/my-appointment',
+        params
+      }),
       providesTags: ['Appointment']
+    }),
+    getAllAppointments: build.query<AppointmentResponse, GetAppointmentsParams>({
+      query: (params) => ({
+        url: 'appointment/all',
+        params
+      }),
+      providesTags: ['Appointment']
+    }),
+    getAppointmentDetail: build.query<{ data: Appointment }, string>({
+      query: (id) => `appointment/${id}`,
+      providesTags: ['Appointment']
+    }),
+    approveAppointment: build.mutation<{ message: string }, string>({
+      query: (id) => ({
+        url: `appointment/approve/${id}`,
+        method: 'POST'
+      }),
+      invalidatesTags: ['Appointment']
+    }),
+    cancelAppointment: build.mutation<{ message: string }, { id: string; reason: string }>({
+      query: (body) => ({
+        url: 'appointment/cancel',
+        method: 'POST',
+        body
+      }),
+      invalidatesTags: ['Appointment']
     })
   })
 })
 
-export const { useCreateAppointmentMutation, useGetMyAppointmentsQuery } = appointmentApi
+export const {
+  useCreateAppointmentMutation,
+  useGetMyAppointmentsQuery,
+  useGetAllAppointmentsQuery,
+  useGetAppointmentDetailQuery,
+  useApproveAppointmentMutation,
+  useCancelAppointmentMutation
+} = appointmentApi

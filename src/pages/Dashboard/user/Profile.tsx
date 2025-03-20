@@ -3,10 +3,10 @@ import { useAppSelector } from '@/redux/store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import PersonalInfo from '@/components/Dashboard/Form/PersonalInfo'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import ProfilePatient from '../admin/UserManage/components/Detail/ProfilePatient'
 import { AppointmentStats } from './AppointmentStats'
 import { AppointmentHistory } from './AppointmentHistory'
 import { PaymentHistory } from './PaymentHistory'
+import { ProfilePatient } from './ProfilePatient'
 
 export default function ProfileDoctor() {
   const user = useAppSelector((state) => state.authState.user)
@@ -23,9 +23,6 @@ export default function ProfileDoctor() {
         </TabsList>
         <TabsContent value='personal'>
           <Card>
-            <CardHeader>
-              <CardTitle>Thông tin cá nhân</CardTitle>
-            </CardHeader>
             <CardContent>
               <PersonalInfo user={user} />
             </CardContent>
@@ -34,9 +31,6 @@ export default function ProfileDoctor() {
         <TabsContent value='user'>
           <ScrollArea className='h-full mb-4'>
             <Card>
-              <CardHeader>
-                <CardTitle>Hồ sơ bệnh nhân</CardTitle>
-              </CardHeader>
               <CardContent>
                 <ProfilePatient user={user} />
               </CardContent>

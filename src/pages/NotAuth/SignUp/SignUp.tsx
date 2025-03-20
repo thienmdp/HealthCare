@@ -37,13 +37,10 @@ export default function SignUp() {
 
   useEffect(() => {
     if (resultRegister.data) {
-      // After successful registration, redirect to sign in with booking intent preserved
-      const bookingIntent = sessionStorage.getItem('bookingIntent')
-      navigate('/sign-in', {
+      // After successful registration, navigate to email verification
+      navigate('/verify-email', {
         state: {
-          email: getValues('email'),
-          message: 'Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.',
-          bookingIntent: bookingIntent ? JSON.parse(bookingIntent) : null
+          email: getValues('email')
         }
       })
     }

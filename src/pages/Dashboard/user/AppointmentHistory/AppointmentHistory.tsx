@@ -1,48 +1,49 @@
 import { useState } from 'react'
 import { DataTable } from '@/components/ui/data-table'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { appointmentColumns } from '../components/columns'
 import { useGetMyAppointmentsQuery } from '@/redux/services/appointmentApi'
 import { Appointment } from '@/types/appointment.type'
-import { ColumnDef } from '@tanstack/react-table'
-import MedicalRecordDetail from '../components/Dialog/MedicalRecordDetail'
+import { appointmentColumns } from './components/columns'
+import AppointmentDetail from './components/AppointmentDetail'
 
 export default function AppointmentHistory() {
-  const { data: appointmentsData, isFetching, refetch } = useGetMyAppointmentsQuery()
-  const [selectedRecord, setSelectedRecord] = useState<Appointment | null>(null)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [selectedAppointment, setSelectedAppointment] = useState<string | null>(null)
 
-  const columns: ColumnDef<any>[] = [
-    ...appointmentColumns,
-    {
-      id: 'actions',
-      accessorKey: 'actions',
-      header: '',
-      cell: ({ row }) => (
-        <Button
-          variant='ghost'
-          size='sm'
-          onClick={() => setSelectedRecord(row.original)}
-          disabled={row.original.status === 'pending'}
-        >
-          Xem chi tiết
-        </Button>
-      ),
-      accessorFn: (row) => row._id
-    }
-  ]
+  const { data, isFetching, refetch } = useGetMyAppointmentsQuery({
+    page,
+    limit: pageSize
+  })
+
+  const handlePageSizeChange = (newSize: number) => {
+    setPageSize(newSize)
+    setPage(1)
+  }
 
   return (
-    <div className='space-y-4'>
-      <div className='flex items-center justify-between'>
-        <h2 className='text-xl font-bold'>Lịch sử khám bệnh</h2>
-      </div>
+    <div className='p-6'>
+      <h1 className='mb-4 text-2xl font-bold'>Lịch sử khám bệnh</h1>
 
-      <DataTable columns={columns} data={appointmentsData?.data || []} isLoading={isFetching} onReload={refetch} />
+      <DataTable<Appointment, unknown>
+        columns={appointmentColumns((id) => setSelectedAppointment(id))}
+        data={data?.data?.appointments || []}
+        onReload={refetch}
+        isLoading={isFetching}
+        pagination={{
+          pageSize,
+          total: data?.data?.pagination.total || 0,
+          current: page,
+          onChange: (newPage) => setPage(newPage),
+          onPageSizeChange: handlePageSizeChange
+        }}
+      />
 
-      <Dialog open={!!selectedRecord} onOpenChange={() => setSelectedRecord(null)}>
-        <DialogContent className='max-w-4xl'>
-          {selectedRecord && <MedicalRecordDetail record={selectedRecord} onClose={() => setSelectedRecord(null)} />}
+      <Dialog open={!!selectedAppointment} onOpenChange={() => setSelectedAppointment(null)}>
+        <DialogContent className='max-w-3xl'>
+          {selectedAppointment && (
+            <AppointmentDetail appointmentId={selectedAppointment} onClose={() => setSelectedAppointment(null)} />
+          )}
         </DialogContent>
       </Dialog>
     </div>

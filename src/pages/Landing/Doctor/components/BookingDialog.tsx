@@ -11,17 +11,18 @@ import { bufferToHex } from '@/utils/utils'
 
 interface Props {
   doctorId: string
+  doctorProfileId: string | Buffer<ArrayBufferLike>
   date: Date
   timeSlot: string
   onClose: () => void
 }
 
-export default function BookingDialog({ doctorId, date, timeSlot, onClose }: Props) {
+export default function BookingDialog({ doctorId, doctorProfileId, date, timeSlot, onClose }: Props) {
   const user = useAppSelector((state) => state.authState.user)
   const [createAppointment, { isLoading }] = useCreateAppointmentMutation()
   const [type, setType] = useState<'video_call' | 'in_person'>('video_call')
   const [symptoms, setSymptoms] = useState('')
-
+  console.log('user:', user)
   const handleSubmit = async () => {
     try {
       // Calculate endTime (assuming 30 min duration)
@@ -31,13 +32,15 @@ export default function BookingDialog({ doctorId, date, timeSlot, onClose }: Pro
       const endTime = format(endTimeDate, 'HH:mm')
 
       await createAppointment({
-        patient: bufferToHex(user?.patientId!),
-        doctor: doctorId,
+        patient: bufferToHex(user?._id!),
+        doctor: bufferToHex(doctorProfileId),
         appointmentDate: format(date, 'yyyy-MM-dd'),
         startTime: timeSlot,
         endTime,
-        type
-        // symptoms
+        type,
+        medicalInfo: {
+          symptoms
+        }
       }).unwrap()
 
       toast.success(CustomNotification, {

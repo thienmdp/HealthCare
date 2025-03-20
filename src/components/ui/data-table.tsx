@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Settings2, RefreshCcw } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -32,6 +33,13 @@ interface DataTableProps<TData, TValue> {
   bodyClassName?: string
   rowClassName?: string
   cellClassName?: string
+  pagination?: {
+    pageSize: number
+    total: number
+    current: number
+    onChange: (page: number) => void
+    onPageSizeChange?: (size: number) => void
+  }
 }
 
 function TableSkeleton({ columns }: { columns: number }) {
@@ -53,6 +61,7 @@ export function DataTable<TData, TValue>({
   data,
   isLoading,
   onReload,
+  pagination,
   className,
   tableClassName,
   headerClassName,
@@ -168,24 +177,52 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className='flex items-center justify-end space-x-2'>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage() || isLoading}
-        >
-          Trước
-        </Button>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage() || isLoading}
-        >
-          Sau
-        </Button>
-      </div>
+      {pagination && (
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center gap-2 text-sm text-gray-500'>
+            <span>Hiển thị</span>
+            <Select
+              value={pagination.pageSize.toString()}
+              onValueChange={(value) => pagination.onPageSizeChange?.(Number(value))}
+            >
+              <SelectTrigger className='h-8 w-[70px]'>
+                <SelectValue placeholder={pagination.pageSize} />
+              </SelectTrigger>
+              <SelectContent>
+                {[5, 10, 20, 50].map((size) => (
+                  <SelectItem key={size} value={size.toString()}>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <span>dòng / trang</span>
+          </div>
+          <div className='flex items-center gap-2'>
+            <span className='text-sm text-gray-500'>
+              Trang {pagination.current} / {Math.ceil(pagination.total / pagination.pageSize)}
+            </span>
+            <div className='flex items-center space-x-2'>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() => pagination.onChange(pagination.current - 1)}
+                disabled={pagination.current <= 1 || isLoading}
+              >
+                Trước
+              </Button>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() => pagination.onChange(pagination.current + 1)}
+                disabled={pagination.current >= Math.ceil(pagination.total / pagination.pageSize) || isLoading}
+              >
+                Sau
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
