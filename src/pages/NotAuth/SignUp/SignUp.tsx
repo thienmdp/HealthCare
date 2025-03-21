@@ -1,6 +1,7 @@
 import Input from '@/components/Core/Input'
 import { CustomNotification } from '@/components/CustomReactToastify'
 import { Button } from '@/components/ui/button'
+import path from '@/constants/path'
 import { useRegisterAccountMutation } from '@/redux/services/authApi'
 import { Schema, schema } from '@/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -130,9 +131,9 @@ export default function SignUp() {
         </form>
         <p className='mt-4 text-center text-gray-600'>
           Đã có tài khoản?
-          <a href='/sign-in' className='ml-1 text-blue-600 hover:underline'>
+          <Link to={path.signin} className='ml-1 text-blue-600 hover:underline'>
             Đăng nhập ngay
-          </a>
+          </Link>
         </p>
       </div>
     </div>

@@ -1,6 +1,5 @@
 import { memo, useEffect, useCallback } from 'react'
 import { animateScroll as scroll } from 'react-scroll'
-import Footer from './components/Landing/Footer'
 import { useAppSelector } from '@/redux/store'
 import GoogleOneTap from '@/components/Auth/GoogleOneTap'
 import { Header } from './components/Landing/Header'
@@ -42,7 +41,6 @@ function DefaultLayoutInner({ children }: Props) {
       {!isAuthen && <GoogleOneTap />}
       <Header />
       <div className='max-w-screen-xl w-full px-6 mx-auto sm:px-10 mt-28 mb-12 lg:mt-[98px]'>{children}</div>
-      {/* <Footer /> */}
       <Chatbot />
     </div>
   )

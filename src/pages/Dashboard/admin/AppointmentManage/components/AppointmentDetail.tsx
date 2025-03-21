@@ -101,22 +101,22 @@ export default function AppointmentDetail({ appointmentId }: Props) {
         </div>
 
         {/* Accordion Sections */}
-        <Accordion type='multiple' defaultValue={['medical_info']}>
+        <Accordion type='multiple' defaultValue={['medical_info', 'more_info']}>
           <AccordionItem value='medical_info'>
-            <AccordionTrigger className='text-base font-medium'>Khai báo y tế</AccordionTrigger>
+            <AccordionTrigger className='text-sm font-medium'>Khai báo y tế</AccordionTrigger>
             <AccordionContent className='space-y-4'>
-              {appointment.medicalInfo?.symptoms && (
-                <div>
-                  <p className='mb-1 font-medium'>Triệu chứng</p>
-                  <p className='text-gray-600 whitespace-pre-wrap'>{appointment.medicalInfo.symptoms}</p>
-                </div>
-              )}
+              <div>
+                <p className='mb-1 font-medium'>Triệu chứng</p>
+                <p className='text-gray-600 whitespace-pre-wrap'>
+                  {(appointment.medicalInfo?.symptoms && appointment.medicalInfo.symptoms) || '--'}
+                </p>
+              </div>
             </AccordionContent>
           </AccordionItem>
 
           {appointment.cancelReason && (
             <AccordionItem value='cancel_info'>
-              <AccordionTrigger className='text-base font-medium text-red-500'>Thông tin hủy lịch</AccordionTrigger>
+              <AccordionTrigger className='text-sm font-medium text-red-500'>Thông tin hủy lịch</AccordionTrigger>
               <AccordionContent>
                 <p className='mb-2'>
                   <span className='font-medium'>Lý do:</span> {appointment.cancelReason}
@@ -133,7 +133,7 @@ export default function AppointmentDetail({ appointmentId }: Props) {
 
           {appointment.status === 'completed' && (
             <AccordionItem value='prescription'>
-              <AccordionTrigger className='text-base font-medium'>Đơn thuốc</AccordionTrigger>
+              <AccordionTrigger className='text-sm font-medium'>Đơn thuốc</AccordionTrigger>
               <AccordionContent>
                 {appointment.medicalInfo?.reason && (
                   <div>
@@ -162,7 +162,7 @@ export default function AppointmentDetail({ appointmentId }: Props) {
           )}
 
           <AccordionItem value='more_info' className='border-b-0'>
-            <AccordionTrigger className='text-base font-medium'>Thông tin thêm</AccordionTrigger>
+            <AccordionTrigger className='text-sm font-medium'>Thông tin thêm</AccordionTrigger>
             <AccordionContent>
               <ul className='space-y-1 text-sm text-gray-600'>
                 <li>Đặt lịch lúc: {format(new Date(appointment.createdAt), 'HH:mm dd/MM/yyyy')}</li>
