@@ -57,6 +57,13 @@ export interface UserWithProfile {
   profile: Profile | null
 }
 
+export interface VideoCallInfo {
+  provider: string
+  meetingUrl: string
+  meetingId: string
+  password: string | null
+}
+
 export interface Appointment {
   _id: BufferObject
   patient: UserWithProfile
@@ -77,6 +84,9 @@ export interface Appointment {
   cancelledAt?: string
   cancelledBy?: BufferObject
   updatedBy?: BufferObject
+  approvedAt?: string
+  approvedBy?: BufferObject
+  videoCallInfo?: VideoCallInfo
   medicalInfo?: {
     symptoms?: string
     reason?: string
@@ -120,6 +130,9 @@ export interface AppointmentDetail extends Appointment {
   cancelledAt?: string
   cancelledBy?: BufferObject
   updatedBy?: BufferObject
+  approvedAt?: string
+  approvedBy?: BufferObject
+  videoCallInfo?: VideoCallInfo
   medicalInfo?: MedicalInfo
 }
 

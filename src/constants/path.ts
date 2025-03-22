@@ -27,6 +27,9 @@ const path = {
   profileAdmin: '/profile-admin',
   settingsAdmin: '/settings-admin',
   workSchedule: '/work-schedule',
-  packageManage: '/package-manage'
+  packageManage: '/package-manage',
+
+  // Video Call
+  videoRoom: '/room/:roomId'
 } as const
 export default path

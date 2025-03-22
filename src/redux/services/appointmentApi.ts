@@ -21,6 +21,44 @@ interface GetAppointmentsParams {
   limit?: number
 }
 
+interface VideoMeeting {
+  appointmentId: {
+    buffer: {
+      type: 'Buffer'
+      data: number[]
+    }
+  }
+  meetingId: string
+}
+
+interface VideoCallsResponse {
+  data: VideoMeeting[]
+}
+
+// Response khi tham gia cuộc gọi video
+interface JoinVideoCallResponse {
+  data: Appointment
+}
+
+// Response khi lấy thông tin video call
+interface VideoCallData {
+  appointmentId: {
+    buffer: {
+      type: 'Buffer'
+      data: number[]
+    }
+  }
+  videoCallInfo: {
+    provider: string
+    meetingUrl: string
+    meetingId: string
+    password: string | null
+    joinedAt: string
+  }
+  isVideoCallStarted: boolean
+  isVideoCallEnded: boolean
+}
+
 export const appointmentApi = createApi({
   reducerPath: 'appointmentApi',
   baseQuery: customFetchBase,
@@ -66,6 +104,31 @@ export const appointmentApi = createApi({
         body
       }),
       invalidatesTags: ['Appointment']
+    }),
+    getVideoMeetings: build.query<VideoCallsResponse, void>({
+      query: () => 'appointment/video-calls/meetings',
+      providesTags: ['Appointment']
+    }),
+    joinVideoCall: build.mutation<JoinVideoCallResponse, string>({
+      query: (appointmentId) => ({
+        url: `appointment/join/${appointmentId}`,
+        method: 'POST'
+      }),
+      invalidatesTags: ['Appointment']
+    }),
+    endVideoCall: build.mutation<{ message: string }, string>({
+      query: (appointmentId) => ({
+        url: `appointment/end/${appointmentId}`,
+        method: 'POST'
+      }),
+      invalidatesTags: ['Appointment']
+    }),
+    getVideoCallData: build.query<{ data: VideoCallData }, string>({
+      query: (meetingId) => ({
+        url: `appointment/video-calls/meetings/${meetingId}`,
+        method: 'GET'
+      }),
+      providesTags: ['Appointment']
     })
   })
 })
@@ -76,5 +139,9 @@ export const {
   useGetAllAppointmentsQuery,
   useGetAppointmentDetailQuery,
   useApproveAppointmentMutation,
-  useCancelAppointmentMutation
+  useCancelAppointmentMutation,
+  useGetVideoMeetingsQuery,
+  useJoinVideoCallMutation,
+  useEndVideoCallMutation,
+  useGetVideoCallDataQuery
 } = appointmentApi

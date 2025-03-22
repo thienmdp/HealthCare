@@ -62,31 +62,23 @@ export const appointmentColumns: ColumnDef<Appointment, unknown>[] = [
   }
 ]
 
-type Payment = {
+interface PaymentData {
   id: string
   date: string
   amount: number
-  package: Package
   status: string
   method: string
   paymentDate?: string
+  originalData?: any
 }
 
-export const paymentColumns = (onView?: (id: string) => void): ColumnDef<Payment>[] => [
+export const paymentColumns = (onView?: (id: string) => void): ColumnDef<PaymentData>[] => [
   {
     accessorKey: 'id',
     header: 'Mã giao dịch',
     cell: ({ row }) => {
       const id = row.getValue('id') as string
       return <span className='font-medium'>{id.substring(0, 8)}...</span>
-    }
-  },
-  {
-    accessorKey: 'package',
-    header: 'Sản phẩm',
-    cell: ({ row }) => {
-      const pkg = row.original.package
-      return <span>{pkg.name}</span>
     }
   },
   {

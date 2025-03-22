@@ -21,6 +21,28 @@ export interface Package {
   __v: number
 }
 
+export interface UserPackage {
+  id: {
+    buffer: {
+      type: string
+      data: number[]
+    }
+  }
+  packageName: string
+  remainingAppointments: number
+  usedAppointments: number
+  purchaseDate: string
+  expiryDate: string
+  status: string
+}
+
+export interface UserPackageStats {
+  totalPackages: number
+  totalRemainingAppointments: number
+  totalUsedAppointments: number
+  packages: UserPackage[]
+}
+
 export interface PackageParams {
   name: string
   description: string
@@ -34,7 +56,7 @@ export interface PackageParams {
 export const packageApi = createApi({
   reducerPath: 'packageApi',
   baseQuery: customFetchBase,
-  tagTypes: ['Package'],
+  tagTypes: ['Package', 'UserPackage'],
   endpoints: (builder) => ({
     getAllPackages: builder.query<ApiResponse<Package[]>, null>({
       query: () => ({
@@ -56,6 +78,13 @@ export const packageApi = createApi({
         method: 'GET'
       }),
       providesTags: (_: any, __: any, id: string) => [{ type: 'Package', id }]
+    }),
+    getMyAppointmentPackage: builder.query<ApiResponse<UserPackageStats>, null>({
+      query: () => ({
+        url: '/appointment-package/my-appointment-package',
+        method: 'GET'
+      }),
+      providesTags: ['UserPackage']
     }),
     createPackage: builder.mutation<ApiResponse<Package>, PackageParams>({
       query: (body: PackageParams) => ({
@@ -87,6 +116,7 @@ export const {
   useGetAllPackagesQuery,
   useGetAllActivePackagesQuery,
   useGetPackageByIdQuery,
+  useGetMyAppointmentPackageQuery,
   useCreatePackageMutation,
   useUpdatePackageMutation,
   useDeletePackageMutation

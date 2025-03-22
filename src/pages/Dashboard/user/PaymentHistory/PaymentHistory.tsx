@@ -1,4 +1,4 @@
-import { useGetMyPaymentsQuery } from '@/redux/services/paymentApi'
+import { Payment, useGetMyPaymentsQuery } from '@/redux/services/paymentApi'
 import { useState } from 'react'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -24,7 +24,7 @@ export default function PaymentHistory() {
     method: payment.bank_code,
     paymentDate: payment.payment_date,
     package: payment.package,
-    originalData: payment // Lưu trữ dữ liệu gốc để hiển thị chi tiết
+    originalData: payment
   }))
 
   const handleViewPayment = (paymentId: string) => {
