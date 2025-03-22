@@ -26,6 +26,7 @@ const path = {
   appointmentAdmin: '/appointment-manage',
   profileAdmin: '/profile-admin',
   settingsAdmin: '/settings-admin',
-  workSchedule: '/work-schedule'
+  workSchedule: '/work-schedule',
+  packageManage: '/package-manage'
 } as const
 export default path

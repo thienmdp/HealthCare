@@ -1,46 +1,77 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { PaymentOrder } from '@/types/payment.type'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Eye } from 'lucide-react'
 import { format } from 'date-fns'
+import { Button } from '@/components/ui/button'
 import { formatCurrency } from '@/utils/utils'
+import { Eye } from 'lucide-react'
 
-export const paymentColumns = (onView: (payment: PaymentOrder) => void): ColumnDef<PaymentOrder>[] => [
+interface PaymentData {
+  id: string
+  packageId: string
+  packageName: string
+  userId: string
+  userName: string
+  date: string
+  amount: number
+  status: 'pending' | 'paid' | 'cancelled'
+  method: string
+  paymentDate?: string
+}
+
+export const paymentColumns = (onView: (payment: PaymentData) => void): ColumnDef<PaymentData>[] => [
   {
-    accessorKey: 'userName',
-    header: 'Khách hàng'
+    accessorKey: 'id',
+    header: 'Mã giao dịch',
+    cell: ({ row }) => {
+      const id = row.getValue('id') as string
+      return <div className='font-medium'>{id.substring(0, 8)}...</div>
+    }
   },
   {
-    accessorKey: 'packageType',
+    accessorKey: 'userName',
+    header: 'Khách hàng',
+    cell: ({ row }) => {
+      const userName = row.getValue('userName') as string
+      return <div>{userName}</div>
+    }
+  },
+  {
+    accessorKey: 'packageName',
     header: 'Gói khám',
     cell: ({ row }) => {
-      const type = row.getValue('packageType') as string
-      return type === 'single' ? 'Khám lẻ' : `Combo ${type.replace('combo', '')} lần`
+      const packageName = row.getValue('packageName') as string
+      return <div>{packageName}</div>
+    }
+  },
+  {
+    accessorKey: 'date',
+    header: 'Ngày tạo',
+    cell: ({ row }) => {
+      const date = row.getValue('date') as string
+      return <div>{format(new Date(date), 'dd/MM/yyyy HH:mm')}</div>
     }
   },
   {
     accessorKey: 'amount',
     header: 'Số tiền',
-    cell: ({ row }) => formatCurrency(row.getValue('amount'))
-  },
-  {
-    accessorKey: 'paymentMethod',
-    header: 'Phương thức',
     cell: ({ row }) => {
-      const method = row.getValue('paymentMethod') as string
-      return {
-        transfer: 'Chuyển khoản',
-        cash: 'Tiền mặt',
-        'e-wallet': 'Ví điện tử'
-      }[method]
+      const amount = row.getValue('amount') as number
+      return <div className='font-medium'>{formatCurrency(amount)}</div>
     }
   },
   {
-    accessorKey: 'paymentStatus',
+    accessorKey: 'method',
+    header: 'Phương thức',
+    cell: ({ row }) => {
+      const method = row.getValue('method') as string
+      return <div>{method}</div>
+    }
+  },
+  {
+    accessorKey: 'status',
     header: 'Trạng thái',
     cell: ({ row }) => {
-      const status = row.getValue('paymentStatus') as string
+      const status = row.getValue('status') as string
       return (
         <Badge variant={status === 'paid' ? 'default' : status === 'pending' ? 'secondary' : 'destructive'}>
           {status === 'paid' && 'Đã thanh toán'}
@@ -51,16 +82,15 @@ export const paymentColumns = (onView: (payment: PaymentOrder) => void): ColumnD
     }
   },
   {
-    accessorKey: 'orderDate',
-    header: 'Ngày đặt',
-    cell: ({ row }) => format(new Date(row.getValue('orderDate')), 'dd/MM/yyyy HH:mm')
-  },
-  {
     id: 'actions',
-    cell: ({ row }) => (
-      <Button variant='ghost' size='icon' onClick={() => onView(row.original)}>
-        <Eye className='w-4 h-4' />
-      </Button>
-    )
+    header: 'Thao tác',
+    cell: ({ row }) => {
+      const payment = row.original
+      return (
+        <Button variant='ghost' size='icon' onClick={() => onView(payment)}>
+          <Eye className='w-4 h-4' />
+        </Button>
+      )
+    }
   }
 ]

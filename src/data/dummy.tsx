@@ -1,5 +1,13 @@
 import path from '@/constants/path'
-import { CalendarDays, CircleUserRound, CreditCard, FolderClock, LayoutDashboard, UsersRound } from 'lucide-react'
+import {
+  CalendarDays,
+  CircleUserRound,
+  CreditCard,
+  FolderClock,
+  LayoutDashboard,
+  Package,
+  UsersRound
+} from 'lucide-react'
 
 export const sidebarAdmin = [
   {
@@ -21,6 +29,11 @@ export const sidebarAdmin = [
     label: 'Quản lý lịch hẹn',
     icon: <FolderClock className='flex-shrink-0 w-5 h-5' />,
     href: path.appointmentAdmin
+  },
+  {
+    label: 'Quản lý gói khám',
+    icon: <Package className='flex-shrink-0 w-5 h-5' />,
+    href: path.packageManage
   },
   {
     label: 'Lịch làm việc',

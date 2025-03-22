@@ -7,13 +7,44 @@ import { AppointmentStats } from './AppointmentStats'
 import { AppointmentHistory } from './AppointmentHistory'
 import { PaymentHistory } from './PaymentHistory'
 import { ProfilePatient } from './ProfilePatient'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { CustomNotification } from '@/components/CustomReactToastify'
 
 export default function ProfileDoctor() {
   const user = useAppSelector((state) => state.authState.user)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState('personal')
+
+  // Kiểm tra nếu có paymentId trong URL
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search)
+    const paymentId = queryParams.get('paymentId')
+
+    if (paymentId) {
+      // Chuyển đến tab lịch sử thanh toán
+      setActiveTab('history_payment')
+
+      // Hiển thị thông báo
+      toast.success(CustomNotification, {
+        data: {
+          title: 'Thanh toán thành công',
+          content: 'Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.'
+        }
+      })
+
+      // Xóa paymentId khỏi URL
+      navigate('/profile', { replace: true })
+    }
+  }, [location.search, navigate])
+
   if (!user) return null
+
   return (
     <div>
-      <Tabs defaultValue='personal' className='w-full'>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className='w-full'>
         <TabsList className='flex-wrap min-w-[380px] !justify-start'>
           <TabsTrigger value='personal'>Thông tin cá nhân</TabsTrigger>
           <TabsTrigger value='user'>Hồ sơ bệnh nhân</TabsTrigger>
@@ -29,7 +60,7 @@ export default function ProfileDoctor() {
           </Card>
         </TabsContent>
         <TabsContent value='user'>
-          <ScrollArea className='h-full mb-4'>
+          <ScrollArea className='mb-4 h-full'>
             <Card>
               <CardContent>
                 <ProfilePatient user={user} />

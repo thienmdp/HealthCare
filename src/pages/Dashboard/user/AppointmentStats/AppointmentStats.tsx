@@ -3,15 +3,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Calendar, Clock, Ticket, UserCheck, Users } from 'lucide-react'
-import { AppointmentPackage } from '@/types/appointmentPackage.type'
-import BuyPackageDialog from '../components/Dialog/BuyPackageDialog'
+import BuyPackageDialog from './components/BuyPackageDialog'
 
 export default function AppointmentStats() {
   const [showBuyPackage, setShowBuyPackage] = useState(false)
 
-  const handlePurchasePackage = (pkg: AppointmentPackage) => {
-    console.log('Purchase package:', pkg)
-    // Add API call here
+  const handleCloseBuyDialog = () => {
     setShowBuyPackage(false)
   }
 
@@ -56,7 +53,7 @@ export default function AppointmentStats() {
     <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
       {stats.map((stat) => (
         <Card key={stat.title} className={stat.className}>
-          <CardHeader className='flex flex-row items-center justify-between pb-2'>
+          <CardHeader className='flex flex-row justify-between items-center pb-2'>
             <CardTitle className='text-sm font-medium'>{stat.title}</CardTitle>
             <stat.icon className='w-4 h-4 text-muted-foreground' />
           </CardHeader>
@@ -72,7 +69,7 @@ export default function AppointmentStats() {
 
       <Dialog open={showBuyPackage} onOpenChange={setShowBuyPackage}>
         <DialogContent className='max-w-4xl'>
-          <BuyPackageDialog onClose={() => setShowBuyPackage(false)} onPurchase={handlePurchasePackage} />
+          <BuyPackageDialog onClose={handleCloseBuyDialog} />
         </DialogContent>
       </Dialog>
     </div>

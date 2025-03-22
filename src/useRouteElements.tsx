@@ -18,6 +18,7 @@ import {
 import {
   AppointmentManage,
   DashboardAdmin,
+  PackageManage,
   PaymentManage,
   ProfileAdmin,
   SettingsAdmin,
@@ -101,6 +102,10 @@ const adminRoutes = [
   {
     path: path.settingsAdmin,
     element: <SettingsAdmin />
+  },
+  {
+    path: path.packageManage,
+    element: <PackageManage />
   }
 ]
 
